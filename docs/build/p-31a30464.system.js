@@ -1,0 +1,1 @@
+System.register(["./p-1205d314.system.js"],(function(){"use strict";var e,t;return{setters:[function(n){e=n.p;t=n.b}],execute:function(){e().then((function(e){return t([["p-nagp5y7i.system",[[0,"polaris-wf",{name:[32]}],[1,"my-component",{name:[32]}]]]],e)}))}}}));

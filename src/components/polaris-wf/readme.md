@@ -1,4 +1,4 @@
-# my-component
+# app-root
 
 
 
@@ -7,15 +7,15 @@
 
 ## Dependencies
 
-### Used by
+### Depends on
 
- - [polaris-wf](../polaris-wf)
+- [my-component](../my-component)
 
 ### Graph
 ```mermaid
 graph TD;
   polaris-wf --> my-component
-  style my-component fill:#f9f,stroke:#333,stroke-width:4px
+  style polaris-wf fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

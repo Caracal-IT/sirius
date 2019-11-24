@@ -10,20 +10,8 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface MyComponent {
-    /**
-    * The first name
-    */
-    'first': string;
-    /**
-    * The last name
-    */
-    'last': string;
-    /**
-    * The middle name
-    */
-    'middle': string;
-  }
+  interface MyComponent {}
+  interface PolarisWf {}
 }
 
 declare global {
@@ -34,29 +22,25 @@ declare global {
     prototype: HTMLMyComponentElement;
     new (): HTMLMyComponentElement;
   };
+
+  interface HTMLPolarisWfElement extends Components.PolarisWf, HTMLStencilElement {}
+  var HTMLPolarisWfElement: {
+    prototype: HTMLPolarisWfElement;
+    new (): HTMLPolarisWfElement;
+  };
   interface HTMLElementTagNameMap {
     'my-component': HTMLMyComponentElement;
+    'polaris-wf': HTMLPolarisWfElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface MyComponent {
-    /**
-    * The first name
-    */
-    'first'?: string;
-    /**
-    * The last name
-    */
-    'last'?: string;
-    /**
-    * The middle name
-    */
-    'middle'?: string;
-  }
+  interface MyComponent {}
+  interface PolarisWf {}
 
   interface IntrinsicElements {
     'my-component': MyComponent;
+    'polaris-wf': PolarisWf;
   }
 }
 
@@ -67,6 +51,7 @@ declare module "@stencil/core" {
   export namespace JSX {
     interface IntrinsicElements {
       'my-component': LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+      'polaris-wf': LocalJSX.PolarisWf & JSXBase.HTMLAttributes<HTMLPolarisWfElement>;
     }
   }
 }
