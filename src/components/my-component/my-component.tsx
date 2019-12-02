@@ -1,47 +1,27 @@
-import { Component, State, Prop, h } from '@stencil/core';
-import { Store, Unsubscribe } from "@stencil/redux";
-import { setAppName } from "../../store/actions/app";
-import { RootState } from '../../store/model/RootState';
+import { Component, Prop, h } from "@stencil/core";
 
 @Component({
-  tag: 'my-component',
-  styleUrl: 'my-component.css',
+  tag: "my-component",
+  styleUrl: "my-component.css",
   shadow: true
 })
 export class MyComponent {
-  storeUnsubscribe: Unsubscribe;
-  setAppName: typeof setAppName;
+  @Prop()
+  first: string;
 
-  @State()
-  name: RootState["app"]["name"];
+  @Prop()
+  middle: string;
 
-  @Prop({ context: "store" })
-  store: Store;
-
-  componentWillLoad() {
-    this.store.mapDispatchToProps(this, { setAppName });
-    this.storeUnsubscribe = this.store.mapStateToProps(this, (state: RootState) => {
-      const {
-        app: { name }
-      } = state;
-
-      return {
-        name
-      };
-    });
-  }
-
-  componentDidUnload() {
-    this.storeUnsubscribe();
-  }
+  @Prop()
+  last: string;
 
   render() {
-    return <div>
-        <p>{this.name}</p>
-        <input
-          value={this.name}
-          onInput={e => this.setAppName((e.target as any).value)}
-        />
-      </div>;
+    return (
+      <div>
+        Hello, World! I'm {this.first}
+        {this.middle ? " " + this.middle : ""}
+        {this.last ? " " + this.last : ""}
+      </div>
+    );
   }
 }

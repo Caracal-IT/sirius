@@ -10,8 +10,12 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface MyComponent {}
-  interface PolarisWf {}
+  interface MyComponent {
+    'first': string;
+    'last': string;
+    'middle': string;
+  }
+  interface SiriusWf {}
 }
 
 declare global {
@@ -23,24 +27,28 @@ declare global {
     new (): HTMLMyComponentElement;
   };
 
-  interface HTMLPolarisWfElement extends Components.PolarisWf, HTMLStencilElement {}
-  var HTMLPolarisWfElement: {
-    prototype: HTMLPolarisWfElement;
-    new (): HTMLPolarisWfElement;
+  interface HTMLSiriusWfElement extends Components.SiriusWf, HTMLStencilElement {}
+  var HTMLSiriusWfElement: {
+    prototype: HTMLSiriusWfElement;
+    new (): HTMLSiriusWfElement;
   };
   interface HTMLElementTagNameMap {
     'my-component': HTMLMyComponentElement;
-    'polaris-wf': HTMLPolarisWfElement;
+    'sirius-wf': HTMLSiriusWfElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface MyComponent {}
-  interface PolarisWf {}
+  interface MyComponent {
+    'first'?: string;
+    'last'?: string;
+    'middle'?: string;
+  }
+  interface SiriusWf {}
 
   interface IntrinsicElements {
     'my-component': MyComponent;
-    'polaris-wf': PolarisWf;
+    'sirius-wf': SiriusWf;
   }
 }
 
@@ -51,7 +59,7 @@ declare module "@stencil/core" {
   export namespace JSX {
     interface IntrinsicElements {
       'my-component': LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
-      'polaris-wf': LocalJSX.PolarisWf & JSXBase.HTMLAttributes<HTMLPolarisWfElement>;
+      'sirius-wf': LocalJSX.SiriusWf & JSXBase.HTMLAttributes<HTMLSiriusWfElement>;
     }
   }
 }

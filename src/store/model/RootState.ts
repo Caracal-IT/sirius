@@ -1,5 +1,7 @@
-import { AppState } from './AppState';
+import { AppState } from "./AppState";
+import { WFState } from "./WFState";
 
 export interface RootState {
-    app: AppState
+  app: AppState;
+  wf: WFState;
 }

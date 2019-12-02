@@ -4,7 +4,7 @@ import { AppState } from "../model/AppState";
 
 const getInitialState = (): AppState => {
   return {
-    name: "Polaris"
+    name: "Sirius Workflow"
   };
 };
 
