@@ -1,1 +1,11 @@
+* {
+    box-sizing: border-box;
+}
 
+li {
+    list-style: none;
+}
+
+:first-of-type(header) {
+    background-color: hotpink;
+}

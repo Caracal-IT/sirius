@@ -1,3 +1,4 @@
 export interface WFState {
-  name: string;
+  model?: any;
+  currAction?: string
 }

@@ -1,85 +1,46 @@
 import { Component, Prop, State, h } from "@stencil/core";
 
 import "@stencil/redux";
-import { Store } from "@stencil/redux";
+import { Store, Unsubscribe } from "@stencil/redux";
 import { configureStore } from "../../store";
+
 import { RootState } from "../../store/model/RootState";
+import { Page } from "../../store/model/wf/Page";
+
+import * as utils from "../../utils/utils";
 
 @Component({
   tag: "sirius-wf",
   shadow: true
 })
 export class SiriusWf {
-  @State()
-  name: RootState["wf"]["name"];
+  storeUnsubscribe: Unsubscribe;
+  currAction: RootState["wf"]["currAction"];
+  
+  @State() page: Page;  
+  @Prop({ context: "store" })store: Store;  
 
-  @Prop({ context: "store" })
-  store: Store;
+  wf: any;
+
+  constructor(){
+    this.wf = utils.wf;   
+  }
 
   async componentWillLoad() {
-    this.store.setStore(configureStore({}));
-    this.store.mapStateToProps(this, (state: RootState) => {
-      const {
-        app: { name }
-      } = state;
-      return {
-        name
-      };
-    });
-  }
-
-  render() {
-    return <div>Hello, my name is {this.name}</div>;
-  }
-}
-
-/* 
-import { Component, State, Prop, h } from '@stencil/core';
-import { Store, Unsubscribe } from "@stencil/redux";
-import { setAppName } from "../../store/actions/app";
-import { RootState } from '../../store/model/RootState';
-
-@Component({
-  tag: 'my-component',
-  styleUrl: 'my-component.css',
-  shadow: true
-})
-export class MyComponent {
-  storeUnsubscribe: Unsubscribe;
-  setAppName: typeof setAppName;
-
-  @State()
-  name: RootState["app"]["name"];
-
-  @Prop({ context: "store" })
-  store: Store;
-
-  componentWillLoad() {
-    this.store.mapDispatchToProps(this, { setAppName });
+    this.store.setStore(configureStore({}));  
+    
     this.storeUnsubscribe = this.store.mapStateToProps(this, (state: RootState) => {
-      const {
-        app: { name }
-      } = state;
+      const {wf:{ currAction: currAction }} = state;
+      const pg = this.wf.activities.find((p: any) => p.name === currAction);
 
-      return {
-        name
-      };
-    });
-  }
-
-  componentDidUnload() {
-    this.storeUnsubscribe();
+      if(pg && pg.components) 
+        this.page = pg;
+      
+      return { currAction };
+    });  
   }
 
   render() {
-    return <div>
-        <p>{this.name}</p>
-        <input
-          value={this.name}
-          onInput={e => this.setAppName((e.target as any).value)}
-        />
-      </div>;
+    return <sirius-page page={this.page} />;
   }
 }
-
-*/
