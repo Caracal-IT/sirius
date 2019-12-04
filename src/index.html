@@ -11,8 +11,58 @@
 
 </head>
 
-<body>
-  <sirius-wf />  
-</body>
+<body>  
+  <sirius-wf></sirius-wf>
+  <hr/>
+  <span>Custom Workflow</span>  
+  <textarea id="processDef" style="width: 100%;height:500px">
+    {
+      "name": "Workflow1",
+      "activities": [
+        {
+          "name": "start",
+          "components": [
+            { "tag": "polaris-label" },
+            { "tag": "polaris-select", "id": "registration.numberSelect" },
+            { "tag": "polaris-select", "id": "registration.numberSelect2" },       
+            { "tag": "input", "id": "registration.firstName" },
+            { "tag": "polaris-button", "id": "nextButton", "caption":"Next", "next": "page1"}
+          ]    
+        },
+        {
+          "name": "page1",
+          "components": [                        
+            { "tag": "input", "id": "registration.firstName" },
+            { "tag": "input", "id": "registration.lastName" },
+            { "tag": "polaris-button", "id":"nextButton", "caption":"Previous", "next": "start"}
+          ]    
+        }
+      ]
+    }
+  </textarea> 
+  <button id="loadProcessButton">Load New Process</button>
+    
+  <script type="module">           
+    const wf = document.querySelector("sirius-wf");
+    const processDef = document.querySelector("#processDef");
+    const loadProcessButton = document.querySelector("#loadProcessButton");
 
+    setTimeout(() => {
+      const process = JSON.parse(processDef.value.trim());
+      wf.loadProcess(process);
+    }, 0);    
+   
+    loadProcessButton.addEventListener("click", () => {
+      try {                
+        const process = JSON.parse(processDef.value.trim());
+        const event = new CustomEvent("loadProcess",  {detail: process});
+            
+        wf.dispatchEvent(event);
+      }
+      catch(ex) {
+        console.dir(ex);
+      }
+    })    
+  </script>
+</body>
 </html>

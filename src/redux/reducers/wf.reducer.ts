@@ -1,15 +1,10 @@
 import { ActionTypes, TypeKeys } from "../actions/wf.action";
-import { WFState } from "../model/WFState.model";
+import { WFState } from "../state/WF.state";
 
 const getInitialState = (): WFState => {
   return {
-    currAction: "start",
-    model: {
-      registration: {
-        numberSelect2: "2",
-        firstName: "Ettiene"
-      }
-    }
+    currAction: "start",    
+    model: {}    
   };
 };
 
@@ -20,6 +15,8 @@ export default (state = getInitialState(), action: ActionTypes): WFState => {
       return {...state, model: {...model}};
     case TypeKeys.SET_NEXT_ACTION:
       return {...state, currAction: action.name};
+    case TypeKeys.SET_PROCESS:
+      return {...state, currProcess: action.process, currAction: 'start'};
     default:
       return state;
   }

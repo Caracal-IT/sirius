@@ -1,6 +1,6 @@
 import { Component, h, Prop, State } from "@stencil/core";
 import { Unsubscribe } from "redux";
-import { RootState } from "../../redux/model/RootState.model";
+import { RootState } from "../../redux/state/Root.state";
 import { Store } from "@stencil/redux";
 
 @Component({
@@ -14,25 +14,22 @@ export class PolarisLabel {
     @Prop({ context: "store" })store: Store;
 
     async componentWillLoad() {
+      
         this.storeUnsubscribe = this.store.mapStateToProps(this, (state: RootState) => {
-          const {        
-            wf: {
-              model: {
-                registration: {
-                  firstName: firstName
-                }
-              }
-            }
-          } = state;
-          return {
-            firstName
-          };
+          let firstName = "";
+
+          if(state && state.wf && state.wf.model && state.wf.model.registration) {
+            firstName = state.wf.model.registration.firstName;
+          }
+            this.firstName
+         
+          return { firstName };   
         });
-      }
-    
-      componentDidUnload() {
-        this.storeUnsubscribe();
-      }
+  }
+  
+  componentDidUnload() {
+    this.storeUnsubscribe();
+  }
 
   render() {
     return <div>FirstName {this.firstName}</div>;

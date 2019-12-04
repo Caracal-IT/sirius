@@ -9,7 +9,10 @@
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 import {
   Page,
-} from './redux/model/wf/Page.model';
+} from './redux/model/Page.model';
+import {
+  Process,
+} from './redux/model/Process.model';
 
 export namespace Components {
   interface MyComponent {
@@ -28,7 +31,10 @@ export namespace Components {
   interface SiriusPage {
     'page': Page;
   }
-  interface SiriusWf {}
+  interface SiriusWf {
+    'goto': (activity: string) => Promise<void>;
+    'loadProcess': (process: Process) => Promise<void>;
+  }
 }
 
 declare global {
