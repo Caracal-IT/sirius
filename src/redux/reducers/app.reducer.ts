@@ -1,4 +1,4 @@
-import { ActionTypes, TypeKeys } from "./../actions/app";
+import { ActionTypes, TypeKeys } from "../actions/app.action";
 
 import { AppState } from "../model/AppState";
 

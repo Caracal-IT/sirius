@@ -9,7 +9,7 @@
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 import {
   Page,
-} from './store/model/wf/Page';
+} from './redux/model/wf/Page';
 
 export namespace Components {
   interface MyComponent {
@@ -18,8 +18,8 @@ export namespace Components {
     'middle': string;
   }
   interface PolarisButton {
+    'caption': string;
     'next': string;
-    'title': string;
   }
   interface PolarisLabel {}
   interface PolarisSelect {
@@ -86,8 +86,9 @@ declare namespace LocalJSX {
     'middle'?: string;
   }
   interface PolarisButton {
+    'caption'?: string;
     'next'?: string;
-    'title'?: string;
+    'onGotoAct'?: (event: CustomEvent<any>) => void;
   }
   interface PolarisLabel {}
   interface PolarisSelect {

@@ -1,10 +1,10 @@
 import { Component, h, Prop } from "@stencil/core";
 import { Store } from "@stencil/redux";
 
-import { ModelService } from "../../services/modelService";
+import { ModelService } from "../../services/modelService.service";
 
-import { Page } from "../../store/model/wf/Page";
-import { WebComponent } from "../../store/model/wf/WebComponent";
+import { Page } from "../../redux/model/wf/Page";
+import { WebComponent } from "../../redux/model/wf/WebComponent";
 
 @Component({
   tag: "sirius-page",

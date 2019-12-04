@@ -1,5 +1,5 @@
 import { Store } from "@stencil/redux";
-import { setModelValue } from "../store/actions/wf";
+import { setModelValue } from "../redux/actions/wf.action";
 
 export class ModelService {
   store: Store;

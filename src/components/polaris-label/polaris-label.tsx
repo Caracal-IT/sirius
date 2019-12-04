@@ -1,6 +1,6 @@
 import { Component, h, Prop, State } from "@stencil/core";
 import { Unsubscribe } from "redux";
-import { RootState } from "../../store/model/RootState";
+import { RootState } from "../../redux/model/RootState";
 import { Store } from "@stencil/redux";
 
 @Component({

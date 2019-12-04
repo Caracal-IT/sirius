@@ -1,4 +1,4 @@
-import { ActionTypes, TypeKeys } from "./../actions/wf";
+import { ActionTypes, TypeKeys } from "../actions/wf.action";
 import { WFState } from "../model/WFState";
 
 const getInitialState = (): WFState => {

@@ -1,24 +1,17 @@
-import { Component, Prop, h } from "@stencil/core";
-
-import { Store } from "@stencil/redux";
-import { setNextAction } from "../../store/actions/wf";
+import { Component, Prop, Event, EventEmitter, h } from "@stencil/core";
 
 @Component({
     tag: "polaris-button",
     shadow: true
   })
   export class PolarisButton {
-    setNextAction: typeof setNextAction;
+    @Event()
+    gotoAct: EventEmitter
         
     @Prop() next: string;
-    @Prop() title: string;
-    @Prop({ context: "store" })store: Store;
-
-    componentWillLoad(){
-        this.store.mapDispatchToProps(this, { setNextAction });
-    }
-
+    @Prop() caption: string;
+    
     render(){
-        return <button onClick={() => this.setNextAction(this.next)}>{this.title}</button>
+        return <button onClick={this.gotoAct.emit.bind(this, this.next)}>{this.caption}</button>
     }
   }

@@ -17,7 +17,7 @@ export const wf = {
         { tag: 'polaris-select', id: 'registration.numberSelect' },
         { tag: 'polaris-select', id: 'registration.numberSelect2' },       
         { tag: 'input', id: 'registration.firstName' },
-        { tag: 'polaris-button', id:'nextButton', title:'Next', next: 'page1'}
+        { tag: 'polaris-button', id:'nextButton', caption:'Next', next: 'page1'}
       ]    
     },
     {
@@ -25,7 +25,7 @@ export const wf = {
       components: [                        
         { tag: 'input', id: 'registration.firstName' },
         { tag: 'input', id: 'registration.lastName' },
-        { tag: 'polaris-button', id:'nextButton', title:'Previous', next: 'start'}
+        { tag: 'polaris-button', id:'nextButton', caption:'Previous', next: 'start'}
       ]    
     }
   ]

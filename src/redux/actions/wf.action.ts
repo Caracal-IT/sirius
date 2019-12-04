@@ -1,4 +1,4 @@
-import { NullAction } from "./app";
+import { NullAction } from "./app.action";
 
 export enum TypeKeys {
   NULL = "NULL", // Won't match anything
