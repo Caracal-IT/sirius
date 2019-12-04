@@ -3,8 +3,8 @@ import { Store } from "@stencil/redux";
 
 import { ModelService } from "../../services/modelService.service";
 
-import { Page } from "../../redux/model/wf/Page";
-import { WebComponent } from "../../redux/model/wf/WebComponent";
+import { Page } from "../../redux/model/wf/Page.model";
+import { WebComponent } from "../../redux/model/wf/WebComponent.model";
 
 @Component({
   tag: "sirius-page",

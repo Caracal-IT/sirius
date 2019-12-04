@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 
 import rootReducer from './reducers/index.reducer';
-import { RootState } from './model/RootState';
+import { RootState } from './model/RootState.model';
 
 export const configureStore = (preloadedState: Partial<RootState>) =>
   createStore(

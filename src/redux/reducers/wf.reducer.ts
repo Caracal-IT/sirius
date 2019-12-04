@@ -1,5 +1,5 @@
 import { ActionTypes, TypeKeys } from "../actions/wf.action";
-import { WFState } from "../model/WFState";
+import { WFState } from "../model/WFState.model";
 
 const getInitialState = (): WFState => {
   return {

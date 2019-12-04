@@ -1,6 +1,6 @@
 import { ActionTypes, TypeKeys } from "../actions/app.action";
 
-import { AppState } from "../model/AppState";
+import { AppState } from "../model/AppState.model";
 
 const getInitialState = (): AppState => {
   return {

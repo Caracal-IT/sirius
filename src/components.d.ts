@@ -9,7 +9,7 @@
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 import {
   Page,
-} from './redux/model/wf/Page';
+} from './redux/model/wf/Page.model';
 
 export namespace Components {
   interface MyComponent {
