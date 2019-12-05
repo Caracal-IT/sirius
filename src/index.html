@@ -12,7 +12,7 @@
 </head>
 
 <body>    
-  <sirius-wf></sirius-wf>
+  <sirius-wf style="display: block;min-height: 200px;"></sirius-wf>
   <hr/>
   <span>Custom Workflow</span>  
   <textarea id="processDef" style="width: 100%;height:500px">
@@ -23,9 +23,12 @@
           "name": "start",
           "type": "page-activity",
           "components": [                           
+            { "tag": "input", "id": "apicall.title" },
             { "tag": "input", "id": "registration.firstName" },
             { "tag": "moon-button", "id": "btn1", "value": "Next", "next": "page1" },
-            { "tag": "moon-button", "id": "btn2", "value": "Alert", "next": "page3" }
+            { "tag": "moon-button", "id": "btn2", "value": "Decision", "next": "page3" },
+            { "tag": "moon-button", "id": "btn2", "value": "Alert", "next": "page4" },
+            { "tag": "moon-button", "id": "btn2", "value": "Api Call", "next": "page5" }
           ]    
         },
         {
@@ -51,8 +54,19 @@
           "left": "model.registration&&model.registration.firstName",
           "equality": "===",
           "right": "'Lourens'",
-          "trueAction": "page1",
-          "falseAction": "page2"
+          "trueAction": "page2",
+          "falseAction": "page1"
+        },
+        {
+          "name": "page4",
+          "type": "alert-activity",
+          "message": "This is the alert activity"
+        },
+        {
+          "name": "page5",
+          "type": "api-activity",
+          "url": "https://jsonplaceholder.typicode.com/posts/2",
+          "next": "start"
         }
       ]
     }
@@ -65,7 +79,7 @@
 
       connectedCallback() {             
           this.attachShadow({mode: 'open'});
-          this.shadowRoot.innerHTML = this.render();
+          this.shadowRoot.innerHTML = `<button/>${this.attributes.value.value}</button>`;
 
           this.button = this.shadowRoot.querySelector("button");
 
@@ -86,10 +100,6 @@
           const next = this.attributes.next.value;  
           this.context.wfService.setNextAction(next);         
         }
-
-        render(){
-          return `<button>${this.attributes.value.value}</button>`
-        }
     }
 
   
@@ -97,10 +107,46 @@
     window.WebComponents ? window.WebComponents.waitFor(register) : register();
   </script>
 
+  <script>      
+      class AlertActivity {
+        static type = "alert-activity";
+
+        static create(act) {
+            return Object.assign(new AlertActivity(), act);
+        }
+    
+        type = AlertActivity.type;
+        execute = (context) => alert(this.message);
+      }
+  </script>
+
+  <script>      
+    class ApiActivity {      
+      static type = "api-activity";
+
+      static create(act) {
+          return Object.assign(new ApiActivity(), act);
+      }
+  
+      type = ApiActivity.type;
+      execute = (context) => {            
+        fetch(this.url)
+          .then(response => response.json())
+          .then(data => context.modelService.setModelValue("apicall.title", data.title))
+          .then(() => {
+            context.wfService.setNextAction(this.next);                     
+          });        
+      };
+    }
+</script>
+
   <script type="module">
     const wf = document.querySelector("sirius-wf");
     const processDef = document.querySelector("#processDef");
     const loadProcessButton = document.querySelector("#loadProcessButton");
+
+    wf.addActivity(AlertActivity.type, AlertActivity.create);
+    wf.addActivity(ApiActivity.type, ApiActivity.create);
 
     setTimeout(() => loadProcessButton.click(), 0);    
    

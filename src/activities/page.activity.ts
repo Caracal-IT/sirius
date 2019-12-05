@@ -12,5 +12,8 @@ export class PageActivity implements Activity, Page  {
     }
     
     type = PageActivity.type;
-    execute = (context: Context) => context.container.page = {...this, context: context}
+    execute = (context: Context) => { 
+        context.container.page = {components: []};
+        setTimeout(() => context.container.page = {...this, context: context}, 0);
+    }
 }

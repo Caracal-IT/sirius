@@ -11,6 +11,13 @@ export class WFService {
     constructor(private store: Store) { 
         this.store.mapDispatchToProps(this, { setNextAction, setProcess });        
     }
+    
+    addActivity(type: string, create: any){
+        const act = ActivityFactiory.activities.find(a => a.type === type);
+
+        if(!act)
+            ActivityFactiory.activities.push({type, create})
+    }
 
     parse(processDef: string) {
         try {

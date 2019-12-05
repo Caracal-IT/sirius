@@ -19,6 +19,7 @@ export namespace Components {
     'page': Page;
   }
   interface SiriusWf {
+    'addActivity': (type: string, create: any) => Promise<void>;
     'goto': (activity: string) => Promise<void>;
     'loadProcess': (process: Process) => Promise<void>;
     'parse': (processDef: string) => Promise<Process>;

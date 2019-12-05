@@ -26,6 +26,11 @@ export class SiriusWf {
   @Prop({ context: "store" }) store: Store;  
   
   @Method()
+  async addActivity(type: string, create: any){
+    this.wfService.addActivity(type, create);
+  }
+
+  @Method()
   async goto(activity: string){
     this.wfService.setNextAction(activity);
   }
@@ -60,8 +65,8 @@ export class SiriusWf {
       const {wf:{ model: model, currProcess: currProcess, currAction: currAction }} = state;
 
       const context = new Context(model, modelService, this.wfService, this);
-
-      if(this.currProcess === currProcess && this.currAction == currAction)
+      
+      if(this.currProcess === currProcess && this.currAction === currAction)
         return;
 
       this.currProcess = currProcess;

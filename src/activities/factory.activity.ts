@@ -8,7 +8,7 @@ export class ActivityFactiory {
         { type: DesisionActivity.type, create: DesisionActivity.create }
     ]
 
-    static linkActivities(process: Process){              
+    static linkActivities(process: Process){            
         process
             .activities
             .forEach(p => {

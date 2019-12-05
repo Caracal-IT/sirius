@@ -26,7 +26,7 @@ export class SiriusPage {
 
   render() {
     const renderItem = (item: WebComponent) => <item.tag wf-element onInput={this.inputHandler.bind(this)} {...item} context={this.page["context"]} value={this.modelService.getModelValue(item)} />
-        
+    
     if(this.page && this.page.components)    
       return this.page.components.map(renderItem);        
   }
