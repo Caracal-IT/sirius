@@ -20,8 +20,12 @@ export class SiriusPage {
     this.modelService = new ModelService(this.store);    
   }
 
+  inputHandler(event: Event) {
+    this.modelService.setModelValue(event.target["id"], event.target["value"]);
+  }
+
   render() {
-    const renderItem = (item: WebComponent) => <item.tag {...item} wf-element {...this.modelService} value={this.modelService.getModelValue(item.id)}/>
+    const renderItem = (item: WebComponent) => <item.tag wf-element onInput={this.inputHandler.bind(this)} {...item} context={this.page["context"]} value={this.modelService.getModelValue(item)} />
         
     if(this.page && this.page.components)    
       return this.page.components.map(renderItem);        

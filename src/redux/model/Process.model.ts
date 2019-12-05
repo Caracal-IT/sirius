@@ -1,6 +1,6 @@
-import { Page } from "puppeteer";
+import { Activity } from "./activity";
 
 export class Process {
     name: string;
-    activities: Array<Page|any>
+    activities: Array<Activity|any>
 }

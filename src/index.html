@@ -11,7 +11,7 @@
 
 </head>
 
-<body>  
+<body>    
   <sirius-wf></sirius-wf>
   <hr/>
   <span>Custom Workflow</span>  
@@ -19,49 +19,98 @@
     {
       "name": "Workflow1",
       "activities": [
-        {
+        {          
           "name": "start",
-          "components": [
-            { "tag": "polaris-label" },
-            { "tag": "polaris-select", "id": "registration.numberSelect" },
-            { "tag": "polaris-select", "id": "registration.numberSelect2" },       
+          "type": "page-activity",
+          "components": [                           
             { "tag": "input", "id": "registration.firstName" },
-            { "tag": "polaris-button", "id": "nextButton", "caption":"Next", "next": "page1"}
+            { "tag": "moon-button", "id": "btn1", "value": "Next", "next": "page1" },
+            { "tag": "moon-button", "id": "btn2", "value": "Alert", "next": "page3" }
           ]    
         },
         {
           "name": "page1",
-          "components": [                        
-            { "tag": "input", "id": "registration.firstName" },
+          "type": "page-activity",
+          "components": [                                   
             { "tag": "input", "id": "registration.lastName" },
-            { "tag": "polaris-button", "id":"nextButton", "caption":"Previous", "next": "start"}
+            { "tag": "input", "id": "registration.firstName" },
+            { "tag": "moon-button", "id": "btn3", "value": "Start", "next": "start" }          
           ]    
+        },
+        {
+          "name": "page2",
+          "type": "page-activity",
+          "components": [                        
+            { "tag": "input", "id": "page2", "value": "Page2" },
+            { "tag": "moon-button", "id": "btn4", "value": "Start", "next": "start" }                    
+          ]    
+        },
+        {
+          "name": "page3",
+          "type": "desision-activity",
+          "left": "model.registration&&model.registration.firstName",
+          "equality": "===",
+          "right": "'Lourens'",
+          "trueAction": "page1",
+          "falseAction": "page2"
         }
       ]
     }
-  </textarea> 
+  </textarea>  
   <button id="loadProcessButton">Load New Process</button>
     
-  <script type="module">           
+  <script>    
+    class MoonButton extends HTMLElement {
+      static get observedAttributes() { return ['name', 'id', 'value', 'next']; }
+
+      connectedCallback() {             
+          this.attachShadow({mode: 'open'});
+          this.shadowRoot.innerHTML = this.render();
+
+          this.button = this.shadowRoot.querySelector("button");
+
+          this.handler = this.clickHandler.bind(this);          
+          this.button.addEventListener('click', this.handler);
+        }
+        
+        attributeChangedCallback(name, oldValue, newValue) {
+          if(name === "value" && this.button)
+            this.button.innerText =  newValue;         
+        }
+
+        disconnectedCallback() {         
+          this.button.removeEventListener('click', this.handler);
+        }
+
+        clickHandler() {
+          const next = this.attributes.next.value;  
+          this.context.wfService.setNextAction(next);         
+        }
+
+        render(){
+          return `<button>${this.attributes.value.value}</button>`
+        }
+    }
+
+  
+    const register = () => customElements.define('moon-button', MoonButton);
+    window.WebComponents ? window.WebComponents.waitFor(register) : register();
+  </script>
+
+  <script type="module">
     const wf = document.querySelector("sirius-wf");
     const processDef = document.querySelector("#processDef");
     const loadProcessButton = document.querySelector("#loadProcessButton");
 
-    setTimeout(() => {
-      const process = JSON.parse(processDef.value.trim());
-      wf.loadProcess(process);
-    }, 0);    
+    setTimeout(() => loadProcessButton.click(), 0);    
    
-    loadProcessButton.addEventListener("click", () => {
-      try {                
-        const process = JSON.parse(processDef.value.trim());
-        const event = new CustomEvent("loadProcess",  {detail: process});
-            
-        wf.dispatchEvent(event);
-      }
-      catch(ex) {
-        console.dir(ex);
-      }
+    loadProcessButton.addEventListener("click", async () => {
+      const process = await wf.parse(processDef.value);
+
+      if(!process)
+        return;
+        
+        wf.loadProcess(process);        
     })    
   </script>
 </body>

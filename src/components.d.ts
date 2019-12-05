@@ -15,54 +15,18 @@ import {
 } from './redux/model/Process.model';
 
 export namespace Components {
-  interface MyComponent {
-    'first': string;
-    'last': string;
-    'middle': string;
-  }
-  interface PolarisButton {
-    'caption': string;
-    'next': string;
-  }
-  interface PolarisLabel {}
-  interface PolarisSelect {
-    'value': any;
-  }
   interface SiriusPage {
     'page': Page;
   }
   interface SiriusWf {
     'goto': (activity: string) => Promise<void>;
     'loadProcess': (process: Process) => Promise<void>;
+    'parse': (processDef: string) => Promise<Process>;
   }
 }
 
 declare global {
 
-
-  interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {}
-  var HTMLMyComponentElement: {
-    prototype: HTMLMyComponentElement;
-    new (): HTMLMyComponentElement;
-  };
-
-  interface HTMLPolarisButtonElement extends Components.PolarisButton, HTMLStencilElement {}
-  var HTMLPolarisButtonElement: {
-    prototype: HTMLPolarisButtonElement;
-    new (): HTMLPolarisButtonElement;
-  };
-
-  interface HTMLPolarisLabelElement extends Components.PolarisLabel, HTMLStencilElement {}
-  var HTMLPolarisLabelElement: {
-    prototype: HTMLPolarisLabelElement;
-    new (): HTMLPolarisLabelElement;
-  };
-
-  interface HTMLPolarisSelectElement extends Components.PolarisSelect, HTMLStencilElement {}
-  var HTMLPolarisSelectElement: {
-    prototype: HTMLPolarisSelectElement;
-    new (): HTMLPolarisSelectElement;
-  };
 
   interface HTMLSiriusPageElement extends Components.SiriusPage, HTMLStencilElement {}
   var HTMLSiriusPageElement: {
@@ -76,40 +40,18 @@ declare global {
     new (): HTMLSiriusWfElement;
   };
   interface HTMLElementTagNameMap {
-    'my-component': HTMLMyComponentElement;
-    'polaris-button': HTMLPolarisButtonElement;
-    'polaris-label': HTMLPolarisLabelElement;
-    'polaris-select': HTMLPolarisSelectElement;
     'sirius-page': HTMLSiriusPageElement;
     'sirius-wf': HTMLSiriusWfElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface MyComponent {
-    'first'?: string;
-    'last'?: string;
-    'middle'?: string;
-  }
-  interface PolarisButton {
-    'caption'?: string;
-    'next'?: string;
-    'onGotoAct'?: (event: CustomEvent<any>) => void;
-  }
-  interface PolarisLabel {}
-  interface PolarisSelect {
-    'value'?: any;
-  }
   interface SiriusPage {
     'page'?: Page;
   }
   interface SiriusWf {}
 
   interface IntrinsicElements {
-    'my-component': MyComponent;
-    'polaris-button': PolarisButton;
-    'polaris-label': PolarisLabel;
-    'polaris-select': PolarisSelect;
     'sirius-page': SiriusPage;
     'sirius-wf': SiriusWf;
   }
@@ -121,10 +63,6 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
   export namespace JSX {
     interface IntrinsicElements {
-      'my-component': LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
-      'polaris-button': LocalJSX.PolarisButton & JSXBase.HTMLAttributes<HTMLPolarisButtonElement>;
-      'polaris-label': LocalJSX.PolarisLabel & JSXBase.HTMLAttributes<HTMLPolarisLabelElement>;
-      'polaris-select': LocalJSX.PolarisSelect & JSXBase.HTMLAttributes<HTMLPolarisSelectElement>;
       'sirius-page': LocalJSX.SiriusPage & JSXBase.HTMLAttributes<HTMLSiriusPageElement>;
       'sirius-wf': LocalJSX.SiriusWf & JSXBase.HTMLAttributes<HTMLSiriusWfElement>;
     }

@@ -12,16 +12,20 @@ export class ModelService {
 
   onInput = this.inputHandler.bind(this);
 
-  getModelValue(id: string) {
+  getModelValue(component: any) {
       const model = this.store.getState()["wf"]["model"];
+      let value: any;
 
-      if(id && model) 
-        return id.split(".").reduce((total, currentElement) => total ? total[currentElement]: null, model);
+      if(component && component.id && model) 
+        value = component.id.split(".").reduce((total, currentElement) => total ? total[currentElement]: null, model);
             
-      return null;
+      if(value === undefined && component.value)
+        value = component.value;
+
+      return value;
   }
-  
-  inputHandler(event: Event) {    
+
+  private inputHandler(event: Event) {    
     const target = event.currentTarget as HTMLElement;    
     const wfElement = target.closest("[wf-element]");    
 
