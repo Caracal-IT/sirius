@@ -18,9 +18,10 @@ export class ApiActivity {
 
     execute = (context: Context) => {  
         const url = new ModelUrl(this.url, this.method, context.modelService);        
-        context
+        
+        return context
             .http
             .fetch(url, this.mappings)
-            .then(() => context.wfService.setNextAction(this.next));
+            .then(() => context.wfService.setNextAction(this.next));            
     };
   }

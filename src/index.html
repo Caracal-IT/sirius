@@ -84,6 +84,10 @@
     }
   </textarea>  
   <button id="loadProcessButton">Load New Process</button>
+  <button id="clearErrorsButton">Clear Errors</button>
+  <br>
+  <textarea id="errorMsg" readonly="readonly" style="resize: none;color:darkred;font-weight:bolder;width: 47%;height:100px"></textarea>
+  <textarea id="errorStack" readonly="readonly" style="resize: none;color:darkred;font-weight:bolder;width: 47%;height:100px"></textarea>
     
   <script>    
     class MoonButton extends HTMLElement {
@@ -133,6 +137,10 @@
   </script>
 
   <script type="module">
+    const errorMsg = document.querySelector("#errorMsg");
+    const errorStack = document.querySelector("#errorStack");
+    const clearErrorsButton = document.querySelector("#clearErrorsButton");
+
     const wf = document.querySelector("sirius-wf");
     const processDef = document.querySelector("#processDef");
     const loadProcessButton = document.querySelector("#loadProcessButton");
@@ -140,8 +148,17 @@
     wf.addActivity(AlertActivity.type, AlertActivity.create);
     
     setTimeout(() => loadProcessButton.click(), 0);    
-   
-    loadProcessButton.addEventListener("click", async () => {
+    wf.addEventListener("wfError", (event) => {           
+      errorMsg.innerText = event.detail.message;
+      errorStack.innerText = event.detail.stack;
+    });
+
+    clearErrorsButton.addEventListener('click', () => {
+      errorMsg.innerText = "";
+      errorStack.innerText = "";
+    });
+
+    loadProcessButton.addEventListener("click", async () => {      
       const process = await wf.parse(processDef.value);
 
       if(!process)

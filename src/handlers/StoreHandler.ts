@@ -55,7 +55,22 @@ export class StoreHandler {
         const act = this.currProcess.activities.find((p: any) => p.name === this.currAction);
       
         if(this.canExecute(act))        
-            act.execute(this.context);        
+            this.tryExecute(act);        
+    }
+
+    private async tryExecute(act: any) {
+        try {
+            await act.execute(this.context);        
+        }
+        catch(ex) {            
+            this.handleError(ex);
+        }
+    }
+
+    private handleError(error: Error) {
+        this.context.container.wfError.emit(error)
+        console.log("ERROR OCCURED", error);
+        console.dir(error);
     }
     
     private hasActivities() {

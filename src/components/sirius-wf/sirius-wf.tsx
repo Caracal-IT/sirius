@@ -1,4 +1,4 @@
-import { Component, Prop, State, Method, Listen, h } from "@stencil/core";
+import { Component, Event, EventEmitter, Prop, State, Method, Listen, h } from "@stencil/core";
 
 import "@stencil/redux";
 import { Store, Unsubscribe } from "@stencil/redux";
@@ -22,7 +22,12 @@ export class SiriusWf {
   currProcess: Process; 
   currAction: string;
   
+
+  @Event()
+  wfError: EventEmitter;
+
   @State() page: Page;  
+
   @Prop({ context: "store" }) store: Store;  
   
   @Method()

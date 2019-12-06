@@ -18,13 +18,7 @@ export class CodeActivity implements Activity {
     }
 
     eval(expression: string, context: Context) {
-        try {
-            var f =  new Function('context', 'model', expression);        
-            return f(context, context.model);         
-        }
-        catch(ex){
-            console.log(ex);
-            return false;
-        }
+        const f =  new Function('context', 'model', expression);        
+        return f(context, context.model);                
     }
 }

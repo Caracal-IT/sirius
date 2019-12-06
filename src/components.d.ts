@@ -50,7 +50,9 @@ declare namespace LocalJSX {
   interface SiriusPage {
     'page'?: Page;
   }
-  interface SiriusWf {}
+  interface SiriusWf {
+    'onWfError'?: (event: CustomEvent<any>) => void;
+  }
 
   interface IntrinsicElements {
     'sirius-page': SiriusPage;
