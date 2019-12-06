@@ -13,7 +13,7 @@ export class ModelService {
   onInput = this.inputHandler.bind(this);
 
   getModelValue(component: any) {
-      const model = this.store.getState()["wf"]["model"];
+      const model = this.getModel();
       let value: any;
 
       if(component && component.id && model) 
@@ -26,8 +26,12 @@ export class ModelService {
       return value;
   }
 
-  getValue(key: string, model: any) {
-    return key.split(".").reduce((total, currentElement) => total ? total[currentElement]: null, model)
+  getModel(): any {
+    return this.store.getState()["wf"]["model"];
+  }
+
+  getValue(key: string, model: any) {    
+    return key.split(".").reduce((total, currentElement) => total ? total[currentElement]: null, model);
   }
 
   private inputHandler(event: Event) {    

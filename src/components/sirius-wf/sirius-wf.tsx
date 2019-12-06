@@ -10,6 +10,7 @@ import { Process } from "../../redux/model/Process.model";
 import { WFService } from "../../services/wf.service";
 import { ModelService } from "../../services/model.service";
 import { Context } from "../../redux/model/Context.model";
+import { HttpService } from "../../services/http.service";
 
 @Component({
   tag: "sirius-wf",
@@ -64,7 +65,7 @@ export class SiriusWf {
       const state =  this.store.getState();
       const {wf:{ model: model, currProcess: currProcess, currAction: currAction }} = state;
 
-      const context = new Context(model, modelService, this.wfService, this);
+      const context = new Context(model, modelService, this.wfService, new HttpService(modelService), this);
       
       if(this.currProcess === currProcess && this.currAction === currAction)
         return;
