@@ -14,7 +14,7 @@ export const config: Config = {
       type: "www",
       serviceWorker: null // disable service workers
     }
-    /*
+    
     ,
     {
       type: 'www',
@@ -22,7 +22,7 @@ export const config: Config = {
       copy: [
         { src: '../www', dest: '' }
       ]
-    }*/
+    }
 
   ]
 };

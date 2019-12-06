@@ -111,7 +111,7 @@
     const processDef = document.querySelector("#processDef");
     const loadProcessButton = document.querySelector("#loadProcessButton");
 
-    wf.addActivity(AlertActivity.type, AlertActivity.create);
+    setTimeout(() => wf.addActivity(AlertActivity.type, AlertActivity.create), 0);
     
     setTimeout(() => loadProcessButton.click(), 0);    
     wf.addEventListener("wfError", (event) => {           
@@ -131,7 +131,7 @@
         return;
         
         wf.loadProcess(process);        
-    })</script> <script data-build="2019-12-06T16:33:08">if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    })</script> <script data-build="2019-12-06T16:36:29">if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('/sw.js')
       .then(function(reg) {

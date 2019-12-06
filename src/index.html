@@ -145,7 +145,7 @@
     const processDef = document.querySelector("#processDef");
     const loadProcessButton = document.querySelector("#loadProcessButton");
 
-    wf.addActivity(AlertActivity.type, AlertActivity.create);
+    setTimeout(() => wf.addActivity(AlertActivity.type, AlertActivity.create), 0);
     
     setTimeout(() => loadProcessButton.click(), 0);    
     wf.addEventListener("wfError", (event) => {           
