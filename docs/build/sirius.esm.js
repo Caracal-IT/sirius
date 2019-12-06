@@ -1,1 +1,1 @@
-import{p,b as m}from"./p-d87f4611.js";p().then(p=>m([["p-hpubzjyl",[[0,"polaris-wf",{name:[32]}],[1,"my-component",{name:[32]}]]]],p));
+import{p as s,b as a}from"./p-06ff02dd.js";s().then(s=>a([["p-424nzgm7",[[1,"sirius-wf",{page:[32],addActivity:[64],goto:[64],loadProcess:[64],parse:[64]}],[1,"sirius-page",{page:[16]}]]]],s));

@@ -27,53 +27,23 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "index.html",
-    "revision": "4297ece281542b20993d45b38222b3f2"
-  },
-  {
-    "url": "build/app-93d25773.js"
-  },
-  {
-    "url": "build/core-c2ec3f06.js",
-    "revision": "bf1a2759b54b62a785e43421157e2f5e"
-  },
-  {
-    "url": "build/css-shim-978387b1-1e75855f.js",
-    "revision": "b23c18189b172b7e2b83302e4e5344e2"
-  },
-  {
-    "url": "build/dom-96781eef-a2fb04dd.js",
-    "revision": "a93639f5a73a9b22a971bfd84437fba7"
+    "revision": "83a14047a480cd372bcfb883331e1810"
   },
   {
     "url": "build/index.esm.js",
     "revision": "d41d8cd98f00b204e9800998ecf8427e"
   },
   {
-    "url": "build/my-component.entry.js",
-    "revision": "34dc0d85f69af096d8dc9caa810eff03"
+    "url": "build/p-06ff02dd.js"
   },
   {
-    "url": "build/p-affe7c09.js"
+    "url": "build/p-424nzgm7.entry.js"
   },
   {
     "url": "build/p-d0882b30.js"
   },
   {
     "url": "build/p-d8631f0b.js"
-  },
-  {
-    "url": "build/p-d87f4611.js"
-  },
-  {
-    "url": "build/p-hpubzjyl.entry.js"
-  },
-  {
-    "url": "build/polaris-wf.entry.js",
-    "revision": "e2fa11ca6c2d42bc1ad70ff7919a4f68"
-  },
-  {
-    "url": "build/shadow-css-4889ae62-23996f3f.js",
-    "revision": "121a72dffe019db9d046569d159930f3"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});

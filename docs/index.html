@@ -1,4 +1,137 @@
-<!doctype html><html dir="ltr" lang="en"><head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"> <title>Stencil Component Starter</title> <script type="module" src="build/sirius.esm.js"></script> <script nomodule="" src="build/sirius.js"></script> </head> <body> <polaris-wf></polaris-wf><script data-build="2019-11-24T17:06:35">if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+<!doctype html><html dir="ltr" lang="en"><head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"> <title>Stencil Component Starter</title> <script type="module" src="build/sirius.esm.js"></script> <script nomodule="" src="build/sirius.js"></script> </head> <body> <sirius-wf style="display: block; min-height: 100px;"></sirius-wf> <hr> <span>Custom Workflow</span> <textarea id="processDef" style="width: 100%; height: 500px;">    {
+      "name": "Workflow1",
+      "activities": [
+        {          
+          "name": "start",
+          "type": "page-activity",
+          "components": [                           
+            { "tag": "input", "id": "apicall.id" },
+            { "tag": "input", "id": "apicall.title" },
+            { "tag": "input", "id": "registration.firstName" },
+            { "tag": "moon-button", "id": "btn1", "value": "Next", "next": "page1" },
+            { "tag": "moon-button", "id": "btn2", "value": "Decision", "next": "page3" },
+            { "tag": "moon-button", "id": "btn2", "value": "Alert", "next": "page4" },
+            { "tag": "moon-button", "id": "btn2", "value": "Api Call", "next": "page5" },
+            { "tag": "moon-button", "id": "btn2", "value": "Code", "next": "page6" }
+          ]    
+        },
+        {
+          "name": "page1",
+          "type": "page-activity",
+          "components": [                                   
+            { "tag": "input", "id": "registration.lastName" },
+            { "tag": "input", "id": "registration.firstName" },
+            { "tag": "moon-button", "id": "btn3", "value": "Start", "next": "start" }          
+          ]    
+        },
+        {
+          "name": "page2",
+          "type": "page-activity",
+          "components": [                        
+            { "tag": "input", "id": "page2", "value": "Page2" },
+            { "tag": "moon-button", "id": "btn4", "value": "Start", "next": "start" }                    
+          ]    
+        },
+        {
+          "name": "page3",
+          "type": "desision-activity",
+          "left": "model.registration&amp;&amp;model.registration.firstName",
+          "equality": "===",
+          "right": "'Lourens'",
+          "trueAction": "page2",
+          "falseAction": "page1"
+        },
+        {
+          "name": "page4",
+          "type": "alert-activity",
+          "message": "This is the alert activity"
+        },
+        {
+          "name": "page5",
+          "type": "api-activity",
+          "url": "https://jsonplaceholder.typicode.com/posts/{apicall.id}",
+          "method": "get",
+          "mappings": [
+            {"client" : "apicall.title", "remote": "title", "direction": "inout"}
+          ],
+          "next": "start"
+        },
+        {
+          "name": "page6",
+          "type": "code-activity",
+          "expression": "alert(model.apicall&amp;&amp;model.apicall.title);",
+          "next": "start"
+        }
+      ]
+    }
+  </textarea> <button id="loadProcessButton">Load New Process</button> <button id="clearErrorsButton">Clear Errors</button> <br> <textarea id="errorMsg" readonly="readonly" style="resize: none; color: darkred; font-weight: bolder; width: 47%; height: 100px;"></textarea> <textarea id="errorStack" readonly="readonly" style="resize: none; color: darkred; font-weight: bolder; width: 47%; height: 100px;"></textarea> <script>class MoonButton extends HTMLElement {
+      static get observedAttributes() { return ['name', 'id', 'value', 'next']; }
+
+      connectedCallback() {             
+          this.attachShadow({mode: 'open'});
+          this.shadowRoot.innerHTML = `<button/>${this.attributes.value.value}</button>`;
+
+          this.button = this.shadowRoot.querySelector("button");
+
+          this.handler = this.clickHandler.bind(this);          
+          this.button.addEventListener('click', this.handler);
+        }
+        
+        attributeChangedCallback(name, oldValue, newValue) {
+          if(name === "value" && this.button)
+            this.button.innerText =  newValue;         
+        }
+
+        disconnectedCallback() {         
+          this.button.removeEventListener('click', this.handler);
+        }
+
+        clickHandler() {
+          const next = this.attributes.next.value;  
+          this.context.wfService.setNextAction(next);         
+        }
+    }
+
+  
+    const register = () => customElements.define('moon-button', MoonButton);
+    window.WebComponents ? window.WebComponents.waitFor(register) : register();</script> <script>class AlertActivity {
+        static type = "alert-activity";
+
+        static create(act) {
+            return Object.assign(new AlertActivity(), act);
+        }
+    
+        type = AlertActivity.type;
+        execute = (context) => alert(this.message);
+      }</script> <script type="module">const errorMsg = document.querySelector("#errorMsg");
+    const errorStack = document.querySelector("#errorStack");
+    const clearErrorsButton = document.querySelector("#clearErrorsButton");
+
+    const wf = document.querySelector("sirius-wf");
+    const processDef = document.querySelector("#processDef");
+    const loadProcessButton = document.querySelector("#loadProcessButton");
+
+    wf.addActivity(AlertActivity.type, AlertActivity.create);
+    
+    setTimeout(() => loadProcessButton.click(), 0);    
+    wf.addEventListener("wfError", (event) => {           
+      errorMsg.innerText = event.detail.message;
+      errorStack.innerText = event.detail.stack;
+    });
+
+    clearErrorsButton.addEventListener('click', () => {
+      errorMsg.innerText = "";
+      errorStack.innerText = "";
+    });
+
+    loadProcessButton.addEventListener("click", async () => {      
+      const process = await wf.parse(processDef.value);
+
+      if(!process)
+        return;
+        
+        wf.loadProcess(process);        
+    })</script> <script data-build="2019-12-06T16:33:08">if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('/sw.js')
       .then(function(reg) {
