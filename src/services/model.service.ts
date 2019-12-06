@@ -26,6 +26,10 @@ export class ModelService {
       return value;
   }
 
+  getValue(key: string, model: any) {
+    return key.split(".").reduce((total, currentElement) => total ? total[currentElement]: null, model)
+  }
+
   private inputHandler(event: Event) {    
     const target = event.currentTarget as HTMLElement;    
     const wfElement = target.closest("[wf-element]");    

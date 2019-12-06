@@ -66,6 +66,9 @@
           "name": "page5",
           "type": "api-activity",
           "url": "https://jsonplaceholder.typicode.com/posts/2",
+          "mappings": [
+            {"client" : "apicall.title", "remote": "title"}
+          ],
           "next": "start"
         }
       ]
@@ -132,10 +135,14 @@
       execute = (context) => {            
         fetch(this.url)
           .then(response => response.json())
-          .then(data => context.modelService.setModelValue("apicall.title", data.title))
-          .then(() => {
-            context.wfService.setNextAction(this.next);                     
-          });        
+          .then(data => {
+            if(this.mappings && this.mappings.length > 0) 
+              this.mappings.forEach(m => context.modelService.setModelValue(m.client, context.modelService.getValue(m.remote, data)));
+            else
+              Object.keys(data).forEach(k => context.modelService.setModelValue(k, data[k]));
+
+            context.wfService.setNextAction(this.next);                                 
+          });                 
       };
     }
 </script>
