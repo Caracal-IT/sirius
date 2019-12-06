@@ -1,7 +1,8 @@
 import { Context } from './../redux/model/Context.model';
 import { Activity } from "../redux/model/activity";
+import { CodeActivity } from './code.activity';
 
-export class DesisionActivity implements Activity {
+export class DesisionActivity extends CodeActivity {
     static type = "desision-activity" 
     
     static create(act: Activity) {        
@@ -16,22 +17,13 @@ export class DesisionActivity implements Activity {
     trueAction: string;
     falseAction: string;
 
-    execute = (context: Context) => {                      
-        const result = this.eval(this.left + " " + this.equality + " " + this.right, context);
+    execute = (context: Context) => {                              
+        const expression = `return ${this.left} ${this.equality} ${this.right};`
+        const result = super.eval(expression, context);
+        
         if(result)
             context.wfService.setNextAction(this.trueAction)             
         else
-            context.wfService.setNextAction(this.falseAction)            
-    }
-
-    eval(expression: string, context: Context) {
-        try {
-            var f =  new Function('context', 'model', 'return ' + expression);
-            return f(context, context.model);         
-        }
-        catch(ex){
-            console.log(ex);
-            return false;
-        }
-    }
+            context.wfService.setNextAction(this.falseAction)                    
+    }    
 }
