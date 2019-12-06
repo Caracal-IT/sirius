@@ -1,4 +1,4 @@
-import { SiriusWf } from './../components/sirius-wf/sirius-wf';
+import { SiriusWf } from '../components/sirius-wf/sirius-wf';
 import { Store, Unsubscribe } from "@stencil/redux";
 import { WFService } from "../services/wf.service";
 import { ModelService } from "../services/model.service";
