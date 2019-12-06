@@ -8,9 +8,7 @@ import { Page } from "../../redux/model/Page.model";
 import { Process } from "../../redux/model/Process.model";
 
 import { WFService } from "../../services/wf.service";
-import { ModelService } from "../../services/model.service";
-import { Context } from "../../redux/model/Context.model";
-import { HttpService } from "../../services/http.service";
+import { StoreHandler } from "../../utils/StoreHandler";
 
 @Component({
   tag: "sirius-wf",
@@ -19,7 +17,8 @@ import { HttpService } from "../../services/http.service";
 export class SiriusWf {  
   storeUnsubscribe: Unsubscribe;
   wfService: WFService;
-
+  storeHandler: StoreHandler;
+  
   currProcess: Process; 
   currAction: string;
   
@@ -59,27 +58,13 @@ export class SiriusWf {
   async componentWillLoad() {
     this.store.setStore(configureStore({})); 
     this.wfService = new WFService(this.store); 
-    const modelService = new ModelService(this.store);   
+    this.storeHandler = new StoreHandler(this.store, this);
 
-    this.store.getStore().subscribe(() => {
-      const state =  this.store.getState();
-      const {wf:{ model: model, currProcess: currProcess, currAction: currAction }} = state;
+    this.storeUnsubscribe = this.storeHandler.subscribe();       
+  }
 
-      const context = new Context(model, modelService, this.wfService, new HttpService(modelService), this);
-      
-      if(this.currProcess === currProcess && this.currAction === currAction)
-        return;
-
-      this.currProcess = currProcess;
-      this.currAction = currAction;
-
-      if(currProcess && currProcess.activities) {      
-        const act = currProcess.activities.find((p: any) => p.name === currAction);
-
-        if(act && act.execute)        
-            act.execute(context);        
-      }
-    });       
+  async componentDidUnload(){
+    this.storeUnsubscribe();
   }
 
   render() {
