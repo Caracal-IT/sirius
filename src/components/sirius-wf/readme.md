@@ -5,17 +5,67 @@
 <!-- Auto Generated Below -->
 
 
+## Events
+
+| Event     | Description | Type               |
+| --------- | ----------- | ------------------ |
+| `wfError` |             | `CustomEvent<any>` |
+
+
+## Methods
+
+### `addActivity(type: string, create: any) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `goto(activity: string) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `loadProcess(process: Process) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `parse(processDef: string) => Promise<Process>`
+
+
+
+#### Returns
+
+Type: `Promise<Process>`
+
+
+
+
 ## Dependencies
 
 ### Depends on
 
-- [my-component](../my-component)
+- [sirius-page](../sirius-page)
 
 ### Graph
 ```mermaid
 graph TD;
-  polaris-wf --> my-component
-  style polaris-wf fill:#f9f,stroke:#333,stroke-width:4px
+  sirius-wf --> sirius-page
+  style sirius-wf fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

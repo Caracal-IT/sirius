@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Prop, State, Method, Listen, h } from "@stencil/core";
+import { Component, Event, EventEmitter, Prop, State, Method, h } from "@stencil/core";
 
 import "@stencil/redux";
 import { Store, Unsubscribe } from "@stencil/redux";
@@ -18,10 +18,6 @@ export class SiriusWf {
   storeUnsubscribe: Unsubscribe;
   wfService: WFService;
   storeHandler: StoreHandler;
-  
-  currProcess: Process; 
-  currAction: string;
-  
 
   @Event()
   wfError: EventEmitter;
@@ -48,16 +44,6 @@ export class SiriusWf {
   @Method()
   async parse(processDef: string) {
     return this.wfService.parse(processDef);
-  }
-
-  @Listen("gotoAct")
-  async gotoActHandler(event: CustomEvent){
-    this.goto(event.detail);
-  }
-
-  @Listen("loadProcess")
-  async loadProcessHandler(event: CustomEvent) {
-    this.loadProcess(event.detail); 
   }
 
   async componentWillLoad() {
