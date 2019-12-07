@@ -54,7 +54,7 @@ export class SiriusWf {
     this.storeUnsubscribe = this.storeHandler.subscribe();       
   }
 
-  async componentDidUnload(){
+  async componentDidUnload() {
     this.storeUnsubscribe();
   }
 

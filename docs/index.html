@@ -131,19 +131,4 @@
         return;
         
         wf.loadProcess(process);        
-    })</script> <script data-build="2019-12-06T16:36:29">if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/sw.js')
-      .then(function(reg) {
-        reg.onupdatefound = function() {
-          var installingWorker = reg.installing;
-          installingWorker.onstatechange = function() {
-            if (installingWorker.state === 'installed') {
-              window.dispatchEvent(new Event('swUpdate'))
-            }
-          }
-        }
-      })
-      .catch(function(err) { console.error('service worker error', err) });
-  });
-}</script></body></html>
+    })</script> </body></html>

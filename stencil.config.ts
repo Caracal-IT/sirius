@@ -14,15 +14,16 @@ export const config: Config = {
       type: "www",
       serviceWorker: null // disable service workers
     }
-    
+    /*
     ,
     {
       type: 'www',
       dir: 'docs',
+      serviceWorker: null,
       copy: [
         { src: '../www', dest: '' }
       ]
     }
-
+*/
   ]
 };
