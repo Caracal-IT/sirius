@@ -14,7 +14,8 @@ export class StoreHandler {
 
     currProcess: Process; 
     currAction: string;
-        
+    lastAction: string;
+            
     constructor(private store: Store, private container: SiriusWf){
         this.wfService = new WFService(this.store);
         this.modelService = new ModelService(this.store);
@@ -31,17 +32,18 @@ export class StoreHandler {
         if(!this.setWfState())
             return; 
     
+        
         this.executeActivity();
     }
 
     private setWfState(): boolean {
         const state =  this.store.getState();
         const {wf:{ model: model, currProcess: currProcess, currAction: currAction }} = state;
-          
-        if(this.currProcess === currProcess && this.currAction === currAction)
-          return false;
-
         this.context.model = model;
+
+        if(this.currProcess === currProcess && this.currAction === currAction)                     
+          return false;
+                
         this.currProcess = currProcess;
         this.currAction = currAction;
 
@@ -52,10 +54,20 @@ export class StoreHandler {
         if(!this.hasActivities())
             return;
         
-        const act = this.currProcess.activities.find((p: any) => p.name === this.currAction);
-      
-        if(this.canExecute(act))        
-            this.tryExecute(act);        
+        const act = this.currProcess.activities.find((p: any) => p.name === this.currAction);    
+        const model = this.context.model;  
+        
+        if(this.canExecute(act)){    
+            this.tryExecute(act)
+                .then(() => {  
+                    if(act.components)            
+                        this.lastAction = this.currAction;
+                    else if(model !== this.context.model)               
+                        this.wfService.setNextAction(this.lastAction);   
+                    else                                                 
+                        this.wfService.setNextAction(null);                
+                });
+        }             
     }
 
     private async tryExecute(act: any) {

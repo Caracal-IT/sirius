@@ -14,7 +14,8 @@ export const config: Config = {
       type: "www",
       serviceWorker: null, // disable service workers
       copy: [
-        { src: 'workflow', dest: 'wf' }
+        { src: 'workflow', dest: 'wf' },
+        { src: 'demo', dest: 'demo' }
       ]
     }
     /*
@@ -25,7 +26,8 @@ export const config: Config = {
       serviceWorker: null,
       copy: [
         { src: '../www', dest: '' },
-        { src: 'workflow', dest: 'wf' }
+        { src: 'workflow', dest: 'wf' },
+        { src: 'demo', dest: 'demo' }
       ]
     }
     */

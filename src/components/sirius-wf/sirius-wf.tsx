@@ -8,7 +8,7 @@ import { Page } from "../../redux/model/Page.model";
 import { Process } from "../../redux/model/Process.model";
 
 import { WFService } from "../../services/wf.service";
-import { StoreHandler } from "../../handlers/StoreHandler";
+import { StoreHandler } from "../../handlers/store.handler";
 
 @Component({
   tag: "sirius-wf",

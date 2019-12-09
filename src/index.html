@@ -6,9 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
   <title>Stencil Component Starter</title>
 
+  <script src="demo/app.js" defer></script> 
+
+  <!--- Custom Extentions -->
+  <script type="module" src="demo/custom/components/moon-button.js" async></script>
+  <script type="module" src="demo/custom/activities/alert-activity.js" async></script>    
+  <!--- Custom Extentions -->
+  
   <script type="module" src="build/sirius.esm.js"></script>
   <script nomodule src="build/sirius.js"></script>
-
 </head>
 
 <body>    
@@ -28,107 +34,5 @@
   <br>
   <textarea id="errorMsg" readonly="readonly" style="resize: none;color:darkred;font-weight:bolder;width: 47%;height:100px"></textarea>
   <textarea id="errorStack" readonly="readonly" style="resize: none;color:darkred;font-weight:bolder;width: 47%;height:100px"></textarea>
-    
-  <script>    
-    class MoonButton extends HTMLElement {
-      static get observedAttributes() { return ['name', 'id', 'value', 'next']; }
-
-      connectedCallback() {             
-          this.attachShadow({mode: 'open'});
-          this.shadowRoot.innerHTML = `<button/>${this.attributes.value.value}</button>`;
-
-          this.button = this.shadowRoot.querySelector("button");
-
-          this.handler = this.clickHandler.bind(this);          
-          this.button.addEventListener('click', this.handler);
-        }
-        
-        attributeChangedCallback(name, oldValue, newValue) {
-          if(name === "value" && this.button)
-            this.button.innerText =  newValue;         
-        }
-
-        disconnectedCallback() {         
-          this.button.removeEventListener('click', this.handler);
-        }
-
-        clickHandler() {
-          const next = this.attributes.next.value;  
-          this.context.wfService.setNextAction(next);         
-        }
-    }
-
-  
-    const register = () => customElements.define('moon-button', MoonButton);
-    window.WebComponents ? window.WebComponents.waitFor(register) : register();
-  </script>
-
-  <script>      
-      class AlertActivity {
-        static type = "alert-activity";
-
-        static create(act) {
-            return Object.assign(new AlertActivity(), act);
-        }
-    
-        type = AlertActivity.type;
-        execute = (context) => alert(this.message);
-      }
-  </script>
-
-  <script type="module">
-    const errorMsg = document.querySelector("#errorMsg");
-    const errorStack = document.querySelector("#errorStack");
-    const clearErrorsButton = document.querySelector("#clearErrorsButton");
-    const defaultWfButton = document.querySelector("#defaultWfButton");
-    const workflow = document.querySelector("#workflow");
-
-    const wf = document.querySelector("sirius-wf");
-    const processDef = document.querySelector("#processDef");
-    const loadProcessButton = document.querySelector("#loadProcessButton");
-
-    setTimeout(() => wf.addActivity(AlertActivity.type, AlertActivity.create), 0);
-    
-    wf.addEventListener("wfError", (event) => {           
-      errorMsg.innerText = event.detail.message;
-      errorStack.innerText = event.detail.stack;
-    });
-
-    clearErrorsButton.addEventListener('click', () => {
-      errorMsg.innerText = "";
-      errorStack.innerText = "";
-    });
-
-    loadProcessButton.addEventListener("click", async () => {      
-      const process = await wf.parse(processDef.value);
-
-      if(!process)
-        return;
-        
-        wf.loadProcess(process);        
-    })    
-
-    defaultWfButton.addEventListener("click", async () => {
-      if(workflow.value === "-1") {
-        processDef.value = "";
-        wf.loadProcess({}); 
-        return;
-      }
-
-      fetch("wf/" + workflow.value)
-        .then(response => response.text())
-        .then(data => {  
-          
-          processDef.value = data;
-          
-          wf.parse(data).then(process => {
-            if(!process)
-            return;
-        
-            wf.loadProcess(process); 
-          });         
-        });
-    });
-  </script>
 </body>
 </html>
