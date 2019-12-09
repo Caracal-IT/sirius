@@ -12,7 +12,10 @@ export const config: Config = {
     },
     {
       type: "www",
-      serviceWorker: null // disable service workers
+      serviceWorker: null, // disable service workers
+      copy: [
+        { src: 'workflow', dest: 'wf' }
+      ]
     }
     /*
     ,
@@ -21,9 +24,10 @@ export const config: Config = {
       dir: 'docs',
       serviceWorker: null,
       copy: [
-        { src: '../www', dest: '' }
+        { src: '../www', dest: '' },
+        { src: 'workflow', dest: 'wf' }
       ]
     }
-*/
+    */
   ]
 };

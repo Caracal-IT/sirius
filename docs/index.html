@@ -1,4 +1,4 @@
-<!doctype html><html dir="ltr" lang="en"><head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"> <title>Stencil Component Starter</title> <script type="module" src="build/sirius.esm.js"></script> <script nomodule="" src="build/sirius.js"></script> </head> <body> <sirius-wf style="display: block; min-height: 100px;"></sirius-wf> <hr> <span>Custom Workflow</span> <textarea id="processDef" style="width: 100%; height: 500px;">    {
+<!doctype html><html dir="ltr" lang="en"><head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"> <title>Stencil Component Starter</title> <script type="module" src="build/sirius.esm.js"></script> <script nomodule="" src="build/sirius.js"></script> </head> <body> <sirius-wf style="display: block; min-height: 100px;"></sirius-wf> <hr> <span>Custom Workflow</span> <textarea id="processDef" style="width: 100%; height: 300px;">    {
       "name": "Workflow1",
       "activities": [
         {          
@@ -64,7 +64,7 @@
         }
       ]
     }
-  </textarea> <button id="loadProcessButton">Load New Process</button> <button id="clearErrorsButton">Clear Errors</button> <br> <textarea id="errorMsg" readonly="readonly" style="resize: none; color: darkred; font-weight: bolder; width: 47%; height: 100px;"></textarea> <textarea id="errorStack" readonly="readonly" style="resize: none; color: darkred; font-weight: bolder; width: 47%; height: 100px;"></textarea> <script>class MoonButton extends HTMLElement {
+  </textarea> <select id="workflow"> <option value="-1">Select an option</option> <option value="default.wf.json">Default</option> <option value="demo.wf.json">Demo</option> </select> <button id="defaultWfButton">Load Default</button> <button id="loadProcessButton">Load New Process</button> <button id="clearErrorsButton">Clear Errors</button> <br> <textarea id="errorMsg" readonly="readonly" style="resize: none; color: darkred; font-weight: bolder; width: 47%; height: 100px;"></textarea> <textarea id="errorStack" readonly="readonly" style="resize: none; color: darkred; font-weight: bolder; width: 47%; height: 100px;"></textarea> <script>class MoonButton extends HTMLElement {
       static get observedAttributes() { return ['name', 'id', 'value', 'next']; }
 
       connectedCallback() {             
@@ -106,6 +106,8 @@
       }</script> <script type="module">const errorMsg = document.querySelector("#errorMsg");
     const errorStack = document.querySelector("#errorStack");
     const clearErrorsButton = document.querySelector("#clearErrorsButton");
+    const defaultWfButton = document.querySelector("#defaultWfButton");
+    const workflow = document.querySelector("#workflow");
 
     const wf = document.querySelector("sirius-wf");
     const processDef = document.querySelector("#processDef");
@@ -131,4 +133,26 @@
         return;
         
         wf.loadProcess(process);        
-    })</script> </body></html>
+    })    
+
+    defaultWfButton.addEventListener("click", async () => {
+      if(workflow.value === "-1") {
+        processDef.value = "";
+        wf.loadProcess({}); 
+        return;
+      }
+
+      fetch("wf/" + workflow.value)
+        .then(response => response.text())
+        .then(data => {  
+          
+          processDef.value = data;
+          
+          wf.parse(data).then(process => {
+            if(!process)
+            return;
+        
+            wf.loadProcess(process); 
+          });         
+        });
+    });</script> </body></html>

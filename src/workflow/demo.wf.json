@@ -1,0 +1,66 @@
+{
+    "name": "Workflow1",
+    "activities": [
+      {          
+        "name": "start",
+        "type": "page-activity",
+        "components": [                           
+          { "tag": "input", "id": "apicall.id" },
+          { "tag": "input", "id": "apicall.title" },
+          { "tag": "input", "id": "registration.firstName" },
+          { "tag": "moon-button", "id": "btn1", "value": "Next", "next": "page1" },
+          { "tag": "moon-button", "id": "btn2", "value": "Decision", "next": "page3" },
+          { "tag": "moon-button", "id": "btn2", "value": "Alert", "next": "page4" },
+          { "tag": "moon-button", "id": "btn2", "value": "Api Call", "next": "page5" },
+          { "tag": "moon-button", "id": "btn2", "value": "Code", "next": "page6" }
+        ]    
+      },
+      {
+        "name": "page1",
+        "type": "page-activity",
+        "components": [                                   
+          { "tag": "input", "id": "registration.lastName" },
+          { "tag": "input", "id": "registration.firstName" },
+          { "tag": "moon-button", "id": "btn3", "value": "Start", "next": "start" }          
+        ]    
+      },
+      {
+        "name": "page2",
+        "type": "page-activity",
+        "components": [                        
+          { "tag": "input", "id": "page2", "value": "Page2" },
+          { "tag": "moon-button", "id": "btn4", "value": "Start", "next": "start" }                    
+        ]    
+      },
+      {
+        "name": "page3",
+        "type": "desision-activity",
+        "left": "model.registration&&model.registration.firstName",
+        "equality": "===",
+        "right": "'Lourens'",
+        "trueAction": "page2",
+        "falseAction": "page1"
+      },
+      {
+        "name": "page4",
+        "type": "alert-activity",
+        "message": "This is the alert activity"
+      },
+      {
+        "name": "page5",
+        "type": "api-activity",
+        "url": "https://jsonplaceholder.typicode.com/posts/{apicall.id}",
+        "method": "get",
+        "mappings": [
+          {"client" : "apicall.title", "remote": "title", "direction": "inout"}
+        ],
+        "next": "start"
+      },
+      {
+        "name": "page6",
+        "type": "code-activity",
+        "expression": "alert(model.apicall&&model.apicall.title);",
+        "next": "start"
+      }
+    ]
+  }

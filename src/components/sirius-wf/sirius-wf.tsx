@@ -38,6 +38,7 @@ export class SiriusWf {
 
   @Method()
   async loadProcess(process: Process) {
+    this.page = null;
     this.wfService.setProcess(process);    
   }
 
