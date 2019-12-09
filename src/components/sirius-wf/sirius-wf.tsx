@@ -22,6 +22,9 @@ export class SiriusWf {
   @Event()
   wfError: EventEmitter;
 
+  @Event()
+  wfMessage: EventEmitter;
+
   @State() page: Page;  
 
   @Prop({ context: "store" }) store: Store;  
