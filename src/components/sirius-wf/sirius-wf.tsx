@@ -27,7 +27,7 @@ export class SiriusWf {
   @Prop({ context: "store" }) store: Store;  
   
   @Method()
-  async addActivity(type: string, create: any){
+  async addActivity(type: string, create: any){    
     this.wfService.addActivity(type, create);
   }
 
