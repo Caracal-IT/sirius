@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, d as getContext, h } from './core-b48d769a.js';
-import { T as TypeKeys$1, s as setNextAction, a as setProcess, M as ModelService } from './model.service-dded3035.js';
+import { T as TypeKeys$1, s as setNextAction, a as setProcess, M as ModelService } from './model.service-172edf75.js';
 
 function symbolObservablePonyfill(root) {
 	var result;
@@ -742,10 +742,12 @@ function getCjsExportFromNamespace (n) {
 	return n && n['default'] || n;
 }
 
+const require$$0 = getCjsExportFromNamespace(redux);
+
 var developmentOnly = createCommonjsModule(function (module, exports) {
 "use strict";
 
-var compose = redux.compose;
+var compose = require$$0.compose;
 
 exports.__esModule = true;
 exports.composeWithDevTools = (
@@ -942,6 +944,23 @@ class ApiActivity {
 }
 ApiActivity.type = "api-activity";
 
+class AssignActivity {
+    constructor() {
+        this.type = AssignActivity.type;
+        this.execute = (context) => {
+            let value = this.value || "";
+            if (this.value.startsWith("{") && this.value.endsWith("}"))
+                value = context.modelService.getValue(this.value.substring(1, this.value.length - 1), context.model);
+            context.modelService.setModelValue(this.key, value);
+            context.wfService.setNextAction(this.next);
+        };
+    }
+    static create(act) {
+        return Object.assign(new AssignActivity(), act);
+    }
+}
+AssignActivity.type = "assign-activity";
+
 class ActivityFactiory {
     static linkActivities(process) {
         process
@@ -957,6 +976,7 @@ ActivityFactiory.activities = [
     { type: PageActivity.type, create: PageActivity.create },
     { type: CodeActivity.type, create: CodeActivity.create },
     { type: DesisionActivity.type, create: DesisionActivity.create },
+    { type: AssignActivity.type, create: AssignActivity.create },
     { type: ApiActivity.type, create: ApiActivity.create }
 ];
 

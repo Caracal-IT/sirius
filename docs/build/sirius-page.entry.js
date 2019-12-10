@@ -1,5 +1,5 @@
 import { r as registerInstance, d as getContext, h } from './core-b48d769a.js';
-import { M as ModelService } from './model.service-dded3035.js';
+import { M as ModelService } from './model.service-172edf75.js';
 
 const SiriusPage = class {
     constructor(hostRef) {
@@ -13,7 +13,7 @@ const SiriusPage = class {
         this.modelService.setModelValue(event.target["id"], event.target["value"]);
     }
     render() {
-        const renderItem = (item) => h(item.tag, Object.assign({ "wf-element": true, onInput: this.inputHandler.bind(this) }, item, { context: this.page["context"], value: this.modelService.getModelValue(item) }));
+        const renderItem = (item) => h(item.tag, Object.assign({ "wf-element": true, onInput: this.inputHandler.bind(this) }, item, { context: this.page["context"], value: this.modelService.getComponentModelValue(item) }));
         if (this.page && this.page.components)
             return this.page.components.map(renderItem);
     }
