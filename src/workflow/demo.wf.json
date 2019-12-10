@@ -43,7 +43,7 @@
       },
       {
         "name": "page3",
-        "type": "desision-activity",
+        "type": "decision-activity",
         "left": "model.registration&&model.registration.firstName",
         "equality": "===",
         "right": "'Lourens'",

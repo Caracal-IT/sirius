@@ -2,14 +2,14 @@ import { Context } from '../redux/model/Context.model';
 import { Activity } from "../redux/model/activity";
 import { CodeActivity } from './code.activity';
 
-export class DesisionActivity extends CodeActivity {
-    static type = "desision-activity" 
+export class DecisionActivity extends CodeActivity {
+    static type = "decision-activity" 
     
     static create(act: Activity) {        
-        return Object.assign(new DesisionActivity(), act);
+        return Object.assign(new DecisionActivity(), act);
     }
 
-    type = DesisionActivity.type;
+    type = DecisionActivity.type;
     left: string;
     equality: string;
     right: string;

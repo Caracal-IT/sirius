@@ -29,7 +29,7 @@ export const config: Config = {
         { src: 'workflow', dest: 'wf' },
         { src: 'demo', dest: 'demo' }
       ]
-    }*/
-    
+    }
+    */
   ]
 };

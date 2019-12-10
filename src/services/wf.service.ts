@@ -2,7 +2,7 @@ import { Process } from "../redux/model/Process.model";
 import { Store } from "@stencil/redux";
 import { setNextAction, setProcess } from "../redux/actions/wf.action";
 
-import { ActivityFactiory } from "../activities/factory.activity";
+import { ActivityFactory} from "../activities/factory.activity";
 
 export class WFService {
     setNextAction: typeof setNextAction;
@@ -13,16 +13,16 @@ export class WFService {
     }
     
     addActivity(type: string, create: any){
-        const act = ActivityFactiory.activities.find(a => a.type === type);
+        const act = ActivityFactory.activities.find(a => a.type === type);
 
         if(!act)
-            ActivityFactiory.activities.push({type, create})
+            ActivityFactory.activities.push({type, create})
     }
 
     parse(processDef: string) {
         try {
             const process = JSON.parse(processDef) as Process;
-            ActivityFactiory.linkActivities(process);
+            ActivityFactory.linkActivities(process);
 
             return process;
         }
