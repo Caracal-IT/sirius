@@ -18,10 +18,7 @@ export class SiriusWf {
   storeUnsubscribe: Unsubscribe;
   wfService: WFService;
   storeHandler: StoreHandler;
-
-  @Event()
-  wfError: EventEmitter;
-
+  
   @Event()
   wfMessage: EventEmitter;
 

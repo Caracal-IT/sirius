@@ -51,7 +51,6 @@ declare namespace LocalJSX {
     'page'?: Page;
   }
   interface SiriusWf {
-    'onWfError'?: (event: CustomEvent<any>) => void;
     'onWfMessage'?: (event: CustomEvent<any>) => void;
   }
 

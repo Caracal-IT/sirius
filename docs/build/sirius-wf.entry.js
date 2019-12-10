@@ -983,6 +983,21 @@ class WFService {
     }
 }
 
+var MessageType;
+(function (MessageType) {
+    MessageType["StartLoading"] = "START_LOADING";
+    MessageType["EndLoading"] = "END_LOADING";
+    MessageType["Error"] = "ERROR";
+})(MessageType || (MessageType = {}));
+
+class Message {
+    constructor(messageType, description, stack) {
+        this.messageType = messageType;
+        this.description = description;
+        this.stack = stack;
+    }
+}
+
 class Context {
     constructor(model, modelService, wfService, http, container) {
         this.model = model;
@@ -1051,6 +1066,7 @@ class StoreHandler {
     constructor(store, container) {
         this.store = store;
         this.container = container;
+        this.hasError = false;
         this.wfService = new WFService(this.store);
         this.modelService = new ModelService(this.store);
         this.http = new HttpService(this.modelService);
@@ -1080,14 +1096,23 @@ class StoreHandler {
         const act = this.currProcess.activities.find((p) => p.name === this.currAction);
         const model = this.context.model;
         if (this.canExecute(act)) {
+            this.hasError = false;
+            this.sendMessage(new Message(MessageType.StartLoading, "Loading..."));
             this.tryExecute(act)
                 .then(() => {
+                if (this.hasError)
+                    return;
+                this.sendMessage(new Message(MessageType.EndLoading));
                 if (act.components)
                     this.lastAction = this.currAction;
                 else if (model !== this.context.model)
                     this.wfService.setNextAction(this.lastAction);
                 else
                     this.wfService.setNextAction(null);
+            })
+                .catch((error) => {
+                this.modelService.setModelValue("message", new Message(MessageType.EndLoading));
+                this.handleError(error);
             });
         }
     }
@@ -1100,7 +1125,8 @@ class StoreHandler {
         }
     }
     handleError(error) {
-        this.context.container.wfError.emit(error);
+        this.hasError = true;
+        this.sendMessage(new Message(MessageType.Error, error.message, error.stack));
         console.log("ERROR OCCURED", error);
         console.dir(error);
     }
@@ -1110,12 +1136,16 @@ class StoreHandler {
     canExecute(act) {
         return act && act.execute;
     }
+    sendMessage(msg) {
+        this.modelService.setModelValue("message", msg);
+        this.context.container.wfMessage.emit(msg);
+    }
 }
 
 const SiriusWf = class {
     constructor(hostRef) {
         registerInstance(this, hostRef);
-        this.wfError = createEvent(this, "wfError", 7);
+        this.wfMessage = createEvent(this, "wfMessage", 7);
         this.store = getContext(this, "store");
     }
     async addActivity(type, create) {

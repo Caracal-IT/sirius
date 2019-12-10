@@ -7,9 +7,9 @@
 
 ## Events
 
-| Event     | Description | Type               |
-| --------- | ----------- | ------------------ |
-| `wfError` |             | `CustomEvent<any>` |
+| Event       | Description | Type               |
+| ----------- | ----------- | ------------------ |
+| `wfMessage` |             | `CustomEvent<any>` |
 
 
 ## Methods

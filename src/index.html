@@ -15,9 +15,47 @@
   
   <script type="module" src="build/sirius.esm.js"></script>
   <script nomodule src="build/sirius.js"></script>
+
+  <style>
+    #loadingPanel {      
+      position: fixed;
+      left: 0;
+      top: 0;
+      min-width: 100vw;
+      min-height: 100vh;
+      z-index: 99999999;
+      background: rgba(0, 0, 0, 0.611);
+    }
+
+    #loadingPanel::after { 
+      content: "Loading...";
+      position: absolute;
+      display: block;      
+      background-color: white;      
+      width: 6rem;
+      height: 1.5rem;
+      line-height: 1.5rem;
+      text-align: center;
+      font-weight: bolder;
+      font-size: 1.2rem;
+      color: blueviolet;
+      border: 1px solid black;
+      border-radius: 5px;
+  
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>    
+  <div id="loadingPanel" class="hidden"></div>
+
   <sirius-wf style="display: block;min-height: 100px;"></sirius-wf>
   <hr/>
   <span>Custom Workflow</span>  
@@ -28,8 +66,8 @@
     <option value="demo.wf.json">Demo</option>
   </select>
 
-  <button id="defaultWfButton">Load Default</button>
-  <button id="loadProcessButton">Load New Process</button>
+  <button id="defaultWfButton">Load Workflow</button>
+  <button id="loadProcessButton">Update Process</button>
   <button id="clearErrorsButton">Clear Errors</button>  
   <br>
   <textarea id="errorMsg" readonly="readonly" style="resize: none;color:darkred;font-weight:bolder;width: 47%;height:100px"></textarea>

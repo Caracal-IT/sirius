@@ -45,8 +45,6 @@ export class StoreHandler {
         const {wf:{ model: model, currProcess: currProcess, currAction: currAction }} = state;
         this.context.model = model;
 
-        console.log(model);
-
         if(this.currProcess === currProcess && this.currAction === currAction)                     
           return false;
                 
@@ -101,9 +99,6 @@ export class StoreHandler {
         this.hasError = true;                 
         this.sendMessage(new Message(MessageType.Error, error.message, error.stack));
         
-        this.context.container.wfError.emit(error);
-        
-
         console.log("ERROR OCCURED", error);
         console.dir(error);
     }
