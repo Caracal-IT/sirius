@@ -742,12 +742,10 @@ function getCjsExportFromNamespace (n) {
 	return n && n['default'] || n;
 }
 
-const require$$0 = getCjsExportFromNamespace(redux);
-
 var developmentOnly = createCommonjsModule(function (module, exports) {
 "use strict";
 
-var compose = require$$0.compose;
+var compose = redux.compose;
 
 exports.__esModule = true;
 exports.composeWithDevTools = (
