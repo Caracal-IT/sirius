@@ -23,6 +23,5 @@ export class ActivityFactory {
                 if(act && act.create) 
                     Object.assign(p, act.create(p));                                    
             });
-
         }        
 }
