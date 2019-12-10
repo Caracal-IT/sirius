@@ -15,8 +15,17 @@
           { "tag": "moon-button", "id": "btn2", "value": "Code", "next": "page6" }
         ]    
       },
+
       {
         "name": "page1",
+        "type": "assign-activity",
+        "key" : "registration.testKey",
+        "value": "Testing Assign",
+        "next": "page1B"
+      },
+
+      {
+        "name": "page1B",
         "type": "page-activity",
         "components": [                                   
           { "tag": "input", "id": "registration.lastName" },

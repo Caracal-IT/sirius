@@ -12,18 +12,22 @@ export class ModelService {
 
   onInput = this.inputHandler.bind(this);
 
-  getModelValue(component: any) {
-      const model = this.getModel();
-      let value: any;
+  getComponentModelValue(component: any) {
+    const model = this.getModel();
+    let value: any;
 
-      if(component && component.id && model) 
-        value = component.id.split(".").reduce((total, currentElement) => total ? total[currentElement]: null, model);
-            
+    if(component && component.id && model) 
+      value = component.id.split(".").reduce((total, currentElement) => total ? total[currentElement]: null, model);
+          
+    
+    if(value === undefined && component.value)
+      value = component.value;
       
-      if(value === undefined && component.value)
-        value = component.value;
-        
-      return value;
+    return value;
+}
+
+  getModelValue(key: any) {
+      this.getValue(key, this.getModel());
   }
 
   getModel(): any {

@@ -1,4 +1,4 @@
-import { Context } from './../redux/model/Context.model';
+import { Context } from '../redux/model/Context.model';
 import { Activity } from "../redux/model/activity";
 import { CodeActivity } from './code.activity';
 

@@ -1,14 +1,16 @@
 import { Process } from "../redux/model/Process.model";
 import { PageActivity } from "./page.activity";
-import { DesisionActivity } from './desisionActivity.activity';
+import { DesisionActivity } from './desision.activity';
 import { ApiActivity } from './api.activity';
 import { CodeActivity } from "./code.activity";
+import { AssignActivity } from "./assign.activity";
 
 export class ActivityFactiory {    
     static activities = [
         { type: PageActivity.type, create: PageActivity.create },
         { type: CodeActivity.type, create: CodeActivity.create },
         { type: DesisionActivity.type, create: DesisionActivity.create },
+        { type: AssignActivity.type, create: AssignActivity.create },
         { type: ApiActivity.type, create: ApiActivity.create }
     ]
 
