@@ -20,6 +20,16 @@ wf.addEventListener("wfMessage", error => {
     }    
 });
 
+wf2.addEventListener("wfMessage", error => {
+    const msg = error.detail;
+
+    switch (msg.messageType) {
+        case "ERROR": return showErrorMessage(msg);
+        case "START_LOADING": return showLoading(msg);
+        case "END_LOADING": return hideLoading(msg);
+    }    
+});
+
 function showErrorMessage(msg) {    
     errorMsg.innerText = msg.description;
     errorStack.innerText = msg.stack;

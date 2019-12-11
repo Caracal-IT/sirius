@@ -30,4 +30,11 @@
 
     .hidden {
       display: none;
-    }</style> </head> <body> <div id="loadingPanel" class="hidden"></div> <sirius-wf style="display: block; min-height: 100px; background-color: purple;"></sirius-wf> <sirius-wf style="display: block; min-height: 100px; background-color: hotpink;"></sirius-wf> <hr> <span>Custom Workflow</span> <textarea id="processDef" style="width: 100%; height: 300px;"></textarea> <select id="workflow"> <option value="-1">Select an option</option> <option value="default.wf.json">Default</option> <option value="demo.wf.json">Demo</option> </select> <button id="defaultWfButton">Load Workflow - api (top)</button> <button id="loadProcessButton">Update Process - use textarea (bottom)</button> <button id="clearErrorsButton">Clear Errors</button> <br> <textarea id="errorMsg" readonly="readonly" style="resize: none; color: darkred; font-weight: bolder; width: 47%; height: 100px;"></textarea> <textarea id="errorStack" readonly="readonly" style="resize: none; color: darkred; font-weight: bolder; width: 47%; height: 100px;"></textarea> </body></html>
+    }</style> </head> <body> <div id="loadingPanel" class="hidden"></div> <sirius-wf style="display: block; min-height: 100px; background-color: purple;"></sirius-wf> <sirius-wf style="display: block; min-height: 100px; background-color: hotpink;"></sirius-wf> <hr> <span>Custom Workflow</span> <textarea id="processDef" style="width: 100%; height: 300px;"></textarea> <select id="workflow"> <option value="-1">Select an option</option> <option value="default.wf.json">Default</option> <option value="demo.wf.json">Demo</option> </select> <button id="defaultWfButton">Load Workflow - api (top)</button> <button id="loadProcessButton">Update Process - use textarea (bottom)</button> <button id="clearErrorsButton">Clear Errors</button> <br> <textarea id="errorMsg" readonly="readonly" style="resize: none; color: darkred; font-weight: bolder; width: 47%; height: 100px;"></textarea> <textarea id="errorStack" readonly="readonly" style="resize: none; color: darkred; font-weight: bolder; width: 47%; height: 100px;"></textarea> <script>if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  // auto-unregister service worker during dev mode
+  navigator.serviceWorker.getRegistration().then(function(registration) {
+    if (registration) {
+      registration.unregister().then(function() { location.reload(true) });
+    }
+  });
+}</script></body></html>
