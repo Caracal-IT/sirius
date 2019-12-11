@@ -279,17 +279,7 @@ class StoreHandler {
             this.hasError = false;
             this.sendMessage(new Message(MessageType.StartLoading, "Loading..."));
             this.tryExecute(act)
-                .then(() => {
-                if (this.hasError)
-                    return;
-                this.sendMessage(new Message(MessageType.EndLoading));
-                if (act.components)
-                    this.lastAction = this.currAction;
-                else if (model !== this.context.model)
-                    this.wfService.setNextAction(this.lastAction);
-                else
-                    this.wfService.setNextAction(null);
-            })
+                .then(() => this.actionExecuted(act, model))
                 .catch((error) => {
                 this.modelService.setModelValue("message", new Message(MessageType.EndLoading));
                 this.handleError(error);
@@ -303,6 +293,20 @@ class StoreHandler {
         catch (ex) {
             this.handleError(ex);
         }
+    }
+    actionExecuted(act, model) {
+        if (this.hasError)
+            return;
+        this.sendMessage(new Message(MessageType.EndLoading));
+        this.goToNextAction(act, model);
+    }
+    goToNextAction(act, model) {
+        if (act.components)
+            this.lastAction = this.currAction;
+        else if (model !== this.context.model)
+            this.wfService.setNextAction(this.lastAction);
+        else
+            this.wfService.setNextAction(null);
     }
     handleError(error) {
         this.hasError = true;
