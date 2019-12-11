@@ -1,17 +1,25 @@
-import { Process } from "../redux/model/Process.model";
-import { Store } from "@stencil/redux";
-import { setNextAction, setProcess } from "../redux/actions/wf.action";
-
+import { Process } from "../model/Process.model";
 import { ActivityFactory} from "../activities/factory.activity";
 
-export class WFService {
-    setNextAction: typeof setNextAction;
-    setProcess: typeof setProcess;
+export class WFService {    
+    wfChangeHandler: (action: string, process: Process) => void;
+    action: string;
+    process: Process;
     
-    constructor(private store: Store) { 
-        this.store.mapDispatchToProps(this, { setNextAction, setProcess });        
+    setNextAction(name: string) {
+        this.action = name;
+
+        if(this.wfChangeHandler)
+            this.wfChangeHandler(this.action, this.process);
     }
-    
+
+    setProcess(process: Process) {        
+        this.process = process;
+
+        if(this.wfChangeHandler)
+            this.wfChangeHandler(this.action, this.process);
+    }
+
     addActivity(type: string, create: any){
         const act = ActivityFactory.activities.find(a => a.type === type);
 

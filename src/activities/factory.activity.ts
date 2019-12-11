@@ -1,4 +1,4 @@
-import { Process } from "../redux/model/Process.model";
+import { Process } from "../model/Process.model";
 import { PageActivity } from "./page.activity";
 import { DecisionActivity } from './decision.activity';
 import { ApiActivity } from './api.activity';

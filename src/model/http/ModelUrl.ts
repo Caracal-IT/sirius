@@ -1,5 +1,5 @@
-import { ModelService } from "../model.service";
-import { KeyValue } from "../../redux/model/KeyValue.model";
+import { ModelService } from "../../services/model.service";
+import { KeyValue } from "../KeyValue.model";
 import { Url } from "./Url";
 import { HttpVerb } from "./HttpVerb";
 export class ModelUrl extends Url {
@@ -17,10 +17,9 @@ export class ModelUrl extends Url {
             .forEach((m: KeyValue) => newUrl = newUrl.replace(m.key, m.value || ''));
         return newUrl;
     }
-    private createValueItem(key: string): KeyValue {
-        const model = this.modelService.getModel();
+    private createValueItem(key: string): KeyValue {        
         const name = key.substring(1, key.length - 1);
-        const value = this.modelService.getValue(name, model);
+        const value = this.modelService.getValue(name, this.modelService.getModel());
         return { key, value };
     }
 }

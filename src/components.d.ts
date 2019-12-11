@@ -9,13 +9,17 @@
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 import {
   Page,
-} from './redux/model/Page.model';
+} from './model/Page.model';
+import {
+  ModelService,
+} from './services/model.service';
 import {
   Process,
-} from './redux/model/Process.model';
+} from './model/Process.model';
 
 export namespace Components {
   interface SiriusPage {
+    'modelService': ModelService;
     'page': Page;
   }
   interface SiriusWf {
@@ -48,6 +52,7 @@ declare global {
 
 declare namespace LocalJSX {
   interface SiriusPage {
+    'modelService'?: ModelService;
     'page'?: Page;
   }
   interface SiriusWf {

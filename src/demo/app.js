@@ -4,7 +4,8 @@ const clearErrorsButton = document.querySelector("#clearErrorsButton");
 const defaultWfButton = document.querySelector("#defaultWfButton");
 const workflow = document.querySelector("#workflow");
 
-const wf = document.querySelector("sirius-wf");
+const wf = document.querySelector("sirius-wf:first-of-type");
+const wf2 = document.querySelector("sirius-wf:last-of-type");
 const processDef = document.querySelector("#processDef");
 const loadProcessButton = document.querySelector("#loadProcessButton");
 const loadingPanel = document.querySelector("#loadingPanel");
@@ -39,12 +40,12 @@ clearErrorsButton.addEventListener('click', () => {
 });
 
 loadProcessButton.addEventListener("click", async () => {      
-    const process = await wf.parse(processDef.value);
+    const process = await wf2.parse(processDef.value);
 
     if(!process)
     return;
     
-    wf.loadProcess(process);        
+    wf2.loadProcess({...process});        
 })    
 
 defaultWfButton.addEventListener("click", async () => {

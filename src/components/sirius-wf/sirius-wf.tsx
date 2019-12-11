@@ -1,31 +1,29 @@
-import { Component, Event, EventEmitter, Prop, State, Method, h } from "@stencil/core";
+import { Component, Event, EventEmitter, State, Method, h } from "@stencil/core";
 
-import "@stencil/redux";
-import { Store, Unsubscribe } from "@stencil/redux";
-import { configureStore } from "../../redux/index.store";
-
-import { Page } from "../../redux/model/Page.model";
-import { Process } from "../../redux/model/Process.model";
+import { Page } from "../../model/Page.model";
+import { Process } from "../../model/Process.model";
 
 import { WFService } from "../../services/wf.service";
 import { StoreHandler } from "../../handlers/store.handler";
+import { Context } from "../../model/Context.model";
+import { ModelService } from "../../services/model.service";
 
 @Component({
   tag: "sirius-wf",
   shadow: true
 })
-export class SiriusWf {  
-  storeUnsubscribe: Unsubscribe;
+export class SiriusWf {    
   wfService: WFService;
+  modelService: ModelService;
+  
+  @State() context: Context;
   storeHandler: StoreHandler;
   
   @Event()
   wfMessage: EventEmitter;
 
   @State() page: Page;  
-
-  @Prop({ context: "store" }) store: Store;  
-  
+    
   @Method()
   async addActivity(type: string, create: any){    
     this.wfService.addActivity(type, create);
@@ -47,19 +45,15 @@ export class SiriusWf {
     return this.wfService.parse(processDef);
   }
 
-  async componentWillLoad() {
-    this.store.setStore(configureStore({})); 
-    this.wfService = new WFService(this.store); 
-    this.storeHandler = new StoreHandler(this.store, this);
+  async componentWillLoad() {    
+    this.wfService = new WFService(); 
+    this.modelService = new ModelService();
+    this.storeHandler = new StoreHandler(this.wfService, this.modelService, this);
 
-    this.storeUnsubscribe = this.storeHandler.subscribe();       
+    this.storeHandler.handle();       
   }
-
-  async componentDidUnload() {
-    this.storeUnsubscribe();
-  }
-
+  
   render() {
-    return <sirius-page page={this.page} />;
+    return <sirius-page page={this.page} modelService={this.modelService}/>;
   }
 }

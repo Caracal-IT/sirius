@@ -1,16 +1,13 @@
-import { MessageType } from './../redux/model/messages/message-type.model';
-import { Message } from './../redux/model/messages/message.model';
+import { MessageType } from './../model/messages/message-type.model';
+import { Message } from './../model/messages/message.model';
 import { SiriusWf } from '../components/sirius-wf/sirius-wf';
-import { Store, Unsubscribe } from "@stencil/redux";
 import { WFService } from "../services/wf.service";
 import { ModelService } from "../services/model.service";
-import { Context } from "../redux/model/Context.model";
+import { Context } from "../model/Context.model";
 import { HttpService } from "../services/http.service";
-import { Process } from "../redux/model/Process.model";
+import { Process } from "../model/Process.model";
 
-export class StoreHandler {
-    wfService: WFService;
-    modelService: ModelService;
+export class StoreHandler {        
     http: HttpService;
     context: Context;    
 
@@ -20,38 +17,28 @@ export class StoreHandler {
 
     hasError = false;
             
-    constructor(private store: Store, private container: SiriusWf){
-        this.wfService = new WFService(this.store);
-        this.modelService = new ModelService(this.store);
+    constructor(        
+        private wfService: WFService, 
+        private modelService: ModelService, 
+        private container: SiriusWf){        
+            
         this.http = new HttpService(this.modelService);   
-
         this.context = new Context({}, this.modelService, this.wfService, this.http, this.container);
     }
 
-    subscribe(): Unsubscribe {
-        return this.store.getStore().subscribe(this.handle.bind(this));
+    handle(): void {
+        this.wfService.wfChangeHandler = this.handleWfChange.bind(this);
+        this.modelService.modelChangedHandler = this.handleModelChanged.bind(this);
     }
 
-    private handle(){       
-        if(!this.setWfState())
-            return; 
-    
-        
+    private handleWfChange(action: string, process: Process){            
+        this.currProcess = process;
+        this.currAction = action||"start";               
         this.executeActivity();
     }
 
-    private setWfState(): boolean {
-        const state =  this.store.getState();
-        const {wf:{ model: model, currProcess: currProcess, currAction: currAction }} = state;
+    private handleModelChanged(model: any) {        
         this.context.model = model;
-
-        if(this.currProcess === currProcess && this.currAction === currAction)                     
-          return false;
-                
-        this.currProcess = currProcess;
-        this.currAction = currAction;
-
-        return true;
     }
 
     private executeActivity() {

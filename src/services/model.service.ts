@@ -1,13 +1,12 @@
-import { Store } from "@stencil/redux";
-import { setModelValue } from "../redux/actions/wf.action";
-
 export class ModelService {
-  store: Store;
-  setModelValue: typeof setModelValue;
+  modelChangedHandler: (arg0: {}) => void;
+  model = {};
 
-  constructor(store: Store) {
-    this.store = store;
-    this.store.mapDispatchToProps(this, { setModelValue });
+  setModelValue(name: string, value: any) {    
+    this.model = this.merge(this.model, name, value);
+    
+    if(this.modelChangedHandler)
+      this.modelChangedHandler(this.model);    
   }
 
   onInput = this.inputHandler.bind(this);
@@ -31,7 +30,7 @@ export class ModelService {
   }
 
   getModel(): any {
-    return this.store.getState()["wf"]["model"];
+    return {...this.model};    
   }
 
   getValue(key: string, model: any) {    
@@ -43,5 +42,18 @@ export class ModelService {
     const wfElement = target.closest("[wf-element]");    
 
     this.setModelValue(wfElement.id, wfElement["value"]);
-  }  
+  } 
+  
+  private merge(model: any, name: string, value: any) {
+    let newModel = {...model};
+  
+    name
+      .split(".")  
+      .reduce((total, current, index, arr) =>{
+        total[current] = index == arr.length - 1 ? value : {...total[current]};
+        return total[current];
+      }, newModel);
+  
+    return newModel;
+  }
 }

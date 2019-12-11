@@ -1,6 +1,6 @@
-import { ModelService } from './../../services/model.service';
-import { SiriusWf } from './../../components/sirius-wf/sirius-wf';
-import { WFService } from '../../services/wf.service';
+import { ModelService } from './../services/model.service';
+import { SiriusWf } from './../components/sirius-wf/sirius-wf';
+import { WFService } from '../services/wf.service';
 import { Context } from './Context.model';
 export interface Activity {
     type: string;

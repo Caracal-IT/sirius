@@ -1,7 +1,7 @@
-import { Context } from "../redux/model/Context.model";
-import { HttpVerb } from "../services/http/HttpVerb";
-import { ModelUrl } from "../services/http/ModelUrl";
-import { Mapping } from "../services/http/Mapping";
+import { Context } from "../model/Context.model";
+import { HttpVerb } from "../model/http/HttpVerb";
+import { ModelUrl } from "../model/http/ModelUrl";
+import { Mapping } from "../model/http/Mapping";
 
 export class ApiActivity {      
     static type = "api-activity";

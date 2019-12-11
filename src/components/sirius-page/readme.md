@@ -7,9 +7,10 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type   | Default     |
-| -------- | --------- | ----------- | ------ | ----------- |
-| `page`   | --        |             | `Page` | `undefined` |
+| Property       | Attribute | Description | Type           | Default     |
+| -------------- | --------- | ----------- | -------------- | ----------- |
+| `modelService` | --        |             | `ModelService` | `undefined` |
+| `page`         | --        |             | `Page`         | `undefined` |
 
 
 ## Dependencies

@@ -1,7 +1,7 @@
-import { Page } from '../redux/model/Page.model';
-import { WebComponent } from '../redux/model/WebComponent.model';
-import { Activity } from '../redux/model/activity';
-import { Context } from '../redux/model/Context.model';
+import { Page } from '../model/Page.model';
+import { WebComponent } from '../model/WebComponent.model';
+import { Activity } from '../model/activity';
+import { Context } from '../model/Context.model';
 
 export class PageActivity implements Activity, Page  {    
     components: WebComponent[];   

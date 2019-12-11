@@ -1,5 +1,5 @@
-import { Context } from '../redux/model/Context.model';
-import { Activity } from "../redux/model/activity";
+import { Context } from '../model/Context.model';
+import { Activity } from "../model/activity";
 import { CodeActivity } from './code.activity';
 
 export class DecisionActivity extends CodeActivity {

@@ -1,26 +1,18 @@
 import { Component, h, Prop } from "@stencil/core";
-import { Store } from "@stencil/redux";
 
 import { ModelService } from "../../services/model.service";
-
-import { Page } from "../../redux/model/Page.model";
-import { WebComponent } from "../../redux/model/WebComponent.model";
+import { Page } from "../../model/Page.model";
+import { WebComponent } from "../../model/WebComponent.model";
 
 @Component({
   tag: "sirius-page",
   shadow: true
 })
 export class SiriusPage {
-  private modelService: ModelService;
-
   @Prop() page: Page;
-  @Prop({ context: "store" }) store: Store;  
-  
-  async componentWillLoad() {
-    this.modelService = new ModelService(this.store);    
-  }
-
-  inputHandler(event: Event) {
+  @Prop() modelService: ModelService;
+      
+  inputHandler(event: Event) {  
     this.modelService.setModelValue(event.target["id"], event.target["value"]);
   }
 

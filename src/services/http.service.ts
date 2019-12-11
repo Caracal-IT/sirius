@@ -1,8 +1,8 @@
 import { ModelService } from "./model.service";
-import { Mapping } from "./http/Mapping";
-import { Url } from "./http/Url";
-import { HttpVerb } from "./http/HttpVerb";
-import { MappingDirection } from "./http/MappingDirection";
+import { Mapping } from "../model/http/Mapping";
+import { Url } from "../model/http/Url";
+import { HttpVerb } from "../model/http/HttpVerb";
+import { MappingDirection } from "../model/http/MappingDirection";
 
 export class HttpService {
     constructor(private modelService: ModelService){ }
