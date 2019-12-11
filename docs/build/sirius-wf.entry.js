@@ -249,7 +249,7 @@ class HttpService {
     }
 }
 
-class StoreHandler {
+class WFHandler {
     constructor(wfService, modelService, container) {
         this.wfService = wfService;
         this.modelService = modelService;
@@ -392,8 +392,8 @@ const SiriusWf = class {
     async componentWillLoad() {
         this.wfService = new WFService();
         this.modelService = new ModelService();
-        this.storeHandler = new StoreHandler(this.wfService, this.modelService, this);
-        this.storeHandler.handle();
+        this.wfHandler = new WFHandler(this.wfService, this.modelService, this);
+        this.wfHandler.handle();
     }
     render() {
         return h("sirius-page", { page: this.page, modelService: this.modelService });

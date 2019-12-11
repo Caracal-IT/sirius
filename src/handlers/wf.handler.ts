@@ -1,5 +1,5 @@
-import { MessageType } from './../model/messages/message-type.model';
-import { Message } from './../model/messages/message.model';
+import { MessageType } from '../model/messages/message-type.model';
+import { Message } from '../model/messages/message.model';
 import { SiriusWf } from '../components/sirius-wf/sirius-wf';
 import { WFService } from "../services/wf.service";
 import { ModelService } from "../services/model.service";
@@ -7,7 +7,7 @@ import { Context } from "../model/Context.model";
 import { HttpService } from "../services/http.service";
 import { Process } from "../model/Process.model";
 
-export class StoreHandler {        
+export class WFHandler {        
     http: HttpService;
     context: Context;    
 

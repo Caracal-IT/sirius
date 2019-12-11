@@ -4,7 +4,7 @@ import { Page } from "../../model/Page.model";
 import { Process } from "../../model/Process.model";
 
 import { WFService } from "../../services/wf.service";
-import { StoreHandler } from "../../handlers/store.handler";
+import { WFHandler } from "../../handlers/wf.handler";
 import { Context } from "../../model/Context.model";
 import { ModelService } from "../../services/model.service";
 
@@ -13,11 +13,11 @@ import { ModelService } from "../../services/model.service";
   shadow: true
 })
 export class SiriusWf {    
+  context: Context;
   wfService: WFService;
   modelService: ModelService;
   
-  @State() context: Context;
-  storeHandler: StoreHandler;
+  wfHandler: WFHandler;
   
   @Event()
   wfMessage: EventEmitter;
@@ -48,9 +48,9 @@ export class SiriusWf {
   async componentWillLoad() {    
     this.wfService = new WFService(); 
     this.modelService = new ModelService();
-    this.storeHandler = new StoreHandler(this.wfService, this.modelService, this);
+    this.wfHandler = new WFHandler(this.wfService, this.modelService, this);
 
-    this.storeHandler.handle();       
+    this.wfHandler.handle();       
   }
   
   render() {
