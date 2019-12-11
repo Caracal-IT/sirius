@@ -16,7 +16,7 @@ export class ModelService {
     let value: any;
 
     if(component && component.id && model) 
-      value = component.id.split(".").reduce((total, currentElement) => total ? total[currentElement]: null, model);
+      value = this.getModelValue(component.id);
           
     
     if(value === undefined && component.value)
@@ -26,7 +26,7 @@ export class ModelService {
 }
 
   getModelValue(key: any) {
-      this.getValue(key, this.getModel());
+      return this.getValue(key, this.getModel());
   }
 
   getModel(): any {

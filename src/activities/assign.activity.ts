@@ -13,7 +13,7 @@ export class AssignActivity implements Activity {
     value: string;
     next: string;
 
-    execute = (context: Context) => {   
+    execute = (context: Context) => {           
         let value = this.value||"";
 
         if(this.value.startsWith("{") && this.value.endsWith("}"))            

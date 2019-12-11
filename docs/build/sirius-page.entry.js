@@ -1,0 +1,17 @@
+import { r as registerInstance, h } from './core-714f54fe.js';
+
+const SiriusPage = class {
+    constructor(hostRef) {
+        registerInstance(this, hostRef);
+    }
+    inputHandler(event) {
+        this.modelService.setModelValue(event.target["id"], event.target["value"]);
+    }
+    render() {
+        const renderItem = (item) => h(item.tag, Object.assign({ "wf-element": true, onInput: this.inputHandler.bind(this) }, item, { context: this.page["context"], value: this.modelService.getComponentModelValue(item) }));
+        if (this.page && this.page.components)
+            return this.page.components.map(renderItem);
+    }
+};
+
+export { SiriusPage as sirius_page };
