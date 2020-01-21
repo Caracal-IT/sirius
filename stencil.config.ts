@@ -18,7 +18,6 @@ export const config: Config = {
         { src: 'demo', dest: 'demo' }
       ]
     }
-    /*
     ,
     {
       type: 'www',
@@ -30,6 +29,6 @@ export const config: Config = {
         { src: 'demo', dest: 'demo' }
       ]
     }
-    */
+  
   ]
 };
