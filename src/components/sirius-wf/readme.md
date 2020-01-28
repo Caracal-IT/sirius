@@ -34,6 +34,16 @@ Type: `Promise<void>`
 
 
 
+### `load(processDef: string | object) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 ### `loadProcess(process: Process) => Promise<void>`
 
 

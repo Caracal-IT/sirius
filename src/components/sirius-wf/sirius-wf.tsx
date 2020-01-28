@@ -45,6 +45,19 @@ export class SiriusWf {
     return this.wfService.parse(processDef);
   }
 
+  @Method()
+  async load(processDef: string|object) {
+    if(typeof processDef === 'object')
+      processDef = JSON.stringify(processDef);
+
+      const process = this.wfService.parse(processDef)
+        
+      if(!process)
+        return;
+
+     return this.loadProcess(process);       
+  }
+
   async componentWillLoad() {    
     this.wfService = new WFService(); 
     this.modelService = new ModelService();

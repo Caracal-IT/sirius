@@ -14,14 +14,16 @@ export class ModelService {
   getComponentModelValue(component: any) {
     const model = this.getModel();
     let value: any;
-
+    
     if(component && component.id && model) 
       value = this.getModelValue(component.id);
-          
     
-    if(value === undefined && component.value)
+    
+    if(value === undefined && component.value) {
       value = component.value;
-      
+      this.setModelValue(component.id, value);
+    }
+    
     return value;
 }
 
@@ -34,7 +36,7 @@ export class ModelService {
   }
 
   getValue(key: string, model: any) {    
-    return key.split(".").reduce((total, currentElement) => total ? total[currentElement]: null, model);
+    return key.split(".").reduce((total, currentElement) => total ? total[currentElement]: undefined, model);
   }
 
   private inputHandler(event: Event) {    
