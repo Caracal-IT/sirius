@@ -5,4 +5,5 @@ import { Context } from './Context.model';
 export interface Activity {
     type: string;
     execute(model?: object, wfService?: WFService, wf?: SiriusWf, modelService?: ModelService, context?: Context): void;
+    validate?(context?: Context);
 }

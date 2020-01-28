@@ -10,9 +10,9 @@
           { "tag": "input", "id": "registration.firstName" },
           { "tag": "moon-button", "id": "btn1", "value": "Next", "next": "page1" },
           { "tag": "moon-button", "id": "btn2", "value": "Decision", "next": "page3" },
-          { "tag": "moon-button", "id": "btn2", "value": "Alert", "next": "page4" },
-          { "tag": "moon-button", "id": "btn2", "value": "Api Call", "next": "page5" },
-          { "tag": "moon-button", "id": "btn2", "value": "Code", "next": "page6" }
+          { "tag": "moon-button", "id": "btn3", "value": "Alert", "next": "page4" },
+          { "tag": "moon-button", "id": "btn4", "value": "Api Call", "next": "page5" },
+          { "tag": "moon-button", "id": "btn5", "value": "Code", "next": "page6" }
         ]    
       },
 

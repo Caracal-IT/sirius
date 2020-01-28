@@ -22,8 +22,8 @@ export class ModelService {
     if(value === undefined && component.value) {
       value = component.value;
       this.setModelValue(component.id, value);
-    }
-    
+    }    
+
     return value;
 }
 
