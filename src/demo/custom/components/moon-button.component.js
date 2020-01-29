@@ -22,7 +22,7 @@ export class MoonButton extends HTMLElement {
 
       clickHandler() {
         const next = this.attributes.next.value;  
-        this.context.wfService.setNextAction(next);         
+        this.context.wfService.setNextAction(next, this);         
       }
   }
 

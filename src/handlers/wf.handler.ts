@@ -14,9 +14,8 @@ export class WFHandler {
 
     currProcess: Process; 
     currAction: string;
-    prevAction: string;
     lastAction: string;
-
+       
     hasError = false;
             
     constructor(        
@@ -33,60 +32,61 @@ export class WFHandler {
         this.modelService.modelChangedHandler = this.handleModelChanged.bind(this);
     }
 
-    private handleWfChange(action: string, process: Process){            
+    private handleWfChange(action: string, process: Process, source: any){  
+        this.hasError = false;           
         this.currProcess = process;
         this.currAction = action||"start";               
-        this.executeActivity();
-        this.prevAction = action||"start"
+        this.executeActivity(source);       
     }
 
     private handleModelChanged(model: any) {        
         this.context.model = model;
     }
 
-    private executeActivity() {
+    private executeActivity(source: any) {
         if(!this.hasActivities())
             return;
         
         const act = this.currProcess.activities.find((p: any) => p.name === this.currAction);    
-                
+               
         if(this.canExecute(act)){  
             this.hasError = false;                            
             this.sendMessage(new Message(MessageType.StartLoading, "Loading..."));
 
-            this.validate()                
+            this.validate(source)                
                 .then(() => act.execute(this.context))
-                .then(() => this.actionExecuted(act))
-                .catch((error: Error) => {                         
-                    this.modelService.setModelValue("message", new Message(MessageType.EndLoading, error.message));                    
-                    this.handleError(error);
-                });
+                .then(() => this.actionExecuted())
+                .catch((error: Error) => this.handleError(error));
         }             
     }    
 
-    private async validate(): Promise<boolean>{        
-        if(!this.prevAction && this.currAction === this.prevAction)
-            return;
+    private async validate(source: any): Promise<boolean> {           
+        if(this.shouldSkipValidate(source))
+            return true;
         
-        const act = this.currProcess.activities.find((p: any) => p.name === this.prevAction);
-                
+        const act = this.currProcess.activities.find((p: any) => p.name === this.lastAction);
+        
         if(act && act.validate) 
-            return act.validate(this.context);                   
+            return await act.validate(this.context);                   
     }
 
-    private actionExecuted(act: any) {
-        if(this.hasError)
-            return;
-        
-        this.sendMessage(new Message(MessageType.EndLoading));
+    private shouldSkipValidate(source: any): boolean {               
+        return (source && source.data && source.data.noValidate) 
+            || (this.currAction === this.lastAction);            
+    }
 
-        if(act.components)            
-            this.lastAction = this.currAction;      
+    private actionExecuted() {          
+        this.sendMessage(new Message(MessageType.EndLoading));                
+
+        if(!this.hasError)
+            this.lastAction = this.currAction;
     }
 
     private handleError(error: Error) {
-        this.hasError = true;               
+        this.hasError = true;    
         
+        this.modelService.setModelValue("message", new Message(MessageType.EndLoading, error.message));
+
         if(error instanceof ValidationError)
             this.sendMessage(new Message(MessageType.ValidationError, error.message, error.stack));
         else

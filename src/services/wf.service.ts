@@ -2,22 +2,22 @@ import { Process } from "../model/Process.model";
 import { ActivityFactory} from "../activities/factory.activity";
 
 export class WFService {    
-    wfChangeHandler: (action: string, process: Process) => void;
+    wfChangeHandler: (action: string, process: Process, source: any) => void;
     action: string;
     process: Process;
     
-    setNextAction(name: string) {
+    setNextAction(name: string, source: any) {
         this.action = name;
 
         if(this.wfChangeHandler)
-            this.wfChangeHandler(this.action, this.process);
+            this.wfChangeHandler(this.action, this.process, source);
     }
 
     setProcess(process: Process) {        
         this.process = process;
 
         if(this.wfChangeHandler)
-            this.wfChangeHandler(this.action, this.process);
+            this.wfChangeHandler(this.action, this.process, null);
     }
 
     addActivity(type: string, create: any){

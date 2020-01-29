@@ -3,6 +3,7 @@ import { WebComponent } from '../model/WebComponent.model';
 import { Activity } from '../model/activity';
 import { Context } from '../model/Context.model';
 import { ValidationError } from '../model/ValidationError.model';
+import { Validators } from '../validators/Validators';
 
 export class PageActivity implements Activity, Page  {    
     components: WebComponent[];   
@@ -17,24 +18,32 @@ export class PageActivity implements Activity, Page  {
     execute = (context: Context) => {             
         // Clear the cache
         context.container.page = null;       
-        
+               
+        this.components
+            .filter(i => i.validators)
+            .forEach(component => {
+                component["error"] = "false";
+                component["errorMessage"] = "";        
+            });
+
         setTimeout(() => {
             context.container.page = {...this, context: context};        
         }, 0);
             
     }
 
-    validate = (context: Context) => {
-        console.dir(context);
-
+    validate = (context: Context) => {               
         return new Promise((resolve, reject) => {
-            var rnd = Math.random();
+            const validatedComponents = this.components.filter(i => i.validators);
+            let isValid = true;
 
-            if(rnd > 0.5)
+            for(var component of validatedComponents) 
+                isValid = isValid && Validators.validate(context, component);
+
+            if(isValid)
                 resolve(true);
             else
                 reject(new ValidationError("Validation Failed"));
-
         });
     }
 }    

@@ -14,7 +14,7 @@ export class CodeActivity implements Activity {
 
     execute = (context: Context) => {   
         this.eval(this.expression, context);        
-        context.wfService.setNextAction(this.next);
+        context.wfService.setNextAction(this.next, this);
     }
 
     eval(expression: string, context: Context) {

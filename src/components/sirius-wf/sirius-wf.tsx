@@ -31,7 +31,7 @@ export class SiriusWf {
 
   @Method()
   async goto(activity: string){
-    this.wfService.setNextAction(activity);
+    this.wfService.setNextAction(activity, this);
   }
 
   @Method()

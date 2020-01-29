@@ -22,8 +22,8 @@ export class DecisionActivity extends CodeActivity {
         const result = super.eval(expression, context);
         
         if(result)
-            context.wfService.setNextAction(this.trueAction)             
+            context.wfService.setNextAction(this.trueAction, this)             
         else
-            context.wfService.setNextAction(this.falseAction)                    
+            context.wfService.setNextAction(this.falseAction, this)                    
     }    
 }

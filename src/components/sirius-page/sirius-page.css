@@ -1,0 +1,8 @@
+[wf-element] {
+    border: 1px solid black;
+}
+
+[wf-element][error=true] {
+    border: 1px solid red;
+    background-color: pink;
+}
