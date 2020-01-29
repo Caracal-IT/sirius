@@ -67,7 +67,7 @@ export class WFHandler {
         const act = this.currProcess.activities.find((p: any) => p.name === this.lastAction);
         
         if(act && act.validate) 
-            return await act.validate(this.context);                   
+            return act.validate(this.context);                   
     }
 
     private shouldSkipValidate(source: any): boolean {               
