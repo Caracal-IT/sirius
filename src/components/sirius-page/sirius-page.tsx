@@ -13,8 +13,16 @@ export class SiriusPage {
   @Prop() page: Page;
   @Prop() modelService: ModelService;
       
-  inputHandler(event: Event) {  
+  async inputHandler(event: Event) {  
     this.modelService.setModelValue(event.target["id"], event.target["value"]);
+    
+    if(!this.page.isDirty)
+      return;
+
+    try {
+      await this.page.validate(this.page.context);
+    }
+    catch(Ex){ }
   }
 
   render() {    

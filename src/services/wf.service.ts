@@ -2,6 +2,7 @@ import { Process } from "../model/Process.model";
 import { ActivityFactory} from "../activities/factory.activity";
 
 export class WFService {    
+    
     wfChangeHandler: (action: string, process: Process, source: any) => void;
     action: string;
     process: Process;

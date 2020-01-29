@@ -7,6 +7,8 @@ import { Validators } from '../validators/Validators';
 
 export class PageActivity implements Activity, Page  {    
     components: WebComponent[];   
+    context: Context;
+    isDirty: boolean;
         
     static type = "page-activity"      
     static create(act: Activity) {
@@ -17,7 +19,9 @@ export class PageActivity implements Activity, Page  {
 
     execute = (context: Context) => {             
         // Clear the cache
-        context.container.page = null;       
+        context.container.page = null;  
+        this.context = context;     
+        this.isDirty = false;
                
         this.components
             .filter(i => i.validators)
@@ -27,15 +31,16 @@ export class PageActivity implements Activity, Page  {
             });
 
         setTimeout(() => {
-            context.container.page = {...this, context: context};        
+            context.container.page = this;        
         }, 0);
             
     }
 
-    validate = (context: Context) => {               
+    validate = (context: Context): Promise<boolean> => {    
         return new Promise((resolve, reject) => {
             const validatedComponents = this.components.filter(i => i.validators);
             let isValid = true;
+            this.isDirty = true;
 
             for(var component of validatedComponents) 
                 isValid = isValid && Validators.validate(context, component);

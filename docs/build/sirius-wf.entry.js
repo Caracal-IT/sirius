@@ -12,17 +12,19 @@ class Validator {
         this.name = name;
     }
 }
+
 class RequiredValidator extends Validator {
     validate(context, component) {
         const value = context.modelService.getModelValue(component.id);
         if (value == null || value == undefined || value.toString().trim().length == 0) {
             component["error"] = "true";
-            component["errorMessage"] = "Thie field is required!!";
+            component["errorMessage"] = "The field is required!!";
             return false;
         }
         return true;
     }
 }
+
 class Validators {
     constructor(context, component) {
         this.context = context;
@@ -68,6 +70,8 @@ class PageActivity {
         this.execute = (context) => {
             // Clear the cache
             context.container.page = null;
+            this.context = context;
+            this.isDirty = false;
             this.components
                 .filter(i => i.validators)
                 .forEach(component => {
@@ -75,13 +79,14 @@ class PageActivity {
                 component["errorMessage"] = "";
             });
             setTimeout(() => {
-                context.container.page = Object.assign(Object.assign({}, this), { context: context });
+                context.container.page = this;
             }, 0);
         };
         this.validate = (context) => {
             return new Promise((resolve, reject) => {
                 const validatedComponents = this.components.filter(i => i.validators);
                 let isValid = true;
+                this.isDirty = true;
                 for (var component of validatedComponents)
                     isValid = isValid && Validators.validate(context, component);
                 if (isValid)

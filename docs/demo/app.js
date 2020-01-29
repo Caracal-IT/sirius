@@ -35,8 +35,7 @@ wf2.addEventListener("wfMessage", error => {
 function showErrorMessage(msg) {    
     errorMsg.innerText = msg.description;
     errorStack.innerText = msg.stack;
-    hideLoading();
-    console.dir(msg);
+    hideLoading();    
 }
 
 function showLoading() {

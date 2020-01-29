@@ -4,8 +4,14 @@ const SiriusPage = class {
     constructor(hostRef) {
         registerInstance(this, hostRef);
     }
-    inputHandler(event) {
+    async inputHandler(event) {
         this.modelService.setModelValue(event.target["id"], event.target["value"]);
+        if (!this.page.isDirty)
+            return;
+        try {
+            await this.page.validate(this.page.context);
+        }
+        catch (Ex) { }
     }
     render() {
         const renderItem = (item) => [

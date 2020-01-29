@@ -1,26 +1,7 @@
 import { WebComponent } from './../model/WebComponent.model';
 import { Context } from '../model/Context.model';
-
-export abstract class Validator {
-    constructor(public name: string){}
-
-    abstract validate(context: Context, component: WebComponent, config: any): boolean;
-}
-
-export class RequiredValidator extends Validator {
-    validate(context: Context, component: WebComponent): boolean {        
-        const value = context.modelService.getModelValue(component.id);
-
-        if(value == null || value == undefined || value.toString().trim().length == 0) {
-            component["error"] = "true";
-            component["errorMessage"] = "Thie field is required!!";      
-
-            return false;
-        }
-        
-        return true;
-    }
-}
+import { Validator } from './Validator';
+import { RequiredValidator } from './RequiredValidator';
 
 export class Validators {
     static RegisteredValidators: Array<Validator> = [
