@@ -15,6 +15,7 @@ wf.addEventListener("wfMessage", error => {
 
     switch (msg.messageType) {
         case "ERROR": return showErrorMessage(msg);
+        case "VALIDATION_ERROR": return showErrorMessage(msg);
         case "START_LOADING": return showLoading(msg);
         case "END_LOADING": return hideLoading(msg);
     }    
@@ -25,6 +26,7 @@ wf2.addEventListener("wfMessage", error => {
 
     switch (msg.messageType) {
         case "ERROR": return showErrorMessage(msg);
+        case "VALIDATION_ERROR": return showErrorMessage(msg);
         case "START_LOADING": return showLoading(msg);
         case "END_LOADING": return hideLoading(msg);
     }    
@@ -34,6 +36,7 @@ function showErrorMessage(msg) {
     errorMsg.innerText = msg.description;
     errorStack.innerText = msg.stack;
     hideLoading();
+    console.dir(msg);
 }
 
 function showLoading() {

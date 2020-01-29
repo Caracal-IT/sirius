@@ -1,10 +1,94 @@
-import { r as registerInstance, c as createEvent, h } from './core-11df8c52.js';
+import { r as registerInstance, c as createEvent, h } from './core-d4843236.js';
+
+class ValidationError extends Error {
+    constructor() {
+        super(...arguments);
+        this.type = "ValidationError";
+    }
+}
+
+class Validator {
+    constructor(name) {
+        this.name = name;
+    }
+}
+class RequiredValidator extends Validator {
+    validate(context, component) {
+        const value = context.modelService.getModelValue(component.id);
+        if (value == null || value == undefined || value.toString().trim().length == 0) {
+            component["error"] = "true";
+            component["errorMessage"] = "Thie field is required!!";
+            return false;
+        }
+        return true;
+    }
+}
+class Validators {
+    constructor(context, component) {
+        this.context = context;
+        this.component = component;
+    }
+    static validate(context, component) {
+        const validators = new Validators(context, component);
+        const isValid = validators.validate();
+        context.container.page = Object.assign({}, context.container.page);
+        return isValid;
+    }
+    validate() {
+        this.setErrorState(null);
+        if (this.hasValidators())
+            return this.executeValidators();
+        return true;
+    }
+    hasValidators() {
+        return this.component
+            && this.component.validators
+            && this.component.validators.length > 0;
+    }
+    executeValidators() {
+        for (const validator of this.component.validators) {
+            const v = Validators.RegisteredValidators.find(v => v.name === validator.name);
+            if (v && !v.validate(this.context, this.component, v))
+                return false;
+        }
+        return true;
+    }
+    setErrorState(errorMessage) {
+        this.component["error"] = errorMessage && errorMessage.length > 0;
+        this.component["errorMessage"] = errorMessage;
+    }
+}
+Validators.RegisteredValidators = [
+    new RequiredValidator("Required")
+];
 
 class PageActivity {
     constructor() {
         this.type = PageActivity.type;
         this.execute = (context) => {
-            context.container.page = Object.assign(Object.assign({}, this), { context: context });
+            // Clear the cache
+            context.container.page = null;
+            this.components
+                .filter(i => i.validators)
+                .forEach(component => {
+                component["error"] = "false";
+                component["errorMessage"] = "";
+            });
+            setTimeout(() => {
+                context.container.page = Object.assign(Object.assign({}, this), { context: context });
+            }, 0);
+        };
+        this.validate = (context) => {
+            return new Promise((resolve, reject) => {
+                const validatedComponents = this.components.filter(i => i.validators);
+                let isValid = true;
+                for (var component of validatedComponents)
+                    isValid = isValid && Validators.validate(context, component);
+                if (isValid)
+                    resolve(true);
+                else
+                    reject(new ValidationError("Validation Failed"));
+            });
         };
     }
     static create(act) {
@@ -18,7 +102,7 @@ class CodeActivity {
         this.type = CodeActivity.type;
         this.execute = (context) => {
             this.eval(this.expression, context);
-            context.wfService.setNextAction(this.next);
+            context.wfService.setNextAction(this.next, this);
         };
     }
     static create(act) {
@@ -39,9 +123,9 @@ class DecisionActivity extends CodeActivity {
             const expression = `return ${this.left} ${this.equality} ${this.right};`;
             const result = super.eval(expression, context);
             if (result)
-                context.wfService.setNextAction(this.trueAction);
+                context.wfService.setNextAction(this.trueAction, this);
             else
-                context.wfService.setNextAction(this.falseAction);
+                context.wfService.setNextAction(this.falseAction, this);
         };
     }
     static create(act) {
@@ -96,7 +180,7 @@ class ApiActivity {
             return context
                 .http
                 .fetch(url, this.mappings)
-                .then(() => context.wfService.setNextAction(this.next));
+                .then(() => context.wfService.setNextAction(this.next, this));
         };
     }
     static create(act) {
@@ -113,7 +197,7 @@ class AssignActivity {
             if (this.value.startsWith("{") && this.value.endsWith("}"))
                 value = context.modelService.getValue(this.value.substring(1, this.value.length - 1), context.model);
             context.modelService.setModelValue(this.key, value);
-            context.wfService.setNextAction(this.next);
+            context.wfService.setNextAction(this.next, this);
         };
     }
     static create(act) {
@@ -142,15 +226,15 @@ ActivityFactory.activities = [
 ];
 
 class WFService {
-    setNextAction(name) {
+    setNextAction(name, source) {
         this.action = name;
         if (this.wfChangeHandler)
-            this.wfChangeHandler(this.action, this.process);
+            this.wfChangeHandler(this.action, this.process, source);
     }
     setProcess(process) {
         this.process = process;
         if (this.wfChangeHandler)
-            this.wfChangeHandler(this.action, this.process);
+            this.wfChangeHandler(this.action, this.process, null);
     }
     addActivity(type, create) {
         const act = ActivityFactory.activities.find(a => a.type === type);
@@ -175,6 +259,7 @@ var MessageType;
     MessageType["StartLoading"] = "START_LOADING";
     MessageType["EndLoading"] = "END_LOADING";
     MessageType["Error"] = "ERROR";
+    MessageType["ValidationError"] = "VALIDATION_ERROR";
 })(MessageType || (MessageType = {}));
 
 class Message {
@@ -262,57 +347,51 @@ class WFHandler {
         this.wfService.wfChangeHandler = this.handleWfChange.bind(this);
         this.modelService.modelChangedHandler = this.handleModelChanged.bind(this);
     }
-    handleWfChange(action, process) {
+    handleWfChange(action, process, source) {
+        this.hasError = false;
         this.currProcess = process;
         this.currAction = action || "start";
-        this.executeActivity();
+        this.executeActivity(source);
     }
     handleModelChanged(model) {
         this.context.model = model;
     }
-    executeActivity() {
+    executeActivity(source) {
         if (!this.hasActivities())
             return;
         const act = this.currProcess.activities.find((p) => p.name === this.currAction);
-        const model = this.context.model;
         if (this.canExecute(act)) {
             this.hasError = false;
             this.sendMessage(new Message(MessageType.StartLoading, "Loading..."));
-            this.tryExecute(act)
-                .then(() => this.actionExecuted(act, model))
-                .catch((error) => {
-                this.modelService.setModelValue("message", new Message(MessageType.EndLoading));
-                this.handleError(error);
-            });
+            this.validate(source)
+                .then(() => act.execute(this.context))
+                .then(() => this.actionExecuted())
+                .catch((error) => this.handleError(error));
         }
     }
-    async tryExecute(act) {
-        try {
-            await act.execute(this.context);
-        }
-        catch (ex) {
-            this.handleError(ex);
-        }
+    async validate(source) {
+        if (this.shouldSkipValidate(source))
+            return true;
+        const act = this.currProcess.activities.find((p) => p.name === this.lastAction);
+        if (act && act.validate)
+            return await act.validate(this.context);
     }
-    actionExecuted(act, model) {
-        if (this.hasError)
-            return;
+    shouldSkipValidate(source) {
+        return (source && source.data && source.data.noValidate)
+            || (this.currAction === this.lastAction);
+    }
+    actionExecuted() {
         this.sendMessage(new Message(MessageType.EndLoading));
-        this.goToNextAction(act, model);
-    }
-    goToNextAction(act, model) {
-        if (act.components)
+        if (!this.hasError)
             this.lastAction = this.currAction;
-        else if (model !== this.context.model)
-            this.wfService.setNextAction(this.lastAction);
-        else
-            this.wfService.setNextAction(null);
     }
     handleError(error) {
         this.hasError = true;
-        this.sendMessage(new Message(MessageType.Error, error.message, error.stack));
-        console.log("ERROR OCCURED", error);
-        console.dir(error);
+        this.modelService.setModelValue("message", new Message(MessageType.EndLoading, error.message));
+        if (error instanceof ValidationError)
+            this.sendMessage(new Message(MessageType.ValidationError, error.message, error.stack));
+        else
+            this.sendMessage(new Message(MessageType.Error, error.message, error.stack));
     }
     hasActivities() {
         return this.currProcess && this.currProcess.activities;
@@ -341,8 +420,10 @@ class ModelService {
         let value;
         if (component && component.id && model)
             value = this.getModelValue(component.id);
-        if (value === undefined && component.value)
+        if (value === undefined && component.value) {
             value = component.value;
+            this.setModelValue(component.id, value);
+        }
         return value;
     }
     getModelValue(key) {
@@ -352,7 +433,7 @@ class ModelService {
         return Object.assign({}, this.model);
     }
     getValue(key, model) {
-        return key.split(".").reduce((total, currentElement) => total ? total[currentElement] : null, model);
+        return key.split(".").reduce((total, currentElement) => total ? total[currentElement] : undefined, model);
     }
     inputHandler(event) {
         const target = event.currentTarget;
@@ -380,7 +461,7 @@ const SiriusWf = class {
         this.wfService.addActivity(type, create);
     }
     async goto(activity) {
-        this.wfService.setNextAction(activity);
+        this.wfService.setNextAction(activity, this);
     }
     async loadProcess(process) {
         this.page = null;
@@ -388,6 +469,14 @@ const SiriusWf = class {
     }
     async parse(processDef) {
         return this.wfService.parse(processDef);
+    }
+    async load(processDef) {
+        if (typeof processDef === 'object')
+            processDef = JSON.stringify(processDef);
+        const process = this.wfService.parse(processDef);
+        if (!process)
+            return;
+        return this.loadProcess(process);
     }
     async componentWillLoad() {
         this.wfService = new WFService();

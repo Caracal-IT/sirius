@@ -1,4 +1,4 @@
-const BUILD = {"allRenderFn":true,"cmpDidLoad":false,"cmpShouldUpdate":false,"cmpDidUnload":false,"cmpDidUpdate":false,"cmpDidRender":false,"cmpWillLoad":true,"cmpWillUpdate":false,"cmpWillRender":false,"connectedCallback":false,"disconnectedCallback":false,"element":false,"event":true,"hasRenderFn":true,"lifecycle":true,"asyncLoading":true,"hostListener":false,"hostListenerTargetWindow":false,"hostListenerTargetDocument":false,"hostListenerTargetBody":false,"hostListenerTargetParent":false,"hostListenerTarget":false,"member":true,"method":true,"mode":false,"noVdomRender":false,"observeAttribute":false,"prop":true,"propBoolean":false,"propNumber":false,"propString":false,"propMutable":false,"reflect":false,"scoped":false,"shadowDom":true,"shadowDelegatesFocus":false,"slot":false,"slotRelocation":false,"state":true,"style":false,"svg":false,"updatable":true,"vdomAttribute":true,"vdomXlink":true,"vdomClass":true,"vdomFunctional":true,"vdomKey":true,"vdomListener":true,"vdomRef":true,"vdomRender":true,"vdomStyle":true,"vdomText":false,"watchCallback":false,"taskQueue":true,"cloneNodeFix":false,"lazyLoad":true,"hydrateServerSide":false,"cssVarShim":true,"initializeNextTick":true,"hydrateClientSide":false,"isDebug":false,"isDev":true,"devTools":true,"lifecycleDOMEvents":false,"profile":true,"hotModuleReplacement":true,"constructableCSS":false,"cssAnnotations":true};
+const BUILD = {"allRenderFn":true,"cmpDidLoad":false,"cmpShouldUpdate":false,"cmpDidUnload":false,"cmpDidUpdate":false,"cmpDidRender":false,"cmpWillLoad":true,"cmpWillUpdate":false,"cmpWillRender":false,"connectedCallback":false,"disconnectedCallback":false,"element":false,"event":true,"hasRenderFn":true,"lifecycle":true,"asyncLoading":true,"hostListener":false,"hostListenerTargetWindow":false,"hostListenerTargetDocument":false,"hostListenerTargetBody":false,"hostListenerTargetParent":false,"hostListenerTarget":false,"member":true,"method":true,"mode":false,"noVdomRender":false,"observeAttribute":false,"prop":true,"propBoolean":false,"propNumber":false,"propString":false,"propMutable":false,"reflect":false,"scoped":false,"shadowDom":true,"shadowDelegatesFocus":false,"slot":false,"slotRelocation":false,"state":true,"style":true,"svg":false,"updatable":true,"vdomAttribute":true,"vdomXlink":true,"vdomClass":true,"vdomFunctional":true,"vdomKey":true,"vdomListener":true,"vdomRef":true,"vdomRender":true,"vdomStyle":true,"vdomText":true,"watchCallback":false,"taskQueue":true,"cloneNodeFix":false,"appendChildSlotFix":false,"lazyLoad":true,"hydrateServerSide":false,"cssVarShim":true,"initializeNextTick":true,"hydrateClientSide":false,"isDebug":false,"isDev":true,"devTools":true,"lifecycleDOMEvents":false,"profile":true,"hotModuleReplacement":true,"constructableCSS":false,"cssAnnotations":true};
 const NAMESPACE = 'sirius';
 
 let queueCongestion = 0;
@@ -24,7 +24,7 @@ const plt = {
     ael: (el, eventName, listener, opts) => el.addEventListener(eventName, listener, opts),
     rel: (el, eventName, listener, opts) => el.removeEventListener(eventName, listener, opts),
 };
-const supportsShadowDom = (BUILD.shadowDom) ? /*@__PURE__*/ (() => !!doc.head.attachShadow)() : false;
+const supportsShadowDom = (BUILD.shadowDom) ? /*@__PURE__*/ (() => (doc.head.attachShadow + '').indexOf('[native') > -1)() : false;
 const supportsListenerOptions = /*@__PURE__*/ (() => {
     let supportsListenerOptions = false;
     try {
@@ -197,7 +197,7 @@ const patchEsm = () => {
     // @ts-ignore
     if (BUILD.cssVarShim && !(win.CSS && win.CSS.supports && win.CSS.supports('color', 'var(--c)'))) {
         // @ts-ignore
-        return __sc_import_sirius('./css-shim-978387b1-1e75855f.js').then(() => {
+        return __sc_import_sirius('./css-shim-6aaf713d-9b13816a.js').then(() => {
             plt.$cssShim$ = win.__stencil_cssshim;
             if (plt.$cssShim$) {
                 return plt.$cssShim$.initShim();
@@ -206,34 +206,52 @@ const patchEsm = () => {
     }
     return Promise.resolve();
 };
-const patchBrowser = async () => {
+const patchBrowser = () => {
+    // NOTE!! This fn cannot use async/await!
     if (BUILD.isDev) {
         consoleDevInfo('Stencil is running in the development mode.');
     }
     if (BUILD.cssVarShim) {
+        // shim css vars
         plt.$cssShim$ = win.__stencil_cssshim;
     }
     if (BUILD.cloneNodeFix) {
+        // opted-in to polyfill cloneNode() for slot polyfilled components
         patchCloneNodeFix(H.prototype);
     }
+    if (BUILD.profile && !performance.mark) {
+        // not all browsers support performance.mark/measure (Safari 10)
+        performance.mark = performance.measure = () => { };
+        performance.getEntriesByName = () => [];
+    }
     // @ts-ignore
-    const importMeta = "";
-    const regex = new RegExp(`\/${NAMESPACE}(\\.esm)?\\.js($|\\?|#)`);
-    const scriptElm = Array.from(doc.querySelectorAll('script')).find(s => (regex.test(s.src) ||
+    const scriptElm = Array.from(doc.querySelectorAll('script')).find(s => (new RegExp(`\/${NAMESPACE}(\\.esm)?\\.js($|\\?|#)`).test(s.src) ||
         s.getAttribute('data-stencil-namespace') === NAMESPACE));
-    const opts = scriptElm['data-opts'];
+    const opts = scriptElm['data-opts'] || {};
+    const importMeta = "";
+    if ('onbeforeload' in scriptElm && !history.scrollRestoration /* IS_ESM_BUILD */) {
+        // Safari < v11 support: This IF is true if it's Safari below v11.
+        // This fn cannot use async/await since Safari didn't support it until v11,
+        // however, Safari 10 did support modules. Safari 10 also didn't support "nomodule",
+        // so both the ESM file and nomodule file would get downloaded. Only Safari
+        // has 'onbeforeload' in the script, and "history.scrollRestoration" was added
+        // to Safari in v11. Return a noop then() so the async/await ESM code doesn't continue.
+        // IS_ESM_BUILD is replaced at build time so this check doesn't happen in systemjs builds.
+        return { then() { } };
+    }
     if (importMeta !== '') {
-        return Object.assign(Object.assign({}, opts), { resourcesUrl: new URL('.', importMeta).href });
+        opts.resourcesUrl = new URL('.', importMeta).href;
     }
     else {
-        const resourcesUrl = new URL('.', new URL(scriptElm.getAttribute('data-resources-url') || scriptElm.src, win.location.href));
-        patchDynamicImport(resourcesUrl.href, scriptElm);
+        opts.resourcesUrl = new URL('.', new URL(scriptElm.getAttribute('data-resources-url') || scriptElm.src, win.location.href)).href;
+        patchDynamicImport(opts.resourcesUrl, scriptElm);
         if (!window.customElements) {
+            // module support, but no custom elements support (Old Edge)
             // @ts-ignore
-            await __sc_import_sirius('./dom-76cc7c7d-0a082895.js');
+            return __sc_import_sirius('./dom-76cc7c7d-0a082895.js').then(() => opts);
         }
-        return Object.assign(Object.assign({}, opts), { resourcesUrl: resourcesUrl.href });
     }
+    return Promise.resolve(opts);
 };
 const patchDynamicImport = (base, orgScriptElm) => {
     const importFunctionName = getDynamicImportFunction(NAMESPACE);
@@ -2241,6 +2259,67 @@ function hmrStart(elm, cmpMeta, hmrVersionId) {
     // re-initialize the component
     initializeComponent(elm, hostRef, cmpMeta, hmrVersionId);
 }
+const cloneNodeFix = (HostElementPrototype) => {
+    const orgCloneNode = HostElementPrototype.cloneNode;
+    HostElementPrototype.cloneNode = function (deep) {
+        const srcNode = this;
+        const isShadowDom = BUILD.shadowDom ? srcNode.shadowRoot && supportsShadowDom : false;
+        const clonedNode = orgCloneNode.call(srcNode, isShadowDom ? deep : false);
+        if (BUILD.slot && !isShadowDom && deep) {
+            let i = 0;
+            let slotted;
+            for (; i < srcNode.childNodes.length; i++) {
+                slotted = srcNode.childNodes[i]['s-nr'];
+                if (slotted) {
+                    if (BUILD.appendChildSlotFix && clonedNode.__appendChild) {
+                        clonedNode.__appendChild(slotted.cloneNode(true));
+                    }
+                    else {
+                        clonedNode.appendChild(slotted.cloneNode(true));
+                    }
+                }
+            }
+        }
+        return clonedNode;
+    };
+};
+const appendChildSlotFix = (HostElementPrototype) => {
+    HostElementPrototype.__appendChild = HostElementPrototype.appendChild;
+    HostElementPrototype.appendChild = function (newChild) {
+        const slotName = newChild['s-sn'] = getSlotName(newChild);
+        const slotNode = getHostSlotNode(this, slotName);
+        if (slotNode) {
+            const slotChildNodes = getHostSlotChildNodes(slotNode, slotName);
+            const appendAfter = slotChildNodes[slotChildNodes.length - 1];
+            return appendAfter.parentNode.insertBefore(newChild, appendAfter.nextSibling);
+        }
+        return this.__appendChild(newChild);
+    };
+};
+const getSlotName = (node) => (node.nodeType === 1 && node.getAttribute('slot')) || '';
+const getHostSlotNode = (elm, slotName) => {
+    let childNodes = elm.childNodes;
+    let i = 0;
+    let childNode;
+    for (; i < childNodes.length; i++) {
+        childNode = childNodes[i];
+        if (childNode['s-sr'] && childNode['s-sn'] === slotName) {
+            return childNode;
+        }
+        childNode = getHostSlotNode(childNode, slotName);
+        if (childNode) {
+            return childNode;
+        }
+    }
+    return null;
+};
+const getHostSlotChildNodes = (n, slotName) => {
+    const childNodes = [n];
+    while ((n = n.nextSibling) && n['s-sn'] === slotName) {
+        childNodes.push(n);
+    }
+    return childNodes;
+};
 const bootstrapLazy = (lazyBundles, options = {}) => {
     if (BUILD.profile) {
         performance.mark('st:app:start');
@@ -2348,23 +2427,10 @@ const bootstrapLazy = (lazyBundles, options = {}) => {
             }
         };
         if (BUILD.cloneNodeFix) {
-            const orgCloneNode = HostElement.prototype.cloneNode;
-            HostElement.prototype.cloneNode = function (deep) {
-                const srcNode = this;
-                const isShadowDom = BUILD.shadowDom ? srcNode.shadowRoot && supportsShadowDom : false;
-                const clonedNode = orgCloneNode.call(this, isShadowDom ? deep : false);
-                if (BUILD.slot && !isShadowDom && deep) {
-                    let i = 0;
-                    let slotted;
-                    for (; i < srcNode.childNodes.length; i++) {
-                        slotted = srcNode.childNodes[i]['s-nr'];
-                        if (slotted) {
-                            clonedNode.appendChild(slotted.cloneNode(true));
-                        }
-                    }
-                }
-                return clonedNode;
-            };
+            cloneNodeFix(HostElement.prototype);
+        }
+        if (BUILD.appendChildSlotFix) {
+            appendChildSlotFix(HostElement.prototype);
         }
         if (BUILD.hotModuleReplacement) {
             HostElement.prototype['s-hmr'] = function (hmrVersionId) {

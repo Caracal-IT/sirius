@@ -7,12 +7,19 @@
         "components": [                           
           { "tag": "input", "id": "apicall.id" },
           { "tag": "input", "id": "apicall.title" },
-          { "tag": "input", "id": "registration.firstName" },
+
+          { "tag": "input", 
+            "id": "registration.firstName", 
+            "validators": [
+              {"name": "Required" }
+            ] 
+          },
+
           { "tag": "moon-button", "id": "btn1", "value": "Next", "next": "page1" },
           { "tag": "moon-button", "id": "btn2", "value": "Decision", "next": "page3" },
-          { "tag": "moon-button", "id": "btn2", "value": "Alert", "next": "page4" },
-          { "tag": "moon-button", "id": "btn2", "value": "Api Call", "next": "page5" },
-          { "tag": "moon-button", "id": "btn2", "value": "Code", "next": "page6" }
+          { "tag": "moon-button", "id": "btn3", "value": "Alert", "next": "page4" },
+          { "tag": "moon-button", "id": "btn4", "noValidate": true, "value": "Api Call", "next": "page5" },
+          { "tag": "moon-button", "id": "btn5", "noValidate": true, "value": "Code", "next": "page6" }
         ]    
       },
 

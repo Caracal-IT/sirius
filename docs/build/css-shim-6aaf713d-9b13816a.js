@@ -472,7 +472,9 @@ function replaceAll(input, find, replace) {
 }
 function loadDocument(doc, globalScopes) {
     loadDocumentStyles(doc, globalScopes);
-    return loadDocumentLinks(doc, globalScopes);
+    return loadDocumentLinks(doc, globalScopes).then(function () {
+        updateGlobalScopes(globalScopes);
+    });
 }
 function startWatcher(doc, globalScopes) {
     var mutation = new MutationObserver(function () {
