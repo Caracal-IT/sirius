@@ -9,18 +9,20 @@ import { Context } from "../../model/Context.model";
 import { ModelService } from "../../services/model.service";
 import { WFLoaderHandler } from "../../handlers/wfLoader.handler";
 import { HttpService } from "../../services/http.service";
+import { PersistanceService } from "../../services/persistance.service";
 
 @Component({
   tag: "sirius-wf",
   shadow: true
 })
 export class SiriusWf {   
-  private ipcHistory: Array<IPC> = [];
+  private ipcHistory: any = [];
   
   http: HttpService;
   context: Context;
   wfService: WFService;
   modelService: ModelService;
+  persistance: PersistanceService;
   
   wfHandler: WFHandler;
   wfLoaderHandler: WFLoaderHandler;
@@ -78,9 +80,28 @@ export class SiriusWf {
     catch(Exception) { }
   }
 
+  @Method()
+  async hydrate(process: string, activity: string = "start") {
+    const ipc = this.persistance.getItem("WF_SIRIUS_IPC")||[];
+    const model = this.persistance.getItem("WF_SIRIUS_MODEL")||this.modelService.getModel();
+
+    this.loadUrl(process, activity);
+
+    this.ipcHistory = ipc;
+    this.modelService.setModel(model);   
+  }
+
+  @Method()
+  async dehydrate() {
+    this.persistance.setItem("WF_SIRIUS_IPC", this.ipcHistory);
+    this.persistance.setItem("WF_SIRIUS_MODEL", this.modelService.getModel());
+  }
+
   async ipc(process: string, next: string = null) {    
     try {  
       this.ipcHistory.push(new IPC(this.process, process, next));
+
+      this.persistance.setItem("WF_SIRIUS_IPC", this.ipcHistory);
 
       await this.loadUrl(process, "start");           
     }
@@ -90,11 +111,15 @@ export class SiriusWf {
   async completed(process: string) {
     const lastProcess = this.ipcHistory.pop();
 
+    this.persistance.setItem("WF_SIRIUS_IPC", this.ipcHistory);
+
     if(!lastProcess || lastProcess.process !== process) {
       this.ipcHistory = [];
+
+      this.persistance.setItem("WF_SIRIUS_IPC", this.ipcHistory);
       return;
     }
-
+    
     try {
       await this.loadUrl(lastProcess.parent, lastProcess.next||"start");
     }
@@ -102,6 +127,8 @@ export class SiriusWf {
   }
 
   async componentWillLoad() {    
+    this.persistance = new PersistanceService();
+
     this.wfService = new WFService(); 
     this.modelService = new ModelService();
     this.http = new HttpService(this.modelService);

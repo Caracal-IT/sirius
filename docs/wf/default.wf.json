@@ -5,8 +5,9 @@
         "name": "start",
         "type": "page-activity",
         "components": [                           
-          { "tag": "input", "id": "name", "value" : "Hallo World" },
-          { "tag": "moon-button", "id": "btn1", "value": "Next", "next": "ipc" }         
+          { "tag": "input", "id": "START_name", "value" : "Hallo World" },
+          { "tag": "moon-button", "id": "btn1", "value": "Next", "next": "ipc" },
+          { "tag": "moon-button", "id": "btn133333", "value": "Redirected Test", "next": "redirected" }
         ]    
       },
       {
@@ -21,6 +22,21 @@
         "components": [                           
           { "tag": "input", "id": "ipc_completed_name", "value" : "RETURNED FROM IPC" }         
         ]
+      },
+      {
+        "name": "redirected",
+        "type": "page-activity",
+        "components": [                           
+          { "tag": "input", "id": "redirected_name", "value" : "RETURNED FROM REDIRECT" },
+          { "tag": "input", "id": "START_name" },
+          { "tag": "moon-button", "id": "redirected_btn1", "value": "Next", "next": "start" },
+          { "tag": "moon-button", "id": "redirected_btn2", "value": "Go To Microsoft", "next": "redirectTo" }         
+        ]
+      },
+      {
+        "name": "redirectTo",
+        "type": "redirect-activity",
+        "url": "http://moicrosoft.com"
       }
     ]
   }

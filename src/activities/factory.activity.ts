@@ -6,6 +6,7 @@ import { CodeActivity } from "./code.activity";
 import { AssignActivity } from "./assign.activity";
 import { IPCActivity } from "./ipc.activity";
 import { CompletedActivity } from "./completed.activity";
+import { RedirectActivity } from "./redirect.activity";
 
 export class ActivityFactory {    
     static activities = [
@@ -15,7 +16,8 @@ export class ActivityFactory {
         { type: AssignActivity.type, create: AssignActivity.create },
         { type: ApiActivity.type, create: ApiActivity.create },
         { type: IPCActivity.type, create: IPCActivity.create },
-        { type: CompletedActivity.type, create: CompletedActivity.create }
+        { type: CompletedActivity.type, create: CompletedActivity.create },
+        { type: RedirectActivity.type, create: RedirectActivity.create }
     ]
 
     static linkActivities(process: Process){            

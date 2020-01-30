@@ -4,7 +4,7 @@ export class ModelService {
 
   setModelValue(name: string, value: any) {    
     this.model = this.merge(this.model, name, value);
-    
+        
     if(this.modelChangedHandler)
       this.modelChangedHandler(this.model);    
   }
@@ -33,6 +33,10 @@ export class ModelService {
 
   getModel(): any {
     return {...this.model};    
+  }
+
+  setModel(model: any) {
+    this.model = {...model};
   }
 
   getValue(key: string, model: any) {    

@@ -239,6 +239,20 @@ class CompletedActivity {
 }
 CompletedActivity.type = "completed-activity";
 
+class RedirectActivity {
+    constructor() {
+        this.type = RedirectActivity.type;
+        this.execute = (context) => {
+            context.container.dehydrate();
+            document.location.href = this.url;
+        };
+    }
+    static create(act) {
+        return Object.assign(new RedirectActivity(), act);
+    }
+}
+RedirectActivity.type = "redirect-activity";
+
 class ActivityFactory {
     static linkActivities(process) {
         process
@@ -257,7 +271,8 @@ ActivityFactory.activities = [
     { type: AssignActivity.type, create: AssignActivity.create },
     { type: ApiActivity.type, create: ApiActivity.create },
     { type: IPCActivity.type, create: IPCActivity.create },
-    { type: CompletedActivity.type, create: CompletedActivity.create }
+    { type: CompletedActivity.type, create: CompletedActivity.create },
+    { type: RedirectActivity.type, create: RedirectActivity.create }
 ];
 
 class WFService {
@@ -413,6 +428,9 @@ class ModelService {
     getModel() {
         return Object.assign({}, this.model);
     }
+    setModel(model) {
+        this.model = Object.assign({}, model);
+    }
     getValue(key, model) {
         return key.split(".").reduce((total, currentElement) => total ? total[currentElement] : undefined, model);
     }
@@ -504,6 +522,18 @@ class HttpService {
     }
 }
 
+class PersistanceService {
+    setItem(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+    }
+    getItem(key) {
+        const value = localStorage.getItem(key);
+        if (!value)
+            return null;
+        return JSON.parse(value);
+    }
+}
+
 const SiriusWf = class {
     constructor(hostRef) {
         registerInstance(this, hostRef);
@@ -539,17 +569,31 @@ const SiriusWf = class {
         }
         catch (Exception) { }
     }
+    async hydrate(process, activity = "start") {
+        const ipc = this.persistance.getItem("WF_SIRIUS_IPC") || [];
+        const model = this.persistance.getItem("WF_SIRIUS_MODEL") || this.modelService.getModel();
+        this.loadUrl(process, activity);
+        this.ipcHistory = ipc;
+        this.modelService.setModel(model);
+    }
+    async dehydrate() {
+        this.persistance.setItem("WF_SIRIUS_IPC", this.ipcHistory);
+        this.persistance.setItem("WF_SIRIUS_MODEL", this.modelService.getModel());
+    }
     async ipc(process, next = null) {
         try {
             this.ipcHistory.push(new IPC(this.process, process, next));
+            this.persistance.setItem("WF_SIRIUS_IPC", this.ipcHistory);
             await this.loadUrl(process, "start");
         }
         catch (Exception) { }
     }
     async completed(process) {
         const lastProcess = this.ipcHistory.pop();
+        this.persistance.setItem("WF_SIRIUS_IPC", this.ipcHistory);
         if (!lastProcess || lastProcess.process !== process) {
             this.ipcHistory = [];
+            this.persistance.setItem("WF_SIRIUS_IPC", this.ipcHistory);
             return;
         }
         try {
@@ -558,6 +602,7 @@ const SiriusWf = class {
         catch (Exception) { }
     }
     async componentWillLoad() {
+        this.persistance = new PersistanceService();
         this.wfService = new WFService();
         this.modelService = new ModelService();
         this.http = new HttpService(this.modelService);

@@ -33,7 +33,27 @@ Type: `Promise<void>`
 
 
 
+### `dehydrate() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 ### `goto(activity: string) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `hydrate(process: string, activity?: string) => Promise<void>`
 
 
 
