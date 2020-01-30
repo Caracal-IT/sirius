@@ -1,15 +1,18 @@
 class AlertActivity {
-    static type = "alert-activity";
-
     static create(act) {
         return Object.assign(new AlertActivity(), act);
     }
 
-    type = AlertActivity.type;
-    execute = (context) => alert(this.message);
-    
-  }
+    static get type() {
+        return "alert-activity";
+    }
 
+    constructor() {
+       this.type =  AlertActivity.type;
+       this.execute = (context) => alert(this.message);
+    }
+}
+  
 customElements
     .whenDefined("sirius-wf")
     .then(() => {
