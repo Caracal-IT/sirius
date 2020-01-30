@@ -11,4 +11,8 @@ export class PersistanceService {
         
         return JSON.parse(value);
     }
+
+    clear() {
+        sessionStorage.clear();
+    }
 }

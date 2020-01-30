@@ -95,6 +95,7 @@ export class SiriusWf {
 
   @Method()
   async dehydrate(sessionId: string) {
+    this.persistance.clear();
     this.persistance.setItem(`${sessionId}_IPC`, this.ipcHistory);
     this.persistance.setItem(`${sessionId}_MODEL`, this.modelService.getModel());
   }

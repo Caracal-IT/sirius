@@ -542,6 +542,9 @@ class PersistanceService {
             return null;
         return JSON.parse(value);
     }
+    clear() {
+        sessionStorage.clear();
+    }
 }
 
 const SiriusWf = class {
@@ -588,6 +591,7 @@ const SiriusWf = class {
         this.modelService.setModel(model);
     }
     async dehydrate(sessionId) {
+        this.persistance.clear();
         this.persistance.setItem(`${sessionId}_IPC`, this.ipcHistory);
         this.persistance.setItem(`${sessionId}_MODEL`, this.modelService.getModel());
     }
