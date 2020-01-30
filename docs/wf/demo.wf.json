@@ -11,13 +11,13 @@
           { "tag": "input", 
             "id": "registration.firstName", 
             "validators": [
-              {"name": "Required" }
+              { "name": "Required", "message": "The field is required SDFSDFSDFSDFSDF" }
             ] 
           },
 
           { "tag": "moon-button", "id": "btn1", "value": "Next", "next": "page1" },
           { "tag": "moon-button", "id": "btn2", "value": "Decision", "next": "page3" },
-          { "tag": "moon-button", "id": "btn3", "value": "Alert", "next": "page4" },
+          { "tag": "moon-button", "id": "btn3", "noValidate": true, "value": "Alert", "next": "page4" },
           { "tag": "moon-button", "id": "btn4", "noValidate": true, "value": "Api Call", "next": "page5" },
           { "tag": "moon-button", "id": "btn5", "noValidate": true, "value": "Code", "next": "page6" }
         ]    
@@ -37,7 +37,7 @@
         "components": [                                   
           { "tag": "input", "id": "registration.lastName" },
           { "tag": "input", "id": "registration.firstName" },
-          { "tag": "moon-button", "id": "btn3", "value": "Start", "next": "start" }          
+          { "tag": "moon-button", "id": "btn6", "value": "Start", "next": "start" }          
         ]    
       },
       {
@@ -45,7 +45,7 @@
         "type": "page-activity",
         "components": [                        
           { "tag": "input", "id": "page2", "value": "Page2" },
-          { "tag": "moon-button", "id": "btn4", "value": "Start", "next": "start" }                    
+          { "tag": "moon-button", "id": "btn7", "value": "Start", "next": "start" }                    
         ]    
       },
       {

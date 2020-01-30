@@ -15,7 +15,7 @@ const SiriusPage = class {
     }
     render() {
         const renderItem = (item) => [
-            h(item.tag, Object.assign({ "wf-element": true, error: item["error"], onInput: this.inputHandler.bind(this) }, item, { context: this.page["context"], value: this.modelService.getComponentModelValue(item) })),
+            h(item.tag, Object.assign({ "wf-element": true, data: item, error: item["error"], onInput: this.inputHandler.bind(this) }, item, { context: this.page["context"], value: this.modelService.getComponentModelValue(item) })),
             h("span", null, item["errorMessage"])
         ];
         if (this.page && this.page.components)

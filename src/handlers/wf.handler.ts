@@ -70,7 +70,7 @@ export class WFHandler {
             return act.validate(this.context);                   
     }
 
-    private shouldSkipValidate(source: any): boolean {               
+    private shouldSkipValidate(source: any): boolean { 
         return (source && source.data && source.data.noValidate) 
             || (this.currAction === this.lastAction);            
     }

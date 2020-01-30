@@ -35,10 +35,10 @@ export class Validators {
     }
 
     private executeValidators() : boolean {
-        for (const validator of this.component.validators) {
-            const v = Validators.RegisteredValidators.find(v => v.name === validator.name)
+        for (const config of this.component.validators) {
+            const v = Validators.RegisteredValidators.find(v => v.name === config.name)
             
-            if(v && !v.validate(this.context, this.component, v))
+            if(v && !v.validate(this.context, this.component, config))
                 return false;          
         }
 

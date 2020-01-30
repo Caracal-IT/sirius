@@ -14,11 +14,11 @@ class Validator {
 }
 
 class RequiredValidator extends Validator {
-    validate(context, component) {
+    validate(context, component, config) {
         const value = context.modelService.getModelValue(component.id);
         if (value == null || value == undefined || value.toString().trim().length == 0) {
             component["error"] = "true";
-            component["errorMessage"] = "The field is required!!";
+            component["errorMessage"] = config.message;
             return false;
         }
         return true;
@@ -48,9 +48,9 @@ class Validators {
             && this.component.validators.length > 0;
     }
     executeValidators() {
-        for (const validator of this.component.validators) {
-            const v = Validators.RegisteredValidators.find(v => v.name === validator.name);
-            if (v && !v.validate(this.context, this.component, v))
+        for (const config of this.component.validators) {
+            const v = Validators.RegisteredValidators.find(v => v.name === config.name);
+            if (v && !v.validate(this.context, this.component, config))
                 return false;
         }
         return true;
@@ -379,7 +379,7 @@ class WFHandler {
             return true;
         const act = this.currProcess.activities.find((p) => p.name === this.lastAction);
         if (act && act.validate)
-            return await act.validate(this.context);
+            return act.validate(this.context);
     }
     shouldSkipValidate(source) {
         return (source && source.data && source.data.noValidate)
