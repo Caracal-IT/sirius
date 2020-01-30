@@ -1,6 +1,6 @@
 import { Page } from '../model/Page.model';
 import { WebComponent } from '../model/WebComponent.model';
-import { Activity } from '../model/activity';
+import { Activity } from '../model/activity.model';
 import { Context } from '../model/Context.model';
 import { ValidationError } from '../model/ValidationError.model';
 import { Validators } from '../validators/Validators';

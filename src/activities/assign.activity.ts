@@ -1,5 +1,5 @@
 import { Context } from './../model/Context.model';
-import { Activity } from "../model/activity";
+import { Activity } from "../model/activity.model";
 
 export class AssignActivity implements Activity {
     static type = "assign-activity" 
