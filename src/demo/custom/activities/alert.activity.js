@@ -13,6 +13,8 @@ class AlertActivity {
 customElements
     .whenDefined("sirius-wf")
     .then(() => {
-        const wf = document.querySelector("sirius-wf");
-        wf.addActivity(AlertActivity.type, AlertActivity.create);
+        const wfs = document.querySelectorAll("sirius-wf");
+
+        for(const wf of wfs)
+            wf.addActivity(AlertActivity.type, AlertActivity.create);
     });
