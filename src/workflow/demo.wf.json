@@ -11,7 +11,7 @@
           { "tag": "input", 
             "id": "registration.firstName", 
             "validators": [
-              { "name": "Required", "message": "The field is required SDFSDFSDFSDFSDF" }
+              { "name": "Required", "message": "The field is required" }
             ] 
           },
 

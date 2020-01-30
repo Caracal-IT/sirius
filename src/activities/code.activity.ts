@@ -13,8 +13,10 @@ export class CodeActivity implements Activity {
     next: string;
 
     execute = (context: Context) => {   
-        this.eval(this.expression, context);        
-        context.wfService.setNextAction(this.next, this);
+        this.eval(this.expression, context);    
+        
+        if(this.next && this.next.length > 0)
+            context.wfService.setNextAction(this.next, this);
     }
 
     eval(expression: string, context: Context) {

@@ -1,8 +1,17 @@
-[wf-element] {
-    border: 1px solid black;
+input[wf-element] {
+    border: 1px solid black;    
 }
 
-[wf-element][error=true] {
-    border: 1px solid red;
-    background-color: pink;
+[wf-element] {
+    margin: 0 2px;
+}
+
+input[wf-element][error=true] {
+    border: 1px solid var(--error-color, red);
+    background-color: var(--error-bg-color, pink);
+}
+
+span {
+    display: inline-block;
+    color: var(--error-color, red);
 }

@@ -20,6 +20,7 @@ export class PageActivity implements Activity, Page  {
     execute = (context: Context) => {             
         // Clear the cache
         context.container.page = null;  
+        
         this.context = context;     
         this.isDirty = false;
                
