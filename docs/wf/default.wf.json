@@ -5,8 +5,22 @@
         "name": "start",
         "type": "page-activity",
         "components": [                           
-          { "tag": "input", "id": "name", "value" : "Hallo World" }          
+          { "tag": "input", "id": "name", "value" : "Hallo World" },
+          { "tag": "moon-button", "id": "btn1", "value": "Next", "next": "ipc" }         
         ]    
+      },
+      {
+        "name": "ipc",
+        "type": "ipc-activity",
+        "process": "default_ipc.wf.json",
+        "next": "ipc_completed"
+      },
+      {
+        "name": "ipc_completed",
+        "type": "page-activity",
+        "components": [                           
+          { "tag": "input", "id": "ipc_completed_name", "value" : "RETURNED FROM IPC" }         
+        ]
       }
     ]
   }

@@ -12,7 +12,15 @@
       {
         "name": "ipc",
         "type": "ipc-activity",
-        "process": "default_ipc.wf.json"
+        "process": "default_ipc.wf.json",
+        "next": "ipc_completed"
+      },
+      {
+        "name": "ipc_completed",
+        "type": "page-activity",
+        "components": [                           
+          { "tag": "input", "id": "ipc_completed_name", "value" : "RETURNED FROM IPC" }         
+        ]
       }
     ]
   }

@@ -5,6 +5,15 @@
 <!-- Auto Generated Below -->
 
 
+## Properties
+
+| Property  | Attribute  | Description | Type     | Default     |
+| --------- | ---------- | ----------- | -------- | ----------- |
+| `apiKey`  | `api-key`  |             | `string` | `undefined` |
+| `baseUrl` | `base-url` |             | `string` | `undefined` |
+| `process` | `process`  |             | `string` | `undefined` |
+
+
 ## Events
 
 | Event       | Description | Type               |
@@ -34,7 +43,7 @@ Type: `Promise<void>`
 
 
 
-### `load(processDef: string | object) => Promise<void>`
+### `load(processDef: string | object, activity?: string) => Promise<void>`
 
 
 
@@ -44,7 +53,17 @@ Type: `Promise<void>`
 
 
 
-### `loadProcess(process: Process) => Promise<void>`
+### `loadProcess(process: Process, activity?: string) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `loadUrl(process: string, activity?: string) => Promise<void>`
 
 
 

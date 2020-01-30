@@ -14,7 +14,9 @@ import { HttpService } from "../../services/http.service";
   tag: "sirius-wf",
   shadow: true
 })
-export class SiriusWf {    
+export class SiriusWf {   
+  private ipcHistory: Array<IPC> = [];
+  
   http: HttpService;
   context: Context;
   wfService: WFService;
@@ -30,7 +32,7 @@ export class SiriusWf {
   
   @Prop() baseUrl: string;
   @Prop() apiKey: string;
-  @Prop() process: string; 
+  @Prop({mutable: true, reflectToAttr: true}) process: string; 
     
   @Method()
   async addActivity(type: string, create: any){    
@@ -44,7 +46,7 @@ export class SiriusWf {
 
   @Method()
   async loadProcess(process: Process, activity: string = "start") {
-    this.page = null;
+    this.page = null;    
     this.wfService.setProcess(process);  
     this.goto(activity);  
   }
@@ -69,8 +71,32 @@ export class SiriusWf {
 
   @Method()
   async loadUrl(process: string, activity: string = "start") {    
+    try {  
+      await this.load(await this.wfLoaderHandler.load(process), activity);
+      this.process = process;
+    }
+    catch(Exception) { }
+  }
+
+  async ipc(process: string, next: string = null) {    
+    try {  
+      this.ipcHistory.push(new IPC(this.process, process, next));
+
+      await this.loadUrl(process, "start");           
+    }
+    catch(Exception) { }
+  }
+
+  async completed(process: string) {
+    const lastProcess = this.ipcHistory.pop();
+
+    if(!lastProcess || lastProcess.process !== process) {
+      this.ipcHistory = [];
+      return;
+    }
+
     try {
-      this.load(await this.wfLoaderHandler.load(process), activity);
+      await this.loadUrl(lastProcess.parent, lastProcess.next||"start");
     }
     catch(Exception) { }
   }
@@ -94,4 +120,8 @@ export class SiriusWf {
   render() {
     return <sirius-page page={this.page} modelService={this.modelService}/>;
   }
+}
+
+class IPC {
+  constructor(public parent: string, public process: string, public next: string){}
 }

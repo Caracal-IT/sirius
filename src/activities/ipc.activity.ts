@@ -9,11 +9,10 @@ export class IPCActivity implements Activity {
     }
 
     type = IPCActivity.type;
-    process: string;
-    activity: string;
+    process: string;    
+    next: string;
     
-    execute = (context: Context) => {     
-        console.dir(context);              
-        return context.container.loadUrl(this.process, this.activity||"start");        
+    execute = (context: Context) => {             
+        return context.container.ipc(this.process, this.next);        
     }    
 }

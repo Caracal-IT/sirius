@@ -32,6 +32,6 @@ export class SiriusPage {
     ];
     
     if(this.page && this.page.components)    
-      return this.page.components.map(renderItem);        
+      return this.page.components.map(renderItem); 
   }
 }
