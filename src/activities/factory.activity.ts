@@ -4,6 +4,7 @@ import { DecisionActivity } from './decision.activity';
 import { ApiActivity } from './api.activity';
 import { CodeActivity } from "./code.activity";
 import { AssignActivity } from "./assign.activity";
+import { IPCActivity } from "./ipc.activity";
 
 export class ActivityFactory {    
     static activities = [
@@ -11,7 +12,8 @@ export class ActivityFactory {
         { type: CodeActivity.type, create: CodeActivity.create },
         { type: DecisionActivity.type, create: DecisionActivity.create },
         { type: AssignActivity.type, create: AssignActivity.create },
-        { type: ApiActivity.type, create: ApiActivity.create }
+        { type: ApiActivity.type, create: ApiActivity.create },
+        { type: IPCActivity.type, create: IPCActivity.create }
     ]
 
     static linkActivities(process: Process){            

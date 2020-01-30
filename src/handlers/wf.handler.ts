@@ -8,8 +8,7 @@ import { HttpService } from "../services/http.service";
 import { Process } from "../model/Process.model";
 import { ValidationError } from '../model/ValidationError.model';
 
-export class WFHandler {        
-    http: HttpService;
+export class WFHandler {            
     context: Context;    
 
     currProcess: Process; 
@@ -18,12 +17,12 @@ export class WFHandler {
        
     hasError = false;
             
-    constructor(        
+    constructor(      
+        private http: HttpService,  
         private wfService: WFService, 
         private modelService: ModelService, 
-        private container: SiriusWf){        
-            
-        this.http = new HttpService(this.modelService);   
+        private container: SiriusWf){                    
+        
         this.context = new Context({}, this.modelService, this.wfService, this.http, this.container);
     }
 

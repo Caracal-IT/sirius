@@ -1,0 +1,12 @@
+{
+    "name": "Workflow1",
+    "activities": [
+      {          
+        "name": "start",
+        "type": "page-activity",
+        "components": [                           
+          { "tag": "input", "id": "name", "value" : "This is the IPC Activity" }          
+        ]    
+      }
+    ]
+  }

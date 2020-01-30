@@ -24,10 +24,14 @@ export namespace Components {
   }
   interface SiriusWf {
     'addActivity': (type: string, create: any) => Promise<void>;
+    'apiKey': string;
+    'baseUrl': string;
     'goto': (activity: string) => Promise<void>;
-    'load': (processDef: string | object) => Promise<void>;
-    'loadProcess': (process: Process) => Promise<void>;
+    'load': (processDef: string | object, activity?: string) => Promise<void>;
+    'loadProcess': (process: Process, activity?: string) => Promise<void>;
+    'loadUrl': (process: string, activity?: string) => Promise<void>;
     'parse': (processDef: string) => Promise<Process>;
+    'process': string;
   }
 }
 
@@ -57,7 +61,10 @@ declare namespace LocalJSX {
     'page'?: Page;
   }
   interface SiriusWf {
+    'apiKey'?: string;
+    'baseUrl'?: string;
     'onWfMessage'?: (event: CustomEvent<any>) => void;
+    'process'?: string;
   }
 
   interface IntrinsicElements {
