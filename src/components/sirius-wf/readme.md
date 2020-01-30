@@ -33,7 +33,7 @@ Type: `Promise<void>`
 
 
 
-### `dehydrate() => Promise<void>`
+### `dehydrate(sessionId: string) => Promise<void>`
 
 
 
@@ -53,7 +53,7 @@ Type: `Promise<void>`
 
 
 
-### `hydrate(process: string, activity?: string) => Promise<void>`
+### `hydrate(process: string, sessionId: string, activity?: string) => Promise<void>`
 
 
 

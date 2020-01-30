@@ -1,10 +1,10 @@
 export class PersistanceService {
     setItem(key: string, value: object){        
-        localStorage.setItem(key, JSON.stringify(value));        
+        sessionStorage.setItem(key, JSON.stringify(value));        
     }
 
     getItem(key: string): object{        
-        const value = localStorage.getItem(key);  
+        const value = sessionStorage.getItem(key);  
         
         if(!value)
             return null;

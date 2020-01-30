@@ -15,6 +15,7 @@ export const config: Config = {
       serviceWorker: null, // disable service workers
       copy: [
         { src: 'workflow', dest: 'wf' },
+        { src: 'redirect.html', dest: 'redirect.html' },
         { src: 'demo', dest: 'demo' }
       ]
     }/*

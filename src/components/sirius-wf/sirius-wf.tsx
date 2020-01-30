@@ -81,9 +81,11 @@ export class SiriusWf {
   }
 
   @Method()
-  async hydrate(process: string, activity: string = "start") {
-    const ipc = this.persistance.getItem("WF_SIRIUS_IPC")||[];
-    const model = this.persistance.getItem("WF_SIRIUS_MODEL")||this.modelService.getModel();
+  async hydrate(process: string, sessionId: string, activity: string = "start") {
+    console.log(this.persistance.getItem(`${sessionId}_MODEL`));
+
+    const ipc = this.persistance.getItem(`${sessionId}_IPC`)||[];
+    const model = this.persistance.getItem(`${sessionId}_MODEL`)||this.modelService.getModel();
 
     this.loadUrl(process, activity);
 
@@ -92,9 +94,9 @@ export class SiriusWf {
   }
 
   @Method()
-  async dehydrate() {
-    this.persistance.setItem("WF_SIRIUS_IPC", this.ipcHistory);
-    this.persistance.setItem("WF_SIRIUS_MODEL", this.modelService.getModel());
+  async dehydrate(sessionId: string) {
+    this.persistance.setItem(`${sessionId}_IPC`, this.ipcHistory);
+    this.persistance.setItem(`${sessionId}_MODEL`, this.modelService.getModel());
   }
 
   async ipc(process: string, next: string = null) {    

@@ -30,13 +30,13 @@
           { "tag": "input", "id": "redirected_name", "value" : "RETURNED FROM REDIRECT" },
           { "tag": "input", "id": "START_name" },
           { "tag": "moon-button", "id": "redirected_btn1", "value": "Next", "next": "start" },
-          { "tag": "moon-button", "id": "redirected_btn2", "value": "Go To Microsoft", "next": "redirectTo" }         
+          { "tag": "moon-button", "id": "redirected_btn2", "value": "Go To Fake Bank", "next": "redirectTo" }         
         ]
       },
       {
         "name": "redirectTo",
         "type": "redirect-activity",
-        "url": "http://moicrosoft.com"
+        "url": "redirect.html?process=default.wf.json&activity=redirected"
       }
     ]
   }

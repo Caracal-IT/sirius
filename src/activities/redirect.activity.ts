@@ -12,8 +12,19 @@ export class RedirectActivity implements Activity {
     url: string;
     
     execute = (context: Context) => {             
-        context.container.dehydrate();        
+        const sessionId = this.UUID();
+        context.container.dehydrate(sessionId);        
 
-        document.location.href = this.url;
-    }    
+        if(this.url.indexOf("?") === -1)
+            document.location.href = `${this.url}?sessionId=${sessionId}`;
+        else
+            document.location.href = `${this.url}&sessionId=${sessionId}`;
+    }  
+    
+    UUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
+    }
 }

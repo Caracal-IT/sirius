@@ -26,9 +26,9 @@ export namespace Components {
     'addActivity': (type: string, create: any) => Promise<void>;
     'apiKey': string;
     'baseUrl': string;
-    'dehydrate': () => Promise<void>;
+    'dehydrate': (sessionId: string) => Promise<void>;
     'goto': (activity: string) => Promise<void>;
-    'hydrate': (process: string, activity?: string) => Promise<void>;
+    'hydrate': (process: string, sessionId: string, activity?: string) => Promise<void>;
     'load': (processDef: string | object, activity?: string) => Promise<void>;
     'loadProcess': (process: Process, activity?: string) => Promise<void>;
     'loadUrl': (process: string, activity?: string) => Promise<void>;

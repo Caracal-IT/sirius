@@ -243,12 +243,22 @@ class RedirectActivity {
     constructor() {
         this.type = RedirectActivity.type;
         this.execute = (context) => {
-            context.container.dehydrate();
-            document.location.href = this.url;
+            const sessionId = this.UUID();
+            context.container.dehydrate(sessionId);
+            if (this.url.indexOf("?") === -1)
+                document.location.href = `${this.url}?sessionId=${sessionId}`;
+            else
+                document.location.href = `${this.url}&sessionId=${sessionId}`;
         };
     }
     static create(act) {
         return Object.assign(new RedirectActivity(), act);
+    }
+    UUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
     }
 }
 RedirectActivity.type = "redirect-activity";
@@ -524,10 +534,10 @@ class HttpService {
 
 class PersistanceService {
     setItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+        sessionStorage.setItem(key, JSON.stringify(value));
     }
     getItem(key) {
-        const value = localStorage.getItem(key);
+        const value = sessionStorage.getItem(key);
         if (!value)
             return null;
         return JSON.parse(value);
@@ -569,16 +579,17 @@ const SiriusWf = class {
         }
         catch (Exception) { }
     }
-    async hydrate(process, activity = "start") {
-        const ipc = this.persistance.getItem("WF_SIRIUS_IPC") || [];
-        const model = this.persistance.getItem("WF_SIRIUS_MODEL") || this.modelService.getModel();
+    async hydrate(process, sessionId, activity = "start") {
+        console.log(this.persistance.getItem(`${sessionId}_MODEL`));
+        const ipc = this.persistance.getItem(`${sessionId}_IPC`) || [];
+        const model = this.persistance.getItem(`${sessionId}_MODEL`) || this.modelService.getModel();
         this.loadUrl(process, activity);
         this.ipcHistory = ipc;
         this.modelService.setModel(model);
     }
-    async dehydrate() {
-        this.persistance.setItem("WF_SIRIUS_IPC", this.ipcHistory);
-        this.persistance.setItem("WF_SIRIUS_MODEL", this.modelService.getModel());
+    async dehydrate(sessionId) {
+        this.persistance.setItem(`${sessionId}_IPC`, this.ipcHistory);
+        this.persistance.setItem(`${sessionId}_MODEL`, this.modelService.getModel());
     }
     async ipc(process, next = null) {
         try {
