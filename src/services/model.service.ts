@@ -27,8 +27,21 @@ export class ModelService {
     return value;
 }
 
-  getModelValue(key: any) {
+  getModelValue(key: string) {      
       return this.getValue(key, this.getModel());
+  }
+
+  getInterpolatedValue(value: string) {   
+    if(!value)
+      return value;
+
+    const myRegexp = /\{\{(?:\w+)\}\}/g;
+    const match = value.match(myRegexp);
+    
+    if(!match || match.length === 0)
+      return value;
+
+    return match.reduce((prev, curr) => this.replaceAll(prev, curr), value);
   }
 
   getModel(): any {
@@ -41,6 +54,12 @@ export class ModelService {
 
   getValue(key: string, model: any) {    
     return key.split(".").reduce((total, currentElement) => total ? total[currentElement]: undefined, model);
+  }
+
+  private replaceAll(value: string, key: string) {
+    const newValue = this.getModelValue(key.substring(2, key.length - 2));
+
+    return value.replace(key, newValue);
   }
 
   private inputHandler(event: Event) {    

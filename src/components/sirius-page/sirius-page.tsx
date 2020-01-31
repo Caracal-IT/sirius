@@ -25,13 +25,25 @@ export class SiriusPage {
     catch(Ex){ }
   }
 
-  render() {    
-    const renderItem = (item: WebComponent) => [
-        <item.tag wf-element data={item} error={item["error"]} onInput={this.inputHandler.bind(this)} {...item} context={this.page["context"]} value={this.modelService.getComponentModelValue(item)} />,
-        item.validators ? <span>{item["errorMessage"]}</span> : null
+  renderItem(item: WebComponent){
+    return [
+      <item.tag 
+          wf-element 
+          data={item} 
+          error={item["error"]}
+          errorMsg={item["errorMessage"]} 
+          onInput={this.inputHandler.bind(this)} 
+          {...item} 
+          context={this.page["context"]} 
+          value={this.modelService.getComponentModelValue(item)} 
+          caption={this.modelService.getInterpolatedValue(item["caption"])}
+      />,
+      item.validators ? <span>{item["errorMessage"]}</span> : null
     ];
-    
+  }
+
+  render() {    
     if(this.page && this.page.components)    
-      return this.page.components.map(renderItem); 
+      return this.page.components.map(this.renderItem.bind(this)); 
   }
 }

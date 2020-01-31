@@ -6,6 +6,7 @@
         "type": "page-activity",
         "components": [                           
           { "tag": "input", "id": "START_name", "value" : "Hallo World" },
+          { "tag": "input", "id": "START_test", "value" : "Test 2" },
           { "tag": "moon-button", "id": "btn1", "value": "Next", "next": "ipc" },
           { "tag": "moon-button", "id": "btn133333", "value": "Redirected Test", "next": "redirected" }
         ]    
@@ -27,7 +28,7 @@
         "name": "redirected",
         "type": "page-activity",
         "components": [ 
-          { "tag": "moon-label", "value": "Name"},                          
+          { "tag": "moon-label", "caption": "Name {{START_name}} - {{START_test}}"},                          
           { "tag": "input", "id": "redirected_name", "value" : "RETURNED FROM REDIRECT" },
           { "tag": "input", "id": "START_name" },
           { "tag": "moon-button", "id": "redirected_btn1", "value": "Next", "next": "start" },
