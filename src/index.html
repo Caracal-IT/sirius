@@ -89,5 +89,20 @@
   <hr/>
   <h1>Analytics</h1>
   <textarea id="analyticsMsg" readonly="readonly" style="resize: none;color:darkred;font-weight:bolder;width: 90%;height:100px"></textarea>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const process = urlParams.get('process');
+    const activity = urlParams.get('activity')||"start";
+    const sessionId = urlParams.get('sessionId')||"SiriusWF";
+    if(process && activity) {
+        customElements
+            .whenDefined("sirius-wf")
+            .then(() => {
+                const wf = document.querySelector("sirius-wf");
+                wf.hydrate(process, sessionId, activity);
+            });
+    }
+  </script>
 </body>
 </html>
