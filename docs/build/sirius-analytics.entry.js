@@ -13,9 +13,16 @@ class AnalyticsService {
                 page: payload.page,
                 control: payload.control,
                 value: payload.value,
-                path: payload.wfPath.map(i => i.id)
+                path: payload.wfPath.map(this.getName)
             }, "*");
         }
+    }
+    getName(item) {
+        if (item.id)
+            return item.id;
+        if (item.page && item.page.name)
+            return item.page.name;
+        return "";
     }
     createPayload(type, wfElement, path) {
         const p = path.filter((i) => i.nodeName && i.nodeName.indexOf("document-fragment") === -1);

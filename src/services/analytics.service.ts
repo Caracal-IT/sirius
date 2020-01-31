@@ -17,9 +17,19 @@ export class AnalyticsService {
                 page: payload.page, 
                 control: payload.control, 
                 value: payload.value,
-                path: payload.wfPath.map(i => i.id)
+                path: payload.wfPath.map(this.getName)
             }, "*");
         }
+    }
+
+    private getName(item: any): string {
+        if(item.id)
+            return item.id;
+
+        if(item.page && item.page.name)
+            return item.page.name;
+
+        return "";
     }
 
     private createPayload(type: string, wfElement: WebComponent, path: any){
