@@ -308,7 +308,7 @@ class WFService {
             return process;
         }
         catch (ex) {
-            console.log(ex);
+            console.error(ex);
             return null;
         }
     }
@@ -435,6 +435,15 @@ class ModelService {
     getModelValue(key) {
         return this.getValue(key, this.getModel());
     }
+    getInterpolatedValue(value) {
+        if (!value)
+            return value;
+        const myRegexp = /\{\{(?:\w+)\}\}/g;
+        const match = value.match(myRegexp);
+        if (!match || match.length === 0)
+            return value;
+        return match.reduce((prev, curr) => this.replaceAll(prev, curr), value);
+    }
     getModel() {
         return Object.assign({}, this.model);
     }
@@ -444,12 +453,18 @@ class ModelService {
     getValue(key, model) {
         return key.split(".").reduce((total, currentElement) => total ? total[currentElement] : undefined, model);
     }
+    replaceAll(value, key) {
+        const newValue = this.getModelValue(key.substring(2, key.length - 2));
+        return value.replace(key, newValue);
+    }
     inputHandler(event) {
         const target = event.currentTarget;
         const wfElement = target.closest("[wf-element]");
         this.setModelValue(wfElement.id, wfElement["value"]);
     }
     merge(model, name, value) {
+        if (!name)
+            return;
         let newModel = Object.assign({}, model);
         name
             .split(".")
@@ -583,7 +598,6 @@ const SiriusWf = class {
         catch (Exception) { }
     }
     async hydrate(process, sessionId, activity = "start") {
-        console.log(this.persistance.getItem(`${sessionId}_MODEL`));
         const ipc = this.persistance.getItem(`${sessionId}_IPC`) || [];
         const model = this.persistance.getItem(`${sessionId}_MODEL`) || this.modelService.getModel();
         this.loadUrl(process, activity);
