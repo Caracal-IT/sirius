@@ -26,7 +26,8 @@
       {
         "name": "redirected",
         "type": "page-activity",
-        "components": [                           
+        "components": [ 
+          { "tag": "moon-label", "value": "Name"},                          
           { "tag": "input", "id": "redirected_name", "value" : "RETURNED FROM REDIRECT" },
           { "tag": "input", "id": "START_name" },
           { "tag": "moon-button", "id": "redirected_btn1", "value": "Next", "next": "start" },

@@ -36,7 +36,7 @@ export class WFService {
             return process;
         }
         catch(ex) {
-            console.log(ex);
+            console.error(ex);
             return null;
         }
     }

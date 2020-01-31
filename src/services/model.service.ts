@@ -51,6 +51,9 @@ export class ModelService {
   } 
   
   private merge(model: any, name: string, value: any) {
+    if(!name)
+      return;
+      
     let newModel = {...model};
   
     name

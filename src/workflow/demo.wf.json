@@ -10,6 +10,7 @@
 
           { "tag": "input", 
             "id": "registration.firstName", 
+            "data-error-style": "true",
             "validators": [
               { "name": "Required", "message": "The field is required" }
             ] 

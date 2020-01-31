@@ -28,7 +28,7 @@ export class SiriusPage {
   render() {    
     const renderItem = (item: WebComponent) => [
         <item.tag wf-element data={item} error={item["error"]} onInput={this.inputHandler.bind(this)} {...item} context={this.page["context"]} value={this.modelService.getComponentModelValue(item)} />,
-        <span>{item["errorMessage"]}</span>
+        item.validators ? <span>{item["errorMessage"]}</span> : null
     ];
     
     if(this.page && this.page.components)    

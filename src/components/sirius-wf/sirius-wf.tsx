@@ -82,8 +82,6 @@ export class SiriusWf {
 
   @Method()
   async hydrate(process: string, sessionId: string, activity: string = "start") {
-    console.log(this.persistance.getItem(`${sessionId}_MODEL`));
-
     const ipc = this.persistance.getItem(`${sessionId}_IPC`)||[];
     const model = this.persistance.getItem(`${sessionId}_MODEL`)||this.modelService.getModel();
 
