@@ -1,4 +1,4 @@
-import { r as registerInstance, c as createEvent, h } from './core-1968082f.js';
+import { r as registerInstance, c as createEvent, h } from './core-9e6a015e.js';
 
 class ValidationError extends Error {
     constructor() {

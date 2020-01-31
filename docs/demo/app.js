@@ -1,5 +1,6 @@
 const errorMsg = document.querySelector("#errorMsg");
 const errorStack = document.querySelector("#errorStack");
+const analyticsMsg = document.querySelector("#analyticsMsg");
 const clearErrorsButton = document.querySelector("#clearErrorsButton");
 const defaultWfButton = document.querySelector("#defaultWfButton");
 const workflow = document.querySelector("#workflow");
@@ -84,3 +85,15 @@ defaultWfButton.addEventListener("click", async () => {
             });         
     });
 });
+
+window.addEventListener("message", receiveMessage, false);
+
+function receiveMessage(event) {
+    if (!event.data.path)
+        return;
+    
+    if(analyticsMsg.innerText.length > 999999)
+        analyticsMsg.innerText = "";
+    
+    analyticsMsg.innerText += `\n\r${JSON.stringify(event.data)}`     
+}
