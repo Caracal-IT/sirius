@@ -5,24 +5,25 @@ import { AnalyticsService } from "../../services/analytics.service";
     tag: "sirius-analytics"
   })
   export class SiriusAnalytics {
+    static lastPath: any = [null];
     static analyticsService: AnalyticsService = new AnalyticsService();
-
-    static lastEvent: any;
 
     @Listen('click', { target: 'document' })
     async analyticsHandler(event: any) {
-        if(SiriusAnalytics.lastEvent && SiriusAnalytics.lastEvent.path[0] === event.path[0])
+        const path = SiriusAnalytics.analyticsService.getPath(event);
+
+        if(SiriusAnalytics.lastPath[0] === path[0])
           return;
+ 
+        SiriusAnalytics.lastPath = path;
 
-        SiriusAnalytics.lastEvent = event; 
-
-        const wfElement =  event.path.find((i: HTMLElement) => i.hasAttribute && i.hasAttribute("wf-element"));
+        const wfElement =  path.find((i: HTMLElement) => i.hasAttribute && i.hasAttribute("wf-element"));
 
         if(!wfElement) 
           return;
 
-        event.path[0].addEventListener("blur", this.onBlur);        
-        SiriusAnalytics.analyticsService.send("click", event);
+        path[0].addEventListener("blur", this.onBlur);        
+        SiriusAnalytics.analyticsService.send("click", path);
     }    
 
     @Listen('wfMessage', { target: 'document' })
@@ -31,8 +32,7 @@ import { AnalyticsService } from "../../services/analytics.service";
     }
 
     onBlur(event: Event) {
-        SiriusAnalytics.analyticsService.send("blur", SiriusAnalytics.lastEvent);
-        SiriusAnalytics.lastEvent = null;
+        SiriusAnalytics.analyticsService.send("blur", SiriusAnalytics.lastPath);
         event.target.removeEventListener("blur", this.onBlur);
     }
   }

@@ -1,20 +1,15 @@
-import { WebComponent } from "../model/WebComponent.model";
-
 export class AnalyticsService {
     sendMessage(event: any) {
         this.sendPostMessage(event.detail);
     }
 
-    send(type: string, event: any){
-        if(!event || !event.path)
-            return;
-
-        const wfElement = event.path.find((i: HTMLElement) => i.hasAttribute && i.hasAttribute("wf-element"));
+    send(type: string, path: Array<HTMLElement>) {
+        const wfElement = path.find(i => i.hasAttribute && i.hasAttribute("wf-element"));
         
         if(!wfElement)
             return;
 
-        const payload = this.createPayload(type, wfElement, event.path);
+        const payload = this.createPayload(type, wfElement, path);
 
         if(payload) {
             this.sendPostMessage({
@@ -26,6 +21,10 @@ export class AnalyticsService {
                 path: payload.wfPath.map(this.getName)
             });
         }
+    }
+
+    getPath(event: any) {
+        return event.composedPath(event);
     }
 
     private sendPostMessage(message: any) {
@@ -45,9 +44,9 @@ export class AnalyticsService {
         return "";
     }
 
-    private createPayload(type: string, wfElement: WebComponent, path: any){
-        const p = path.filter((i: HTMLElement) => i.nodeName && i.nodeName.indexOf("document-fragment") === -1);
-        const wfPage = p.find((i: HTMLElement) => i.localName === "sirius-page");
+    private createPayload(type: string, wfElement: any, path: Array<HTMLElement>){
+        const p = path.filter(i => i.nodeName && i.nodeName.indexOf("document-fragment") === -1);
+        const wfPage = p.find(i => i.localName === "sirius-page") as HTMLSiriusPageElement;
 
         if(!wfPage)
             return null;

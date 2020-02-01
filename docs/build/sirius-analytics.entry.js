@@ -4,13 +4,11 @@ class AnalyticsService {
     sendMessage(event) {
         this.sendPostMessage(event.detail);
     }
-    send(type, event) {
-        if (!event || !event.path)
-            return;
-        const wfElement = event.path.find((i) => i.hasAttribute && i.hasAttribute("wf-element"));
+    send(type, path) {
+        const wfElement = path.find(i => i.hasAttribute && i.hasAttribute("wf-element"));
         if (!wfElement)
             return;
-        const payload = this.createPayload(type, wfElement, event.path);
+        const payload = this.createPayload(type, wfElement, path);
         if (payload) {
             this.sendPostMessage({
                 type: payload.type,
@@ -21,6 +19,9 @@ class AnalyticsService {
                 path: payload.wfPath.map(this.getName)
             });
         }
+    }
+    getPath(event) {
+        return event.composedPath(event);
     }
     sendPostMessage(message) {
         const msg = Object.assign(Object.assign({}, message), { timestamp: Date.now() });
@@ -35,8 +36,8 @@ class AnalyticsService {
         return "";
     }
     createPayload(type, wfElement, path) {
-        const p = path.filter((i) => i.nodeName && i.nodeName.indexOf("document-fragment") === -1);
-        const wfPage = p.find((i) => i.localName === "sirius-page");
+        const p = path.filter(i => i.nodeName && i.nodeName.indexOf("document-fragment") === -1);
+        const wfPage = p.find(i => i.localName === "sirius-page");
         if (!wfPage)
             return null;
         const activity = Object.assign({}, wfPage.page);
@@ -69,24 +70,25 @@ const SiriusAnalytics = class {
         registerInstance(this, hostRef);
     }
     async analyticsHandler(event) {
-        if (SiriusAnalytics.lastEvent && SiriusAnalytics.lastEvent.path[0] === event.path[0])
+        const path = SiriusAnalytics.analyticsService.getPath(event);
+        if (SiriusAnalytics.lastPath[0] === path[0])
             return;
-        SiriusAnalytics.lastEvent = event;
-        const wfElement = event.path.find((i) => i.hasAttribute && i.hasAttribute("wf-element"));
+        SiriusAnalytics.lastPath = path;
+        const wfElement = path.find((i) => i.hasAttribute && i.hasAttribute("wf-element"));
         if (!wfElement)
             return;
-        event.path[0].addEventListener("blur", this.onBlur);
-        SiriusAnalytics.analyticsService.send("click", event);
+        path[0].addEventListener("blur", this.onBlur);
+        SiriusAnalytics.analyticsService.send("click", path);
     }
     wfMessage(event) {
         SiriusAnalytics.analyticsService.sendMessage(event);
     }
     onBlur(event) {
-        SiriusAnalytics.analyticsService.send("blur", SiriusAnalytics.lastEvent);
-        SiriusAnalytics.lastEvent = null;
+        SiriusAnalytics.analyticsService.send("blur", SiriusAnalytics.lastPath);
         event.target.removeEventListener("blur", this.onBlur);
     }
 };
+SiriusAnalytics.lastPath = [null];
 SiriusAnalytics.analyticsService = new AnalyticsService();
 
 export { SiriusAnalytics as sirius_analytics };
