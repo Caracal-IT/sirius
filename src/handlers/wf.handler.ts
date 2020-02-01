@@ -106,7 +106,9 @@ export class WFHandler {
         return act && act.execute;
     }
 
-    private sendMessage(msg: Message) {     
+    private sendMessage(message: Message) {     
+        const msg = {...message, wfSessionId: this.context.container.wfSessionId};
+
         this.modelService.setModelValue("message", msg);
         this.context.container.wfMessage.emit(msg);
     }

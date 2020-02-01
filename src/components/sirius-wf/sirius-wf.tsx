@@ -32,6 +32,7 @@ export class SiriusWf {
 
   @State() page: Page; 
   
+  @Prop({mutable: true, reflectToAttr: true}) wfSessionId: string;
   @Prop() baseUrl: string;
   @Prop() apiKey: string;
   @Prop({mutable: true, reflectToAttr: true}) process: string; 
@@ -82,6 +83,8 @@ export class SiriusWf {
 
   @Method()
   async hydrate(process: string, sessionId: string, activity: string = "start") {
+    this.wfSessionId = sessionId;
+
     const ipc = this.persistance.getItem(`${sessionId}_IPC`)||[];
     const model = this.persistance.getItem(`${sessionId}_MODEL`)||this.modelService.getModel();
 
@@ -129,6 +132,7 @@ export class SiriusWf {
 
   async componentWillLoad() {    
     this.persistance = new PersistanceService();
+    this.wfSessionId = this.wfSessionId||this.UUID();
 
     this.wfService = new WFService(); 
     this.modelService = new ModelService();
@@ -140,9 +144,16 @@ export class SiriusWf {
     this.wfLoaderHandler = new WFLoaderHandler(this.http);
     this.wfLoaderHandler.apiKey = this.apiKey;
     this.wfLoaderHandler.baseUrl = this.baseUrl;
-        
+
     if(this.process)
       this.loadUrl(this.process);
+  }
+
+  private UUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
   }
   
   render() {

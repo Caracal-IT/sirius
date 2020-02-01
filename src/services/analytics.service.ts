@@ -1,12 +1,6 @@
 import { WebComponent } from "../model/WebComponent.model";
 
 export class AnalyticsService {
-    instanceId: string;
-
-    constructor() {
-        this.instanceId = this.UUID();
-    }
-
     sendMessage(event: any) {
         this.sendPostMessage(event.detail);
     }
@@ -31,7 +25,7 @@ export class AnalyticsService {
     }
 
     private sendPostMessage(message: any) {
-        const msg = {...message, sessionId: this.instanceId, timestamp:Date.now()};
+        const msg = {...message, timestamp:Date.now()};
 
         console.log("ANALYTICS", msg);
         window.postMessage(msg, "*");
@@ -65,12 +59,5 @@ export class AnalyticsService {
         const value = wfElement.value;
 
         return { type, page, control, value, wfPath};        
-    }
-
-    private UUID() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-          var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-          return v.toString(16);
-        });
     }
 }

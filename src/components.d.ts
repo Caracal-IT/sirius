@@ -35,6 +35,7 @@ export namespace Components {
     'loadUrl': (process: string, activity?: string) => Promise<void>;
     'parse': (processDef: string) => Promise<Process>;
     'process': string;
+    'wfSessionId': string;
   }
 }
 
@@ -76,6 +77,7 @@ declare namespace LocalJSX {
     'baseUrl'?: string;
     'onWfMessage'?: (event: CustomEvent<any>) => void;
     'process'?: string;
+    'wfSessionId'?: string;
   }
 
   interface IntrinsicElements {

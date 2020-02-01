@@ -7,11 +7,12 @@
 
 ## Properties
 
-| Property  | Attribute  | Description | Type     | Default     |
-| --------- | ---------- | ----------- | -------- | ----------- |
-| `apiKey`  | `api-key`  |             | `string` | `undefined` |
-| `baseUrl` | `base-url` |             | `string` | `undefined` |
-| `process` | `process`  |             | `string` | `undefined` |
+| Property      | Attribute       | Description | Type     | Default     |
+| ------------- | --------------- | ----------- | -------- | ----------- |
+| `apiKey`      | `api-key`       |             | `string` | `undefined` |
+| `baseUrl`     | `base-url`      |             | `string` | `undefined` |
+| `process`     | `process`       |             | `string` | `undefined` |
+| `wfSessionId` | `wf-session-id` |             | `string` | `undefined` |
 
 
 ## Events
