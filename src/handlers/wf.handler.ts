@@ -14,6 +14,9 @@ export class WFHandler {
     currProcess: Process; 
     currAction: string;
     lastAction: string;
+
+    wfProcess: string;
+    wfAction: string;
        
     hasError = false;
             
@@ -33,11 +36,15 @@ export class WFHandler {
 
     private handleWfChange(action: string, process: Process, source: any){ 
         this.hasError = false;           
+
         this.currProcess = process;
-        this.currAction = action||"start";    
+        this.currAction = action||"start";   
         
-        this.sendMessage(new Message(MessageType.Workflow_Changing, this.getWorkflowStatus()));   
-        this.executeActivity(source);         
+        setTimeout(() => {
+            this.setWorkflowStatus();
+            this.sendMessage(new Message(MessageType.Workflow_Changing, this.getWorkflowStatus()));   
+            this.executeActivity(source); 
+        }, 0);  
     }
 
     private handleModelChanged(model: any) {        
@@ -77,11 +84,11 @@ export class WFHandler {
     }
 
     private actionExecuted() {          
-        if(!this.hasError)
-            this.lastAction = this.currAction;
-
         this.sendMessage(new Message(MessageType.EndLoading)); 
         this.sendMessage(new Message(MessageType.Workflow_Changed, this.getWorkflowStatus())); 
+
+        if(!this.hasError)
+            this.lastAction = this.currAction;
     }
 
     private handleError(error: Error) {
@@ -113,10 +120,15 @@ export class WFHandler {
         this.context.container.wfMessage.emit(msg);
     }
 
+    private setWorkflowStatus() {
+        this.wfAction = this.currAction;
+        this.wfProcess = this.currProcess.name;
+    }
+
     private getWorkflowStatus(): string {
         return JSON.stringify({
-            process: this.currProcess.name,
-            activity: this.currAction
+            process: this.wfProcess,
+            activity: this.wfAction
         });
     }
 }

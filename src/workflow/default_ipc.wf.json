@@ -1,5 +1,5 @@
 {
-    "name": "Workflow1",
+    "name": "Default_IPC_WF",
     "activities": [
       {          
         "name": "start",

@@ -1,5 +1,5 @@
 {
-    "name": "Workflow1",
+    "name": "DefaultWF",
     "activities": [
       {          
         "name": "start",
