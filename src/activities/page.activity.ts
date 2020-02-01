@@ -17,10 +17,7 @@ export class PageActivity implements Activity, Page  {
     
     type = PageActivity.type;
 
-    execute = (context: Context) => {             
-        // Clear the cache
-        context.container.page = null;  
-        
+    execute = (context: Context) => {  
         this.context = context;     
         this.isDirty = false;
                
@@ -30,11 +27,8 @@ export class PageActivity implements Activity, Page  {
                 component["error"] = "false";
                 component["errorMessage"] = "";        
             });
-        
-        setTimeout(() => {            
-            context.container.page = this;        
-        }, 0);
-            
+
+        context.container.page = {...this};        
     }
 
     validate = (context: Context): Promise<boolean> => {    

@@ -68,8 +68,6 @@ class PageActivity {
     constructor() {
         this.type = PageActivity.type;
         this.execute = (context) => {
-            // Clear the cache
-            context.container.page = null;
             this.context = context;
             this.isDirty = false;
             this.components
@@ -78,9 +76,7 @@ class PageActivity {
                 component["error"] = "false";
                 component["errorMessage"] = "";
             });
-            setTimeout(() => {
-                context.container.page = this;
-            }, 0);
+            context.container.page = Object.assign({}, this);
         };
         this.validate = (context) => {
             return new Promise((resolve, reject) => {
