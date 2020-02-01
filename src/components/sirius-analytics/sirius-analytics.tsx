@@ -27,21 +27,4 @@ import { AnalyticsService } from "../../services/analytics.service";
         event.target.removeEventListener("blur", this.onBlur);
         SiriusAnalytics.analyticsService.send("blur", event);
     }
-
-    /*
-wf2.addEventListener("wfMessage", wfHandler);
-
-function wfHandler(error) {
-    const msg = error.detail;
-
-    switch (msg.messageType) {
-        case "ERROR": return showMessage(msg);
-        case "VALIDATION_ERROR": return showMessage(msg);
-        case "START_LOADING": return showLoading(msg);
-        case "END_LOADING": return hideLoading(msg);
-        case "WORKFLOW_CHANGING": return showMessage(msg);
-        case "WORKFLOW_CHANGED": return showMessage(msg);
-    }  
-}
-    */
   }
