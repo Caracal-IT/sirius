@@ -1,4 +1,4 @@
-import { WebComponent } from './../model/WebComponent.model';
+import { WebComponent } from '../model/WebComponent.model';
 import { Context } from '../model/Context.model';
 import { Validator } from './Validator';
 

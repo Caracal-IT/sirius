@@ -16,9 +16,6 @@ export class WFService {
 
     setProcess(process: Process) {        
         this.process = process;
-
-        if(this.wfChangeHandler)
-            this.wfChangeHandler(this.action, this.process, null);
     }
 
     addActivity(type: string, create: any){

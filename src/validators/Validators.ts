@@ -1,7 +1,7 @@
 import { WebComponent } from './../model/WebComponent.model';
 import { Context } from '../model/Context.model';
 import { Validator } from './Validator';
-import { RequiredValidator } from './RequiredValidator';
+import { RequiredValidator } from './required.validator';
 
 export class Validators {
     static RegisteredValidators: Array<Validator> = [

@@ -31,11 +31,13 @@ export class WFHandler {
         this.modelService.modelChangedHandler = this.handleModelChanged.bind(this);
     }
 
-    private handleWfChange(action: string, process: Process, source: any){  
+    private handleWfChange(action: string, process: Process, source: any){ 
         this.hasError = false;           
         this.currProcess = process;
-        this.currAction = action||"start";               
-        this.executeActivity(source);       
+        this.currAction = action||"start";    
+        
+        this.sendMessage(new Message(MessageType.Workflow_Changing, this.getWorkflowStatus()));   
+        this.executeActivity(source);         
     }
 
     private handleModelChanged(model: any) {        
@@ -75,21 +77,25 @@ export class WFHandler {
     }
 
     private actionExecuted() {          
-        this.sendMessage(new Message(MessageType.EndLoading));                
-
         if(!this.hasError)
             this.lastAction = this.currAction;
+
+        this.sendMessage(new Message(MessageType.EndLoading)); 
+        this.sendMessage(new Message(MessageType.Workflow_Changed, this.getWorkflowStatus())); 
     }
 
     private handleError(error: Error) {
         this.hasError = true;    
+        this.sendMessage(new Message(MessageType.EndLoading)); 
         
         this.modelService.setModelValue("message", new Message(MessageType.EndLoading, error.message));
 
         if(error instanceof ValidationError)
             this.sendMessage(new Message(MessageType.ValidationError, error.message, error.stack));
         else
-            this.sendMessage(new Message(MessageType.Error, error.message, error.stack));        
+            this.sendMessage(new Message(MessageType.Error, error.message, error.stack));
+            
+        this.sendMessage(new Message(MessageType.Workflow_Changed, this.getWorkflowStatus()));
     }
     
     private hasActivities() {
@@ -100,8 +106,15 @@ export class WFHandler {
         return act && act.execute;
     }
 
-    private sendMessage(msg: Message){
+    private sendMessage(msg: Message) {     
         this.modelService.setModelValue("message", msg);
         this.context.container.wfMessage.emit(msg);
+    }
+
+    private getWorkflowStatus(): string {
+        return JSON.stringify({
+            process: this.currProcess.name,
+            activity: this.currAction
+        });
     }
 }

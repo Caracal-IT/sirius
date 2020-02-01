@@ -11,32 +11,25 @@ const processDef = document.querySelector("#processDef");
 const loadProcessButton = document.querySelector("#loadProcessButton");
 const loadingPanel = document.querySelector("#loadingPanel");
 
-wf.addEventListener("wfMessage", error => {
+wf.addEventListener("wfMessage", wfHandler);
+wf2.addEventListener("wfMessage", wfHandler);
+
+function wfHandler(error) {
     const msg = error.detail;
 
     switch (msg.messageType) {
-        case "ERROR": return showErrorMessage(msg);
-        case "VALIDATION_ERROR": return showErrorMessage(msg);
+        case "ERROR": return showMessage(msg);
+        case "VALIDATION_ERROR": return showMessage(msg);
         case "START_LOADING": return showLoading(msg);
         case "END_LOADING": return hideLoading(msg);
-    }    
-});
+        case "WORKFLOW_CHANGING": return showMessage(msg);
+        case "WORKFLOW_CHANGED": return showMessage(msg);
+    }  
+}
 
-wf2.addEventListener("wfMessage", error => {
-    const msg = error.detail;
-
-    switch (msg.messageType) {
-        case "ERROR": return showErrorMessage(msg);
-        case "VALIDATION_ERROR": return showErrorMessage(msg);
-        case "START_LOADING": return showLoading(msg);
-        case "END_LOADING": return hideLoading(msg);
-    }    
-});
-
-function showErrorMessage(msg) {    
-    errorMsg.innerText = msg.description;
-    errorStack.innerText = msg.stack;
-    hideLoading();    
+function showMessage(msg) {     
+    errorMsg.innerHTML = `${errorMsg.value}${msg.messageType} - ${msg.description}&#10;`;
+    errorStack.innerText = msg.stack; 
 }
 
 function showLoading() {
@@ -89,7 +82,7 @@ defaultWfButton.addEventListener("click", async () => {
 window.addEventListener("message", receiveMessage, false);
 
 function receiveMessage(event) {
-    if (!event.data.path)
+    if (!event.data || !event.data.path)
         return;
     
     if(analyticsMsg.innerText.length > 999999)

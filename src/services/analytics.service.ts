@@ -1,6 +1,16 @@
 import { WebComponent } from "../model/WebComponent.model";
 
 export class AnalyticsService {
+    instanceId: string;
+
+    constructor() {
+        this.instanceId = this.UUID();
+    }
+
+    sendMessage(event: any) {
+        this.sendPostMessage(event.detail);
+    }
+
     send(type: string, event: any){
         const wfElement = event.path.find((i: HTMLElement) => i.hasAttribute && i.hasAttribute("wf-element"));
 
@@ -10,16 +20,21 @@ export class AnalyticsService {
         const payload = this.createPayload(type, wfElement, event.path);
 
         if(payload) {
-            console.log("ANALYTICS", payload);
-            
-            window.postMessage({
+            this.sendPostMessage({
                 type: payload.type, 
                 page: payload.page, 
                 control: payload.control, 
                 value: payload.value,
                 path: payload.wfPath.map(this.getName)
-            }, "*");
+            });
         }
+    }
+
+    private sendPostMessage(message: any) {
+        const msg = {...message, sessionId: this.instanceId, timestamp:Date.now()};
+
+        console.log("ANALYTICS", msg);
+        window.postMessage(msg, "*");
     }
 
     private getName(item: any): string {
@@ -50,5 +65,12 @@ export class AnalyticsService {
         const value = wfElement.value;
 
         return { type, page, control, value, wfPath};        
+    }
+
+    private UUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
     }
 }
