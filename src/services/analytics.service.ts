@@ -19,6 +19,7 @@ export class AnalyticsService {
         if(payload) {
             this.sendPostMessage({
                 type: payload.type, 
+                process: payload.process,
                 activity: payload.activity, 
                 control: payload.control, 
                 valueHash: payload.valueHash,
@@ -50,18 +51,20 @@ export class AnalyticsService {
 
         if(!wfPage)
             return null;
-   
+
         const activity = {...wfPage.page}; 
         const wfPath = p.slice(0, p.indexOf(wfPage) + 1)
 
         if(!activity.name)
             return null;
+
+        const process = activity.context.wfService.process.name;
     
         const act = activity.name;
         const control = wfElement.id;
         const valueHash = this.getHashCode(wfElement.value);
 
-        return { type, activity: act, control, valueHash, wfPath};        
+        return { type, process, activity: act, control, valueHash, wfPath};        
     }
 
     private getHashCode(value: string) {
