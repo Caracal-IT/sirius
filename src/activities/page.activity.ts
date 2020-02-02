@@ -28,7 +28,7 @@ export class PageActivity implements Activity, Page  {
                 component["errorMessage"] = "";    
             });
 
-        context.container.page = null;
+        setTimeout(() => context.container.page = null, 0);
         setTimeout(() => context.container.page = this, 15);
     }
 
