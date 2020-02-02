@@ -44,7 +44,7 @@ export class WFHandler {
             this.setWorkflowStatus();
             this.sendMessage(new Message(MessageType.Workflow_Changing, this.getWorkflowStatus()));   
             this.executeActivity(source); 
-        }, 0);  
+        }, 10);  
     }
 
     private handleModelChanged(model: any) {        

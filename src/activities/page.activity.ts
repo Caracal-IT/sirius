@@ -25,13 +25,13 @@ export class PageActivity implements Activity, Page  {
             .filter(i => i.validators)
             .forEach(component => {
                 component["error"] = "false";
-                component["errorMessage"] = "";        
+                component["errorMessage"] = "";    
             });
 
-        context.container.page = {...this};        
+        context.container.page = this;
     }
 
-    validate = (context: Context): Promise<boolean> => {    
+    validate = (context: Context): Promise<boolean> => {   
         return new Promise((resolve, reject) => {
             const validatedComponents = this.components.filter(i => i.validators);
             let isValid = true;
@@ -40,7 +40,7 @@ export class PageActivity implements Activity, Page  {
             for(var component of validatedComponents) 
                 isValid = isValid && Validators.validate(context, component);
 
-            if(isValid)
+            if(isValid) 
                 resolve(true);
             else
                 reject(new ValidationError("Validation Failed"));

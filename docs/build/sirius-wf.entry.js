@@ -76,7 +76,7 @@ class PageActivity {
                 component["error"] = "false";
                 component["errorMessage"] = "";
             });
-            context.container.page = Object.assign({}, this);
+            context.container.page = this;
         };
         this.validate = (context) => {
             return new Promise((resolve, reject) => {
@@ -351,7 +351,7 @@ class WFHandler {
             this.setWorkflowStatus();
             this.sendMessage(new Message(MessageType.Workflow_Changing, this.getWorkflowStatus()));
             this.executeActivity(source);
-        }, 0);
+        }, 10);
     }
     handleModelChanged(model) {
         this.context.model = model;

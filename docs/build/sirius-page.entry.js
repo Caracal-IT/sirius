@@ -8,14 +8,11 @@ const SiriusPage = class {
         this.modelService.setModelValue(event.target["id"], event.target["value"]);
         if (!this.page.isDirty)
             return;
-        try {
-            await this.page.validate(this.page.context);
-        }
-        catch (Ex) { }
+        await this.page.validate(this.page.context);
     }
     renderItem(item) {
         return [
-            h(item.tag, Object.assign({ "wf-element": true, data: item, error: item["error"], errorMsg: item["errorMessage"], onInput: this.inputHandler.bind(this) }, item, { context: this.page["context"], value: this.modelService.getComponentModelValue(item), caption: this.modelService.getInterpolatedValue(item["caption"]) })),
+            h(item.tag, Object.assign({ "wf-element": true, id: item.id, data: item, error: item["error"], errorMsg: item["errorMessage"], onInput: this.inputHandler.bind(this) }, item, { context: this.page["context"], value: this.modelService.getComponentModelValue(item), caption: this.modelService.getInterpolatedValue(item["caption"]) })),
             item.validators ? h("span", null, item["errorMessage"]) : null
         ];
     }

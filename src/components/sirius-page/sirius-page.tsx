@@ -19,16 +19,14 @@ export class SiriusPage {
     if(!this.page.isDirty)
       return;
 
-    try {
-      await this.page.validate(this.page.context);
-    }
-    catch(Ex){ }
+    await this.page.validate(this.page.context);
   }
 
   renderItem(item: WebComponent){
     return [
       <item.tag 
           wf-element 
+          id={item.id}
           data={item} 
           error={item["error"]}
           errorMsg={item["errorMessage"]} 
@@ -42,7 +40,7 @@ export class SiriusPage {
     ];
   }
 
-  render() {    
+  render() {   
     if(this.page && this.page.components)    
       return this.page.components.map(this.renderItem.bind(this)); 
   }
