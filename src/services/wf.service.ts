@@ -18,6 +18,10 @@ export class WFService {
         this.process = process;
     }
 
+    getProcess() {
+        return this.process;
+    }
+
     addActivity(type: string, create: any){
         const act = ActivityFactory.activities.find(a => a.type === type);
 

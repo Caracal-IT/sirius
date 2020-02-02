@@ -28,8 +28,12 @@ export class PageActivity implements Activity, Page  {
                 component["errorMessage"] = "";    
             });
 
-        setTimeout(() => context.container.page = null, 0);
-        setTimeout(() => context.container.page = this, 15);
+        setTimeout(this.reload.bind(this), 10);
+    }
+
+    reload() {
+        this.context.container.page = null;
+        setTimeout(() => this.context.container.page = this, 15);
     }
 
     validate = (context: Context): Promise<boolean> => {   

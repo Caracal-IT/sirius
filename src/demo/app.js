@@ -46,12 +46,8 @@ clearErrorsButton.addEventListener('click', () => {
 });
 
 loadProcessButton.addEventListener("click", async () => {      
-    const process = await wf2.parse(processDef.value);
-
-    if(!process)
-    return;
-    
-    wf2.loadProcess({...process});        
+    if(processDef.value)
+        wf2.loadProcess(processDef.value);        
 })    
 
 defaultWfButton.addEventListener("click", async () => {
@@ -61,22 +57,8 @@ defaultWfButton.addEventListener("click", async () => {
         return;
     }
 
-    showLoading();
-
-    fetch("wf/" + workflow.value)
-        .then(response => response.text())
-        .then(data => {          
-            processDef.value = data;
-        
-            wf.parse(data)
-              .then(process => {
-                if(!process)
-                    return;
-    
-                wf.loadProcess(process); 
-                hideLoading()
-            });         
-    });
+    wf.loadUrl(workflow.value)
+      .then(process => processDef.value = JSON.stringify(process));
 });
 
 window.addEventListener("message", receiveMessage, false);
@@ -84,9 +66,6 @@ window.addEventListener("message", receiveMessage, false);
 function receiveMessage(event) {
     if (!event.data || !event.data.path)
         return;
-    
-    if(analyticsMsg.innerText.length > 999999)
-        analyticsMsg.innerText = "";
-    
+     
     analyticsMsg.innerText += `\n\r${JSON.stringify(event.data)}`     
 }

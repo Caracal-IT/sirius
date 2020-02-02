@@ -13,9 +13,6 @@ import {
 import {
   ModelService,
 } from './services/model.service';
-import {
-  Process,
-} from './model/Process.model';
 
 export namespace Components {
   interface SiriusAnalytics {}
@@ -30,10 +27,8 @@ export namespace Components {
     'dehydrate': (sessionId: string) => Promise<void>;
     'goto': (activity: string) => Promise<void>;
     'hydrate': (process: string, sessionId: string, activity?: string) => Promise<void>;
-    'load': (processDef: string | object, activity?: string) => Promise<void>;
-    'loadProcess': (process: Process, activity?: string) => Promise<void>;
-    'loadUrl': (process: string, activity?: string) => Promise<void>;
-    'parse': (processDef: string) => Promise<Process>;
+    'loadProcess': (processDef: string | object, activity?: string) => Promise<void>;
+    'loadUrl': (process: string, activity?: string) => Promise<import("/Users/ettienemare/Documents/Development/sirius/src/model/Process.model").Process>;
     'process': string;
     'wfSessionId': string;
   }

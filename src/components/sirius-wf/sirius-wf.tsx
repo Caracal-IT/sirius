@@ -1,15 +1,16 @@
 import { Component, Event, EventEmitter, State, Method, h, Prop } from "@stencil/core";
 
+import { IPC } from "../../model/ipc.model";
 import { Page } from "../../model/Page.model";
-import { Process } from "../../model/Process.model";
+import { Context } from "../../model/Context.model";
 
 import { WFService } from "../../services/wf.service";
-import { WFHandler } from "../../handlers/wf.handler";
-import { Context } from "../../model/Context.model";
-import { ModelService } from "../../services/model.service";
-import { WFLoaderHandler } from "../../handlers/wfLoader.handler";
 import { HttpService } from "../../services/http.service";
+import { ModelService } from "../../services/model.service";
 import { PersistanceService } from "../../services/persistance.service";
+
+import { WFHandler } from "../../handlers/wf.handler";
+import { WFLoaderHandler } from "../../handlers/wfLoader.handler";
 
 @Component({
   tag: "sirius-wf",
@@ -48,19 +49,7 @@ export class SiriusWf {
   }
 
   @Method()
-  async loadProcess(process: Process, activity: string = "start") {
-    this.page = null;    
-    this.wfService.setProcess(process);  
-    this.goto(activity);  
-  }
-
-  @Method()
-  async parse(processDef: string) {
-    return this.wfService.parse(processDef);
-  }
-
-  @Method()
-  async load(processDef: string|object, activity: string = "start") {
+  async loadProcess(processDef: string|object, activity: string = "start") {
     if(typeof processDef === 'object')
       processDef = JSON.stringify(processDef);
 
@@ -69,14 +58,18 @@ export class SiriusWf {
       if(!process)
         return;
 
-     return this.loadProcess(process, activity);       
+      this.page = null;    
+      this.wfService.setProcess(process);  
+      this.goto(activity);      
   }
 
   @Method()
   async loadUrl(process: string, activity: string = "start") {    
     try {  
-      await this.load(await this.wfLoaderHandler.load(process), activity);
+      await this.loadProcess(await this.wfLoaderHandler.load(process), activity);
       this.process = process;
+
+      return this.wfService.getProcess();
     }
     catch(Exception) { }
   }
@@ -159,8 +152,4 @@ export class SiriusWf {
   render() {
     return <sirius-page page={this.page} modelService={this.modelService}/>;
   }
-}
-
-class IPC {
-  constructor(public parent: string, public process: string, public next: string){}
 }

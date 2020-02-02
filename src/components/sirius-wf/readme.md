@@ -64,7 +64,7 @@ Type: `Promise<void>`
 
 
 
-### `load(processDef: string | object, activity?: string) => Promise<void>`
+### `loadProcess(processDef: string | object, activity?: string) => Promise<void>`
 
 
 
@@ -74,27 +74,7 @@ Type: `Promise<void>`
 
 
 
-### `loadProcess(process: Process, activity?: string) => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `loadUrl(process: string, activity?: string) => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `parse(processDef: string) => Promise<Process>`
+### `loadUrl(process: string, activity?: string) => Promise<import("/Users/ettienemare/Documents/Development/sirius/src/model/Process.model").Process>`
 
 
 
