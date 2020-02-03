@@ -35,7 +35,7 @@ export class ModelService {
     if(!value)
       return value;
 
-    const myRegexp = /\{\{(?:\w+)\}\}/g;
+    const myRegexp = /\{\{(?:(\w|\.)+)\}\}/g;
     const match = value.match(myRegexp);
     
     if(!match || match.length === 0)

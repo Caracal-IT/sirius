@@ -22,7 +22,7 @@ export class SiriusPage {
     await this.page.validate(this.page.context);
   }
 
-  renderItem(item: WebComponent){
+  renderItem(item: WebComponent){    
     return [
       <item.tag 
           wf-element 
