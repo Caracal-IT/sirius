@@ -16,8 +16,9 @@
         const process = urlParams.get('process');
         const activity = urlParams.get('activity')||"start";
         const sessionId = urlParams.get('sessionId')||"SiriusWF";
+        const redirectUrl = urlParams.get('redirectUrl')||"index.html";
 
-        backLink.href = `index.html?process=${process}&activity=${activity}&sessionId=${sessionId}`;
+        backLink.href = `${redirectUrl}?process=${process}&activity=${activity}&sessionId=${sessionId}`;
     </script>
 </body>
 </html>
