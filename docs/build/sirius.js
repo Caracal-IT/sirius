@@ -882,7 +882,7 @@ if (!win.__stencil_cssshim && needsShim()) {
 
     var resourcesUrl = scriptElm ? scriptElm.getAttribute('data-resources-url') || scriptElm.src : '';
     var start = function() {
-      var url = new URL('./p-daf079ff.system.js', resourcesUrl);
+      var url = new URL('./p-6b9df821.system.js', resourcesUrl);
       System.import(url.href);
     };
 

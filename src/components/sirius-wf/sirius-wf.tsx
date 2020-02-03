@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, State, Method, h, Prop } from "@stencil/core";
+import { Component, Event, EventEmitter, State, Watch, Method, h, Prop } from "@stencil/core";
 
 import { IPC } from "../../model/ipc.model";
 import { Page } from "../../model/Page.model";
@@ -37,7 +37,16 @@ export class SiriusWf {
   @Prop() baseUrl: string;
   @Prop() apiKey: string;
   @Prop({mutable: true, reflectToAttr: true}) process: string; 
-    
+  
+  @Watch('process')
+  validateName(newValue: string, oldValue: string) {
+    if(newValue === oldValue || newValue === "")
+      return;
+
+    this.loadUrl(newValue);
+  }
+
+
   @Method()
   async addActivity(type: string, create: any){    
     this.wfService.addActivity(type, create);
