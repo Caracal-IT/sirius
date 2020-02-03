@@ -74,7 +74,7 @@ Type: `Promise<void>`
 
 
 
-### `loadUrl(process: string, activity?: string) => Promise<import("/Users/ettienemare/Documents/Development/sirius/src/model/Process.model").Process>`
+### `loadUrl(process: string, activity?: string) => Promise<import("D:/Development/Labs/Ettiene/sirius/src/model/Process.model").Process>`
 
 
 

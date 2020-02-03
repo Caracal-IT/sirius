@@ -1,6 +1,6 @@
 {
   "name": "caracal_sirius",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Stencil Component Starter",
   "repository": "https://github.com/Caracal-IT/sirius",
   "main": "dist/index.js",

@@ -3,10 +3,8 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
-  <title>Stencil Component Starter</title>
-
-  <script src="demo/app.js" defer></script> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <title>Sirius Workflow</title>
 
   <!--- Custom Extentions -->
   <script type="module" src="demo/custom/components/moon-button.component.js" async></script>
@@ -17,47 +15,9 @@
   <script type="module" src="build/sirius.esm.js"></script>
   <script nomodule src="build/sirius.js"></script>
 
-  <style>
-    #loadingPanel {      
-      position: fixed;
-      left: 0;
-      top: 0;
-      min-width: 100vw;
-      min-height: 100vh;
-      z-index: 99999999;
-      background: rgba(0, 0, 0, 0.611);
-    }
-
-    #loadingPanel::after { 
-      content: "Loading...";
-      position: absolute;
-      display: block;      
-      background-color: white;      
-      width: 6rem;
-      height: 1.5rem;
-      line-height: 1.5rem;
-      text-align: center;
-      font-weight: bolder;
-      font-size: 1.2rem;
-      color: blueviolet;
-      border: 1px solid black;
-      border-radius: 5px;
-  
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    sirius-wf:first-of-type {
-      display: block;
-      min-height: 100px;
-      background-color:lightskyblue;
-    } 
-  </style>
+  <script defer src="demo/app.js"></script> 
+  <script defer src="demo/return.js"></script> 
+  <link rel="stylesheet" href="demo/style.css" />
 </head>
 
 <body>    
@@ -70,7 +30,7 @@
       base-url="./wf/">
   </sirius-wf>  
 
-  <sirius-wf api-key="67f9c61e-8254-49a2-ac3b-faa61b2d12f0" style="display: block;min-height: 100px;backgroundColor:hotpink;"></sirius-wf>  
+  <sirius-wf api-key="67f9c61e-8254-49a2-ac3b-faa61b2d12f0"></sirius-wf>  
   <hr/>
   <span>Custom Workflow</span>  
   <textarea id="processDef" style="width: 100%;height:300px"></textarea> 
@@ -89,26 +49,5 @@
   <hr/>
   <h1>Analytics</h1>
   <textarea id="analyticsMsg" readonly="readonly" style="resize: none;color:darkred;font-weight:bolder;width: 90%;height:100px"></textarea>
-
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const process = urlParams.get('process');
-    const activity = urlParams.get('activity')||"start";
-    const sessionId = urlParams.get('sessionId');
-
-    const wf0 = document.querySelector("sirius-wf");
-    
-    if(sessionId !== null)
-      wf0.setAttribute("wf-session-id", sessionId);
-
-    if(process && activity) {
-        customElements
-            .whenDefined("sirius-wf")
-            .then(() => {
-                const wf = document.querySelector("sirius-wf");
-                wf.hydrate(process, sessionId, activity);
-            });
-    }
-  </script>
 </body>
 </html>
