@@ -66,10 +66,10 @@
       {
         "name": "page5",
         "type": "api-activity",
-        "url": "http://dummy.restapiexample.com/api/v1/employee/{apicall.id}",
+        "url": "https://reqres.in/api/users/{apicall.id}",
         "method": "get",
         "mappings": [
-          {"client" : "apicall.title", "remote": "data.employee_name", "direction": "inout"}
+          {"client" : "apicall.title", "remote": "data.first_name", "direction": "inout"}
         ],
         "next": "start"
       },
