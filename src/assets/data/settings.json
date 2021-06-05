@@ -1,0 +1,4 @@
+{
+    "[BASE]": "src/assets/",
+    "[WF]": "[BASE]wf/[SELF].wf.json"
+}

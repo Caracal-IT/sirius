@@ -1,0 +1,25 @@
+{
+    "name" : "default",
+    "activities": [
+        {
+            "name": "start",
+            "type": "page-activity",
+            "controls": [
+                {"tag": "h1", "innerText" : "Sirius Workflow"},
+                {"tag": "form", "onSubmit": "ctx.goto('last-page')",
+                 "controls": [
+                    {"tag": "h2", "innerText" : "Kate"},
+                    {"tag": "button", "innerText" : "Goto Kate"}
+                ]}
+            ]
+        },
+        {
+            "name": "last-page",
+            "type": "page-activity",
+            "controls": [
+                {"tag": "h1", "innerText" : "Hallo Kate"},
+                {"tag": "button", "innerText" : "Back", "onClick": "ctx.goto('start')"}
+            ]
+        }
+    ]
+}

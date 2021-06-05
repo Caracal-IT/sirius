@@ -1,0 +1,22 @@
+{
+  "version": "0.0.0",
+  "name": "caracal_sirius",
+  "files": ["dist", "www"],
+  "main": "./dist/caracal_sirius.umd.js",
+  "module": "./dist/caracal_sirius.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/caracal_sirius.es.js",
+      "require": "./dist/caracal_sirius.umd.js"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.2",
+    "vite": "^2.3.6"
+  }
+}
