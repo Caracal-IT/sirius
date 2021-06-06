@@ -5,4 +5,12 @@ body {
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
+    user-select: none;
+    -webkit-user-select: none;
+    background-color: lightgray;
+  }
+
+  button {
+    background-color: purple!important;
+    color: whitesmoke;
   }

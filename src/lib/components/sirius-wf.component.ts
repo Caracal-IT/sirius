@@ -1,13 +1,16 @@
+import { Context } from '../models/context.model';
+import { HttpWorkflowLoader } from "../utilities/http-workflow-loader.utility";
+
+import { ConfigService } from '../services/config.service';
+import { HttpService } from "../services/http.service";
+
 import { Activity } from '../activities/activity';
 import { NotFoundActivity } from '../activities/not-found.activity';
 import { PageActivity } from '../activities/page.activity';
-import { Context } from '../models/context.model';
-import { ConfigService } from '../services/config.service';
-import { HttpService } from "../services/http.service";
-import { HttpWorkflowLoader } from "../utilities/http-workflow-loader.utility";
 
 export class SiriusWf extends HTMLElement implements Context {
-    container: HTMLElement; 
+    container!: HTMLElement; 
+
     config = new ConfigService();
     http = new HttpService(this.config);
 
@@ -21,25 +24,44 @@ export class SiriusWf extends HTMLElement implements Context {
     
     constructor() {
         super();
+        this.createContainer();
+    }
+
+    async connectedCallback() {
+        await this.wfLoader.loadSettings(this.getAttribute('url'));
+        await this.goto('start', 'default');
+    }
+
+    async goto(activity: string, process: string = '') {
+        await this.loadProcess(process);
+        await this.loadActivity(activity);
+    }
+
+    private async loadProcess(process: string) {
+        if(process.length > 0)
+            this.wf = await this.wfLoader.load(process);
+    }
+
+    private async loadActivity(activity: string) {
+        if(this.act !== undefined && !this.act.exit(this)) return;
+
+        const actDef = this.wf?.activities?.find((a: any) => a.name === activity);
+        const act = this.activities.find(a => a.type === actDef?.type)??new NotFoundActivity(activity); 
+        this.act = <Activity> Object.assign(act, actDef);      
         
-        const shadow = this.attachShadow({mode: 'open'});
+        await this.act.execute(this);
+    }
+
+    private createContainer() {
+        const shadow = !this.useShadow() ? this : this.attachShadow({mode: 'open'});
+
         shadow.innerHTML = `<style>@import '${this.getAttribute('styleUrl')}'</style>`;
         this.container = document.createElement("div");
         shadow.appendChild(this.container);
     }
 
-    async connectedCallback() {
-        await this.wfLoader.loadSettings(this.getAttribute('url'));
-        this.wf = await this.wfLoader.load('default');
-        await this.goto();
-    }
-
-    async goto(activity: string = 'start') {
-        if(this.act != undefined && !this.act.exit(this)) return;
-        const actDef = this.wf?.activities?.find((a: any) => a.name === activity);
-        const act = this.activities.find(a => a.type === actDef?.type)??new NotFoundActivity(activity); 
-        this.act = <Activity> Object.assign(act, actDef);      
-        await this.act.execute(this);
+    private useShadow() {
+        return !(this.getAttribute('shadow') === "false");
     }
 }
 
