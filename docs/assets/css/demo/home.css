@@ -1,6 +1,7 @@
 .home {
     position: absolute;
     display: inline-block;
+    text-align: center;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
