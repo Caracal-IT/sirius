@@ -12,6 +12,7 @@ h1, h6 {
 
 demo-header {
   grid-column: 1 / span 2;
+  text-align: center;
   background-color: lightgray;
   border-bottom: 1px solid darkgray;
 }
@@ -19,9 +20,11 @@ demo-header {
 demo-menu {
   grid-row: 2 / span 2;
   background-color: lightgray;
-  width: 8rem;
+  width: 12rem;
   border-right: 1px solid darkgray;
-  padding: 0 0.2rem;    
+  padding: 0 0.2rem;
+  overflow: hidden;
+  transition: width 1s ease-in-out;    
 }
 
 demo-content {
@@ -35,3 +38,77 @@ demo-footer {
   height: .8rem;
   text-align: center;
 }
+
+demo-menu.minimize {
+  width: 4.4rem;
+}
+
+demo-menu .toggle {
+  display: flex; 
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.toggle > div {
+   display: block;
+    width: 35px;
+    height: 5px;
+    background-color: blueviolet;
+}
+
+.material-icons {
+  font-family: 'Material Icons Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 36px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+
+  transition: font-size 1s ease-in-out; 
+}
+
+demo-menu.minimize .material-icons {
+  font-size: 64px;
+}
+
+demo-menu.minimize .menu-item div {
+  font-size: 0;
+}
+
+.menu-item {
+  display: flex;
+  color: blueviolet;
+  padding: 3px 0;
+}
+
+.menu-item div {
+  font-size: 24px;
+  font-weight: bold;
+  padding-top: 5px;
+  padding-left: 5px;
+  transition: font-size 1s ease-in-out; 
+}
+
+.menu-item:hover {
+  color: purple;
+  cursor: pointer;
+} 
