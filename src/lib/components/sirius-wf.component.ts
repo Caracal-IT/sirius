@@ -21,18 +21,19 @@ export class SiriusWf extends HTMLElement implements Context {
     private wfLoader: WorkflowLoader = new HttpWorkflowLoader(this);
     private wf: any|undefined;
     private act: Activity|undefined;
-    
-    constructor() {
-        super();
-        this.createContainer();
-    }
 
     async connectedCallback() {
+        this.createContainer();
+        
         await this.wfLoader.loadSettings(this.getAttribute('url'));
-        await this.goto('start', 'default');
+
+        const process = this.getAttribute('process');
+
+        if(process)
+            await this.goto('start', process);
     }
 
-    async goto(activity: string, process: string = '') {
+    async goto(activity: string, process: string = '') {        
         await this.loadProcess(process);
         await this.loadActivity(activity);
     }
