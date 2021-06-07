@@ -4,7 +4,7 @@ h1, h6 {
 
 .grid-container {
   display: grid;
-  grid-template-rows: 2.5rem auto .8rem;
+  grid-template-rows: 3.4rem auto .8rem;
   grid-template-columns: max-content auto;
   height: 100Vh;
   overflow-y: hidden;
@@ -47,16 +47,33 @@ demo-menu .toggle {
   display: flex; 
   flex-direction: column;
   align-items: flex-end;
-  gap: 5px;
   margin-top: 5px;
   cursor: pointer;
 }
 
+.toggle {
+  position: absolute;
+  top: 2px;
+  left: 10px;
+  border: 1px solid blueviolet;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.toggle:hover {
+  border: 1px solid purple;
+}
+
 .toggle > div {
-   display: block;
+    display: block;
     width: 35px;
     height: 5px;
+    margin: 2px 0;
     background-color: blueviolet;
+}
+
+.toggle:hover > div {
+  background-color: purple;
 }
 
 .material-icons {
