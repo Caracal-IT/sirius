@@ -1,6 +1,6 @@
 export class HeaderComponent extends HTMLElement {
-    constructor() {
-        super();
+    
+    async connectedCallback() {
         this.innerHTML = '<h1>Header</h1>';
     }
 }

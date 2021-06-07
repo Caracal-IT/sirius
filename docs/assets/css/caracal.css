@@ -2,15 +2,23 @@ h1, h6 {
   margin: 5px;
 }
 
-img {
-  width: 80px;
+a {
+  text-decoration: none;
+  color: #2c3e50;
+  font: inherit;
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+a:hover {
+  border-bottom: 1px solid #2c3e50;
+  font-weight: 900;
 }
 
 .img {
   display: inline-block;
   width: 80px;
-  height: 80px;
-  background-color: hotpink;
+  height: 80px;  
 }
 
 .caracal {
@@ -27,8 +35,4 @@ img {
     no-repeat
     center center;
     background-size: 80px 80px;
-}
-
-button {
-  background-color: hotpink;
 }

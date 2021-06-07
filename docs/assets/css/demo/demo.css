@@ -1,0 +1,37 @@
+h1, h6 {
+  margin: 0;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-rows: 2.5rem auto max-content;
+  grid-template-columns: max-content auto;
+  height: 100Vh;
+  overflow-y: hidden;
+}
+
+demo-header {
+  grid-column: 1 / span 2;
+  background-color: lightgray;
+  border-bottom: 1px solid darkgray;
+}
+
+demo-menu {
+  grid-row: 2 / span 2;
+  background-color: lightgray;
+  width: 8rem;
+  border-right: 1px solid darkgray;
+  padding: 0 0.2rem;    
+}
+
+demo-content {
+  position: relative;    
+  padding: 5px;  
+  overflow: auto;
+}
+
+demo-footer {  
+  grid-column: 2;
+  height: .8rem;
+  text-align: center;
+}

@@ -1,0 +1,17 @@
+{
+    "name" : "demo",
+    "activities": [
+        {
+            "name": "start",
+            "type": "page-activity",
+            "controls": [
+                {"tag": "div" , "className": "grid-container", "controls": [
+                    {"tag": "demo-header"},
+                    {"tag": "demo-menu"},
+                    {"tag": "demo-content"},
+                    {"tag": "demo-footer"}
+                ]}
+            ]
+        }
+    ]
+}

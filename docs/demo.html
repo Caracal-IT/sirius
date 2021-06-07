@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/ico" href="assets/img/favicon.ico" />
+    <link rel="stylesheet" href="assets/css/demo/style.css" />
+    <link rel="stylesheet" href="assets/css/demo/home.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sirius Workflow</title>
+    <script type="module" src="lib/main.ts"></script>
+    
+    <script type="module" src="components/header.js"></script>
+    <script type="module" src="components/menu.js"></script>
+    <script type="module" src="components/content.js"></script>
+    <script type="module" src="components/footer.js"></script>
+  </head>
+  <body>
+    <sirius-wf         
+        process="demo"
+        shadow="false"
+        url="assets/data/settings.dev.json" 
+        styleUrl="assets/css/demo/demo.css"></sirius-wf>
+  </body>
+</html>

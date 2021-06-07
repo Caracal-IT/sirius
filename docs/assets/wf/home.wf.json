@@ -1,0 +1,17 @@
+{
+    "name" : "home",
+    "activities": [
+        {
+            "name": "start",
+            "type": "page-activity",
+            "controls": [     
+                {"tag": "div", "className": "home",  "controls": [
+                    {"tag": "h1", "innerText" : "Sirius Workflow"},
+                    {"tag": "div", "className": "img caracal"},
+                    {"tag": "div", "className": "img sirius"},
+                    {"tag": "h6", "innerText" : "Powered by Caracal"}
+                ]}           
+            ]
+        }
+    ]
+}
