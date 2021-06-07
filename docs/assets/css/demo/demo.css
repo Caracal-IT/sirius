@@ -4,7 +4,7 @@ h1, h6 {
 
 .grid-container {
   display: grid;
-  grid-template-rows: 2.5rem auto max-content;
+  grid-template-rows: 2.5rem auto .8rem;
   grid-template-columns: max-content auto;
   height: 100Vh;
   overflow-y: hidden;
