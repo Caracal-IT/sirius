@@ -3,10 +3,10 @@ h1, h6 {
 }
 
 .grid-container {
-  display: grid;
+  display: grid; 
   grid-template-rows: 3.4rem auto .8rem;
   grid-template-columns: max-content auto;
-  height: 100Vh;
+  height: 100vh;
   overflow-y: hidden;
 }
 
@@ -55,25 +55,15 @@ demo-menu .toggle {
   position: absolute;
   top: 2px;
   left: 10px;
+  color: blueviolet;
   border: 1px solid blueviolet;
   border-radius: 5px;
-  padding: 5px;
+  padding: 1px;
 }
 
 .toggle:hover {
+  color: purple;
   border: 1px solid purple;
-}
-
-.toggle > div {
-    display: block;
-    width: 35px;
-    height: 5px;
-    margin: 2px 0;
-    background-color: blueviolet;
-}
-
-.toggle:hover > div {
-  background-color: purple;
 }
 
 .material-icons {
@@ -99,11 +89,13 @@ demo-menu .toggle {
 
   /* Support for IE. */
   font-feature-settings: 'liga';
+}
 
+.menu-item .material-icons {
   transition: font-size 1s ease-in-out; 
 }
 
-demo-menu.minimize .material-icons {
+demo-menu.minimize .menu-item .material-icons {
   font-size: 64px;
 }
 
@@ -129,3 +121,7 @@ demo-menu.minimize .menu-item div {
   color: purple;
   cursor: pointer;
 } 
+
+demo-menu .menu_selected {
+  color: rgb(81, 7, 150);
+}
