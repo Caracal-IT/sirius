@@ -9,6 +9,10 @@ import { NotFoundActivity } from '../activities/not-found.activity';
 import { PageActivity } from '../activities/page.activity';
 
 export class SiriusWf extends HTMLElement implements Context {
+    static get observedAttributes() {
+        return ['process'];
+    }
+
     container!: HTMLElement; 
 
     config = new ConfigService();
@@ -18,6 +22,7 @@ export class SiriusWf extends HTMLElement implements Context {
         new PageActivity()
     ];
 
+    private isInitialized = false;
     private wfLoader: WorkflowLoader = new HttpWorkflowLoader(this);
     private wf: any|undefined;
     private act: Activity|undefined;
@@ -31,6 +36,16 @@ export class SiriusWf extends HTMLElement implements Context {
 
         if(process)
             await this.goto('start', process);
+
+        this.isInitialized = true;
+    }
+
+    attributeChangedCallback(name: string, oldValue:string, newValue: string) {
+        if(!this.isInitialized || oldValue == newValue)
+            return;
+            
+        if(name == 'process' && newValue) 
+            this.goto('start', newValue);
     }
 
     async goto(activity: string, process: string = '') {        

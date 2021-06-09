@@ -1,13 +1,21 @@
 export class MenuComponent extends HTMLElement {
     async connectedCallback() {
         this.clickEvents = [];
+        let active = 'home';
+
+        switch (window.location.hash.toLowerCase()) {
+            case '#home': active = 'home'; break;
+            case '#account': active = 'account'; break;
+            default: window.location.hash = 'home'; break;
+        }
+        
 
         this.innerHTML = `
             <div class='toggle' onclick="this.parentNode.classList.toggle('minimize')">
-            <span class="material-icons">menu</span>
+                <span class="material-icons">menu</span>
             </div>
-            <div id="home" class="menu-item"><span class="material-icons">home</span><div>Home</div></div>
-            <div id="account" class="menu-item"><span class="material-icons">account_circle</span><div>Account</div></div>
+            <div id="home" class="menu-item ${active === 'home' ? 'menu_selected' : ''}"><span class="material-icons">home</span><div>Home</div></div>
+            <div id="account" class="menu-item ${active === 'account' ? 'menu_selected' : ''}"><span class="material-icons">account_circle</span><div>Account</div></div>
         `;
 
         document.querySelectorAll('.menu-item')
@@ -15,7 +23,7 @@ export class MenuComponent extends HTMLElement {
                     const evt = this.onSelected.bind(this, i);
                     this.clickEvents.push({element: i, event: evt});
                     i.addEventListener('click', evt);
-                });
+                });        
     }
 
     onSelected(e) {

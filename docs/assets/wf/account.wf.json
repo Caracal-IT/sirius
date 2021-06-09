@@ -1,0 +1,12 @@
+{
+    "name" : "account",
+    "activities": [
+        {
+            "name": "start",
+            "type": "page-activity",
+            "controls": [     
+                {"tag": "h1", "innerText" : "Account"}                                              
+            ]
+        }
+    ]
+}
