@@ -3,29 +3,35 @@ import { HttpWorkflowLoader } from "../utilities/http-workflow-loader.utility";
 
 import { ConfigService } from '../services/config.service';
 import { HttpService } from "../services/http.service";
+import { ModelService } from '../services/model.service';
+import { WorkflowService } from '../services/workflow.service';
 
-import { Activity } from '../activities/activity';
-import { NotFoundActivity } from '../activities/not-found.activity';
 import { PageActivity } from '../activities/page.activity';
+import { ApiActivity } from '../activities/api.activity';
+
+import { PipeFactory } from '../pipes/factory.pipe';
 
 export class SiriusWf extends HTMLElement implements Context {
     static get observedAttributes() {
         return ['process'];
     }
 
-    container!: HTMLElement; 
+    private isInitialized = false;
+    private ctx: Context = this;
+    private wfLoader: WorkflowLoader = new HttpWorkflowLoader(this);
+
+    activities = [
+        new PageActivity(),
+        new ApiActivity()
+    ];
+
+    container!: HTMLElement;
+    pipes = new PipeFactory(); 
 
     config = new ConfigService();
     http = new HttpService(this.config);
-
-    activities = [
-        new PageActivity()
-    ];
-
-    private isInitialized = false;
-    private wfLoader: WorkflowLoader = new HttpWorkflowLoader(this);
-    private wf: any|undefined;
-    private act: Activity|undefined;
+    model = new ModelService(this.config, this.pipes);
+    wf = new WorkflowService(this.ctx, this.wfLoader, this.activities);
 
     async connectedCallback() {
         this.createContainer();
@@ -35,7 +41,7 @@ export class SiriusWf extends HTMLElement implements Context {
         const process = this.getAttribute('process');
 
         if(process)
-            await this.goto('start', process);
+            await this.wf.goto('start', process);
 
         this.isInitialized = true;
     }
@@ -45,27 +51,7 @@ export class SiriusWf extends HTMLElement implements Context {
             return;
             
         if(name == 'process' && newValue) 
-            this.goto('start', newValue);
-    }
-
-    async goto(activity: string, process: string = '') {        
-        await this.loadProcess(process);
-        await this.loadActivity(activity);
-    }
-
-    private async loadProcess(process: string) {
-        if(process.length > 0)
-            this.wf = await this.wfLoader.load(process);
-    }
-
-    private async loadActivity(activity: string) {
-        if(this.act !== undefined && !this.act.exit(this)) return;
-
-        const actDef = this.wf?.activities?.find((a: any) => a.name === activity);
-        const act = this.activities.find(a => a.type === actDef?.type)??new NotFoundActivity(activity); 
-        this.act = <Activity> Object.assign(act, actDef);      
-        
-        await this.act.execute(this);
+            this.wf.goto('start', newValue);
     }
 
     private createContainer() {

@@ -1,4 +1,5 @@
 {
     "[BASE]": "docs/assets/",
-    "[WF]": "[BASE]wf/[SELF].wf.json"
+    "[WF]": "[BASE]wf/[SELF].wf.json",
+    "[DATA]": "[BASE]data/[SELF].data.json"
 }
