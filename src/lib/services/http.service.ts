@@ -1,28 +1,37 @@
-import { ConfigService } from "./config.service";
+import { ConfigService } from './config.service';
+import { MessageService } from './message.service';
+import {MessageType} from '../models/message.model';
 
 export class HttpService {
-    constructor(private config: ConfigService) {}
+    constructor(private config: ConfigService, private message: MessageService) {}
 
     async fetch(endpoint: Endpoint) {
-        const response = await fetch(this.resolveSetting(endpoint.url), this.getConfig(endpoint));
+        try {
+            this.message.post({type: MessageType.START_LOADING});
 
-        if(response.status >= 400) {
-            const error = await response.json();
+            const response = await fetch(this.resolveSetting(endpoint.url), this.getConfig(endpoint));
 
-            if(response.status >= 401)
-                console.dir({type: "UN_AUTHORIZED", metadata: { endpoint, error}}); 
+            if(response.status >= 400) {
+                const error = await response.json();
 
-            throw {
-                code: response.status,
-                message: response.statusText,
-                error: error
-            };
+                if(response.status >= 401)
+                    this.message.post({type: MessageType.UN_AUTHORIZED, metadata: {endpoint, error}});
+                
+                throw {
+                    code: response.status,
+                    message: response.statusText,
+                    error: error
+                };
+            }
+            
+            if(response.headers.get("content-type")?.indexOf('json'))
+                return await response.json();
+            
+            return await response.text();
         }
-        
-        if(response.headers.get("content-type")?.indexOf('json'))
-            return await response.json();
-        
-        return await response.text();
+        finally {
+            setTimeout(() => this.message.post({type: MessageType.END_LOADING}));
+        }
     }
 
     private getConfig(endpoint: Endpoint): object{

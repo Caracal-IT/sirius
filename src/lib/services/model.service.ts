@@ -87,7 +87,7 @@ export class ModelService {
       const params = values.slice(2);
       let newValue = this.getValue(values[0]);
 
-      if(values && values.length > 1 && this.pipes[values[1]])
+      if(values?.length > 1 && this.pipes[values[1]])
         newValue = this.pipes[values[1]](newValue, params);
       
       return value.replace(key, newValue);

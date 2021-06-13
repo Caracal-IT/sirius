@@ -10,6 +10,7 @@ import { PageActivity } from '../activities/page.activity';
 import { ApiActivity } from '../activities/api.activity';
 
 import { PipeFactory } from '../pipes/factory.pipe';
+import { MessageService } from '../services/message.service';
 
 export class SiriusWf extends HTMLElement implements Context {
     static get observedAttributes() {
@@ -29,7 +30,8 @@ export class SiriusWf extends HTMLElement implements Context {
     pipes = new PipeFactory(); 
 
     config = new ConfigService();
-    http = new HttpService(this.config);
+    message = new MessageService(this);
+    http = new HttpService(this.config, this.message);
     model = new ModelService(this.config, this.pipes);
     wf = new WorkflowService(this.ctx, this.wfLoader, this.activities);
 
@@ -56,8 +58,11 @@ export class SiriusWf extends HTMLElement implements Context {
 
     private createContainer() {
         const shadow = !this.useShadow() ? this : this.attachShadow({mode: 'open'});
+        const style = this.getAttribute('styleUrl');
 
-        shadow.innerHTML = `<style>@import '${this.getAttribute('styleUrl')}'</style>`;
+        if(style != null && style != 'null')
+            shadow.innerHTML = `<style>@import '${style}'</style>`;
+        
         this.container = document.createElement("div");
         shadow.appendChild(this.container);
     }

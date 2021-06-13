@@ -51,6 +51,41 @@ demo-menu .toggle {
   cursor: pointer;
 }
 
+demo-loader.hidden {
+  display: none;
+}
+
+demo-loader div {
+  position: fixed;
+  display: block;
+  top:0;
+  left: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  z-index: 99999999;
+  background: rgba(0, 0, 0, 0.611);
+}
+
+demo-loader div::after {
+  content: "Loading...";
+  position: absolute;
+  display: block;      
+  background-color: white;      
+  width: 6rem;
+  height: 1.5rem;
+  line-height: 1.5rem;
+  text-align: center;
+  font-weight: bolder;
+  font-size: 1.2rem;
+  color: blueviolet;
+  border: 1px solid black;
+  border-radius: 5px;
+
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .toggle {
   position: absolute;
   top: 2px;
