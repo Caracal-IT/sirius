@@ -160,3 +160,29 @@ demo-menu.minimize .menu-item div {
 demo-menu .menu_selected {
   color: rgb(81, 7, 150);
 }
+
+.form-control {
+  display: block;
+  margin: 5px;
+}
+
+.form-control label {
+  display: block;
+}
+
+.form-control input {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: .4rem .5rem;
+  font-size: .9rem;
+  min-width: 30rem;
+}
+
+.form-control input:focus {
+  border-color: blueviolet;
+  outline: none;
+}
+
+.button-panel {
+  display: block;
+}

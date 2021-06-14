@@ -20,7 +20,29 @@
             "type": "page-activity",
             "controls": [     
                 {"tag": "h1", "innerText" : "Account"},
-                {"tag": "h2", "innerText": "{{profile.name}}"}                                              
+                {"tag": "h2", "innerText": "{{profile.name}}"}, 
+                {"tag": "div", "className": "form-control", "controls": [    
+                    {"tag": "label", "innerText": "First Name"},                
+                    {"tag": "input", "id": "profile.firstName"}
+                ]},
+                {"tag": "div", "className": "form-control", "controls": [
+                    {"tag": "label", "innerText": "Surname"},
+                    {"tag": "input", "id": "profile.lastName"}               
+                ]},
+                {"tag": "div", "className": "button-panel", "controls": [
+                    {"tag": "button", "innerText": "Save", "onClick": "ctx.wf.goto('confirm')"}
+                ]}                         
+            ]
+        },
+        {
+            "name": "confirm",
+            "type": "page-activity",
+            "controls": [
+                {"tag": "h1", "innerText": "Confirm Account Details"},
+                {},
+                {"tag": "div", "className": "button-panel", "controls": [
+                    {"tag": "button", "innerText": "Edit", "onClick": "ctx.wf.goto('landing')"}
+                ]} 
             ]
         }
     ]
