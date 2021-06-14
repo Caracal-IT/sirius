@@ -168,13 +168,15 @@ demo-menu .menu_selected {
 
 .form-control label {
   display: block;
+  font-size: 1.2rem;
 }
 
 .form-control input {
+  font: inherit;
   border: 1px solid black;
   border-radius: 5px;
-  padding: .4rem .5rem;
-  font-size: .9rem;
+  padding: .2rem .5rem .2rem .5rem;
+  font-size: 1.7rem;
   min-width: 30rem;
 }
 
@@ -185,4 +187,26 @@ demo-menu .menu_selected {
 
 .button-panel {
   display: block;
+}
+
+.button-panel button {
+  background: blueviolet;
+  color: whitesmoke;
+  font: inherit;
+  font-size: 1.5rem;
+  border: 2px solid rgb(81, 7, 150);
+  border-radius: 5px;
+  padding: .4rem 2rem .1rem 2rem;
+}
+
+.button-panel button:hover {
+  cursor: pointer;
+  background: rgb(226, 3, 226);
+  border-color: purple;
+  color: white;
+}
+
+.button-panel button:focus {
+  outline: none;
+  border-color: purple;
 }
