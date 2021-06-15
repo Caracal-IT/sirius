@@ -10,8 +10,19 @@ export class PageActivity extends Activity {
         this.controls.forEach(this.createElement.bind(this, ctx, ctx.container));
     }
 
-    private createElement(ctx: any, parent: any, control: any): any {
+    async exit(ctx: Context) {
+        Array.from(ctx.container.querySelectorAll("[id]"))
+             .forEach(i => ctx.model.setValue(i.id, i.value));
+
+        return true; 
+    }
+
+    private createElement(ctx: Context, parent: any, control: any): any {
         const newEl = Object.assign(document.createElement(control.tag), control, { ctx });
+        
+        if(control.id)
+            newEl.value = ctx.model.getValue(control.id)??'';
+
         this.bindCaption(ctx, newEl, control);
         this.bindEvent(ctx, newEl, control);
         parent.appendChild(newEl);
