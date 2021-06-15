@@ -169,10 +169,12 @@ demo-menu .menu_selected {
 .form-control label {
   display: block;
   font-size: 1.2rem;
+  font-weight: 400;
 }
 
 .form-control input {
   font: inherit;
+  font-weight: 300;
   border: 1px solid black;
   border-radius: 5px;
   padding: .2rem .5rem .2rem .5rem;
@@ -193,10 +195,11 @@ demo-menu .menu_selected {
   background: blueviolet;
   color: whitesmoke;
   font: inherit;
+  font-weight: 400;
   font-size: 1.5rem;
   border: 2px solid rgb(81, 7, 150);
   border-radius: 5px;
-  padding: .4rem 2rem;
+  padding: .1rem 2rem;
 }
 
 .button-panel button:hover {
