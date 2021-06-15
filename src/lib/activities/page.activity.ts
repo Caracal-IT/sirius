@@ -12,7 +12,7 @@ export class PageActivity extends Activity {
 
     async exit(ctx: Context) {
         Array.from(ctx.container.querySelectorAll("[id]"))
-             .forEach(i => ctx.model.setValue(i.id, i.value));
+             .forEach((i: any) => ctx.model.setValue(i.id, i.value));
 
         return true; 
     }
