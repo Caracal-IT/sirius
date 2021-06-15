@@ -196,7 +196,7 @@ demo-menu .menu_selected {
   font-size: 1.5rem;
   border: 2px solid rgb(81, 7, 150);
   border-radius: 5px;
-  padding: .4rem 2rem .1rem 2rem;
+  padding: .4rem 2rem;
 }
 
 .button-panel button:hover {
