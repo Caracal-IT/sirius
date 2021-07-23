@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "rollup-plugin-copy": "^3.4.0",
-    "typescript": "^4.3.2",
-    "vite": "^2.3.6"
+    "typescript": "^4.3.5",
+    "vite": "^2.4.3"
   }
 }
